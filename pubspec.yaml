@@ -38,7 +38,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   smooth_page_indicator: ^1.0.0+2
   hive_flutter: ^1.1.0
-
+  salomon_bottom_bar: ^3.3.1
+  font_awesome_flutter: ^10.2.1
+  intl: ^0.17.0
+  syncfusion_flutter_datepicker: ^20.3.59
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

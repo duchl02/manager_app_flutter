@@ -6,7 +6,7 @@ class LocalStorageHelper {
 
   factory LocalStorageHelper() {
     return _shared;
-  }
+  } 
 
   Box<dynamic>? hiveBox;
 
