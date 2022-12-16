@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/Data/models/user_login_modal.dart';
 
 import 'package:travel_app/core/helpers/asset_helper.dart';
 import 'package:travel_app/core/helpers/image_helper.dart';
 import 'package:travel_app/core/helpers/local_storage_helper.dart';
+import 'package:travel_app/representation/screens/form_login/login_screen.dart';
 import 'package:travel_app/representation/screens/intro_screen.dart';
 import 'package:travel_app/representation/screens/main_app.dart';
 
@@ -23,14 +25,15 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void redirectIntoScreen() async {
-    final ignoreIntroScreen =
-        LocalStorageHelper.getValue('ignoreIntroScreen') as bool?;
+    
+    final checkLogin =
+        LocalStorageHelper.getValue('checkLogin') as bool?;
     await Future.delayed(const Duration(seconds: 2));
-    if (ignoreIntroScreen != null && ignoreIntroScreen) {
+    if (checkLogin != null && checkLogin) {
       Navigator.of(context).pushNamed(MainApp.routeName);
     } else {
       LocalStorageHelper.setValue("ignoreIntroScreen", true);
-      Navigator.of(context).pushNamed(IntroScreen.routeName);
+      Navigator.of(context).pushNamed(FormLoginScreen.routeName);
     }
   }
 

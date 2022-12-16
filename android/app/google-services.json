@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "746877032690",
+    "project_id": "ducfirebaseapi",
+    "storage_bucket": "ducfirebaseapi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746877032690:android:6a74b0c8855a821a10d86b",
+        "android_client_info": {
+          "package_name": "com.example.travel_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746877032690-8ipoq1heq80o8hhhbg1q503ir9ovo65l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBA7JiGfZp2qNoHShnqYPIglyqb_mCtYAo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746877032690-8ipoq1heq80o8hhhbg1q503ir9ovo65l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

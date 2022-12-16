@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
 import 'package:travel_app/core/helpers/asset_helper.dart';
 import 'package:travel_app/core/helpers/image_helper.dart';
+import 'package:travel_app/core/helpers/local_storage_helper.dart';
 import 'package:travel_app/representation/screens/home_booking_screen.dart';
 import 'package:travel_app/representation/screens/hotel_screen.dart';
 import 'package:travel_app/representation/widgets/app_bar_container.dart';
@@ -217,9 +218,8 @@ class _HomeScreenState extends State<HomeScreen> {
               child: _buildItemCategory(
                   ImageHelper.loadFromAsset(AssetHelper.icoHotelPlane,
                       width: kDefaultIconSize, height: kDefaultPadding),
-                  Color(0xff3EC8BC),
-                  () {},
-                  "All"),
+                  Color(0xff3EC8BC), () {
+              }, "All"),
             ),
           ],
         ),

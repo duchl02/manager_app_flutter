@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
+import 'package:travel_app/representation/screens/form_login/login_screen.dart';
 import 'package:travel_app/representation/screens/home_screen.dart';
 
 class MainApp extends StatefulWidget {
@@ -22,6 +23,7 @@ class _MainAppState extends State<MainApp> {
       backgroundColor: Colors.white,
       body: IndexedStack(index: _currentIndex, children: [
         HomeScreen(),
+                FormLoginScreen(),
         Container(
           color: Colors.amber,
         ),

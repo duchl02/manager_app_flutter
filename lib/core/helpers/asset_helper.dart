@@ -40,4 +40,7 @@ mixin AssetHelper {
   static const String turkey = 'assets/images/turkey.png';
   static const String japan = 'assets/images/japan.png';
   static const String dubai = 'assets/images/dubai.png';
+  static const String computerGuy = 'images/computerguy.png';
+
+
 }
