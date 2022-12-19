@@ -8,11 +8,15 @@ class UserModal {
     this.position,
     this.email,
     this.phoneNumber,
+    this.userName,
+    this.password,
     this.createAt,
     this.updateAt,
   });
 
   final String? name;
+  final String? userName;
+  final String? password;
   final String? id;
   final DateTime? birthday;
   final String? address;

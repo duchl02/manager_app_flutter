@@ -47,7 +47,8 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
       if (listUsers[i].user == userInput &&
           listUsers[i].password == passwordInput) {
         LocalStorageHelper.setValue('checkLogin', true);
-        Navigator.pushNamed(context, MainApp.routeName);
+        // Navigator.pushNamed(context, MainApp.routeName);
+        Navigator.pushReplacementNamed(context, MainApp.routeName);
       }
     }
   }

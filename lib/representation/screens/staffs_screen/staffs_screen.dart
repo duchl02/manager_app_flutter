@@ -15,10 +15,34 @@ class StaffsScreen extends StatefulWidget {
 class _StaffsScreenState extends State<StaffsScreen> {
   final textController = TextEditingController();
 
-  Future createUser({required String name}) async {
-    final docUser = FirebaseFirestore.instance.collection("user").doc('duc_id');
+  // Stream<List<User>> readUsers() => FirebaseFirestore.instance
+  //     .collection("user")
+  //     .snapshots()
+  //     .map((snapshots) =>
+  //         snapshots.docs.map((doc) => User.fromJson(doc.data())).toList());
 
-    final json = {"name": name, "age": 21, "birthday": DateTime(2002, 3, 15)};
+  Future<User?> readUser() async {
+    final docUser = FirebaseFirestore.instance
+        .collection("user")
+        .doc("09V8nAbixt9RZhGITONI");
+    final snapshot = await docUser.get();
+    if (snapshot.exists) {
+      return User.fromJson(snapshot.data()!);
+    }
+    return null;
+  }
+
+  Future createUser({required String name}) async {
+    final docUser = FirebaseFirestore.instance.collection("user").doc();
+
+    final user =
+        User(id: docUser.id, name: name, age: 21, birthday: DateTime.now());
+
+    // docUser.update({'name': "duc", 'age': FieldValue.delete()});
+
+    // docUser.delete();
+
+    final json = user.toJson();
 
     await docUser.set(json);
   }
@@ -26,6 +50,39 @@ class _StaffsScreenState extends State<StaffsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: FutureBuilder(
+        // stream: readUsers(),
+        // builder: (context, snapshot) {
+        //   if (snapshot.hasError) {
+        //     return Text("${snapshot.error}");
+        //   }
+        //   if (snapshot.hasData) {
+        //     print("122");
+        //     final users = snapshot.data!;
+        //     return ListView(
+        //       children: users.map(buildUser).toList(),
+        //     );
+        //   } else {
+        //     print("321");
+        //     return Center(child: CircularProgressIndicator());
+        //   }
+        // },
+        future: readUser(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+          if (snapshot.hasData) {
+            final user = snapshot.data!;
+            return user == null
+                ? Center(child: Text("no user"))
+                : buildUser(user);
+          } else {
+            print("321");
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
       appBar: AppBar(title: TextField(controller: textController), actions: [
         IconButton(
             onPressed: (() {
@@ -37,4 +94,31 @@ class _StaffsScreenState extends State<StaffsScreen> {
       ]),
     );
   }
+}
+
+Widget buildUser(User user) => ListTile(
+      leading: CircleAvatar(child: Text("${user.age}")),
+      title: Text(user.name),
+      subtitle: Text(user.birthday.toIso8601String()),
+    );
+
+class User {
+  String id;
+  final String name;
+  final int age;
+  final DateTime birthday;
+
+  User(
+      {this.id = '',
+      required this.name,
+      required this.age,
+      required this.birthday});
+
+  Map<String, dynamic> toJson() =>
+      {"id": id, "name": name, "age": age, "birthday": birthday};
+
+  static User fromJson(Map<String, dynamic> json) => User(
+      name: json['name'],
+      age: json['age'],
+      birthday: (json['birthday'] as Timestamp).toDate());
 }
