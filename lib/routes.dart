@@ -11,6 +11,7 @@ import 'package:travel_app/representation/screens/main_app.dart';
 import 'package:travel_app/representation/screens/room_screen.dart';
 import 'package:travel_app/representation/screens/select_date_screen.dart';
 import 'package:travel_app/representation/screens/splash_screen.dart';
+import 'package:travel_app/representation/screens/staffs_screen/staffs_screen.dart';
 
 import 'Data/models/hotel_modal.dart';
 
@@ -59,6 +60,9 @@ PageRoute? generateRoutes(RouteSettings settings) {
     case FormLoginScreen.routeName:
       return CupertinoPageRoute(
           builder: (context) => FormLoginScreen(), settings: settings);
+    case StaffsScreen.routeName:
+      return CupertinoPageRoute(
+          builder: (context) => StaffsScreen(), settings: settings);
     default:
       return null;
   }

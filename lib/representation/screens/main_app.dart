@@ -7,6 +7,7 @@ import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
 import 'package:travel_app/representation/screens/form_login/login_screen.dart';
 import 'package:travel_app/representation/screens/home_screen.dart';
+import 'package:travel_app/representation/screens/staffs_screen/staffs_screen.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
@@ -23,7 +24,7 @@ class _MainAppState extends State<MainApp> {
       backgroundColor: Colors.white,
       body: IndexedStack(index: _currentIndex, children: [
         HomeScreen(),
-                FormLoginScreen(),
+        StaffsScreen(),
         Container(
           color: Colors.amber,
         ),
