@@ -1,3 +1,6 @@
+import 'package:travel_app/Data/models/project_model.dart';
+import 'package:travel_app/Data/models/task_model.dart';
+
 class UserModal {
   UserModal({
     this.id,
@@ -10,6 +13,8 @@ class UserModal {
     this.phoneNumber,
     this.userName,
     this.password,
+    this.projects,
+    this.tasks,
     this.createAt,
     this.updateAt,
   });
@@ -24,6 +29,8 @@ class UserModal {
   final String? phoneNumber;
   final String? position;
   final String? email;
+  final List<ProjectModal>? projects;
+  final List<TaskModal>? tasks;
   final DateTime? createAt;
   final DateTime? updateAt;
 }
