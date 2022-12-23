@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:travel_app/core/constants/color_constants.dart';
+import 'package:travel_app/core/constants/text_style.dart';
 
 import '../../../core/constants/dismension_constants.dart';
 import '../../../core/helpers/asset_helper.dart';
 import '../../../core/helpers/image_helper.dart';
 import '../../widgets/app_bar_container.dart';
+import '../../widgets/list_task.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -25,7 +27,7 @@ class HomeScreen extends StatelessWidget {
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                   SizedBox(
-                    height: kDefaultPadding,
+                    height: kMinPadding,
                   ),
                   Text("Nguyễn Văn Đức",
                       style:
@@ -47,17 +49,101 @@ class HomeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(kMinPadding),
                   color: Colors.white,
                 ),
-                child: ImageHelper.loadFromAsset(AssetHelper.person),
+                child: ImageHelper.loadFromAsset(AssetHelper.catCute),
               )
             ],
           ),
         ),
         titleString: "home",
         isHomePage: true,
-        child: Column(children: const [
+        child: Column(children: [
           SizedBox(
-            height: kDefaultPadding,
+            height: kDefaultPadding * 3,
           ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: _buildItemCategory(
+                    Icon(FontAwesomeIcons.plus), () {}, 'Điểm danh'),
+              ),
+              Expanded(
+                child: _buildItemCategory(
+                    Icon(FontAwesomeIcons.calendar), () {}, 'Lịch làm việc'),
+              ),
+              Expanded(
+                child: _buildItemCategory(
+                    Icon(FontAwesomeIcons.list), () {}, 'Thêm task'),
+              ),
+              Expanded(
+                child: _buildItemCategory(Icon(FontAwesomeIcons.userLargeSlash),
+                    () {}, 'Đăng ký nghỉ phép'),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          Container(
+            margin: EdgeInsets.only(bottom: 10),
+            child: Row(
+              
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Text(
+                  "Danh sách task",
+                  style: TextStyleCustom.h2TextPrimary,
+                ),
+                Icon(
+                  FontAwesomeIcons.arrowRight,
+                  size: 16,
+                  color: ColorPalette.primaryColor,
+                )
+              ],
+            ),
+          ),
+               Expanded(
+                 child: SingleChildScrollView(
+                   child: Column(children: const [
+                    listTask(),
+                    listTask(),
+                    listTask(),
+                    listTask(),
+                    listTask(),
+                    listTask(),
+                               ]),
+                 ),
+               ),
         ]));
   }
+
+  Widget _buildItemCategory(Icon icon, Function() onTap, String title) {
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            padding:
+                EdgeInsets.symmetric(vertical: kMediumPadding, horizontal: 24),
+            decoration: BoxDecoration(
+                color: ColorPalette.secondColor.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(kItemPadding)),
+            child: icon,
+          ),
+          SizedBox(
+            height: kItemPadding,
+          ),
+          Text(
+            title,
+            style: TextStyleCustom.nomalTextPrimary,
+            textAlign: TextAlign.center,
+          )
+        ],
+      ),
+    );
+  }
 }
+
+

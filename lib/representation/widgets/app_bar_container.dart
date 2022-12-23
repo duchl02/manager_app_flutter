@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
+import 'package:travel_app/core/constants/text_style.dart';
 import 'package:travel_app/core/helpers/asset_helper.dart';
 import 'package:travel_app/core/helpers/image_helper.dart';
 
@@ -120,18 +119,25 @@ class AppBarContainerWidget extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(top: 156),
-            child: child,
-            padding: EdgeInsets.symmetric(horizontal: kMediumPadding),
-          ),
+          if (isHomePage!)
+            Container(
+              margin: EdgeInsets.only(top: 156),
+              child: child,
+              padding: EdgeInsets.symmetric(horizontal: kMediumPadding),
+            ),
+          if (isHomePage == false)
+            Container(
+              margin: EdgeInsets.only(top: 40),
+              child: child,
+              padding: EdgeInsets.symmetric(horizontal: kItemPadding),
+            ),
           if (isHomePage!)
             Container(
               margin: EdgeInsets.only(top: 120),
               padding: EdgeInsets.only(left: 40, right: 40),
               child: Row(
                 children: [
-                  countNavBar("Ngày công", "0"),
+                  countNavBar("Điểm danh", "0"),
                   countNavBar("Task", "0"),
                   countNavBar("Dự án", "0"),
                 ],
@@ -148,12 +154,11 @@ class AppBarContainerWidget extends StatelessWidget {
       children: [
         Text(
           nameCount,
-          style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 26, color: Colors.white),
+          style: TextStyleCustom.h1Text,
         ),
         Text(
           name,
-          style: TextStyle(color: Colors.white),
+          style: TextStyleCustom.nomalTextWhile,
         ),
       ],
     ));

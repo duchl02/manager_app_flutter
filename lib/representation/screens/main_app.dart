@@ -14,7 +14,7 @@ import 'package:travel_app/representation/widgets/bottom_navigator.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
-  static const routeName = "main_app";
+  static const routeName = "/main_app";
   @override
   State<MainApp> createState() => _MainAppState();
 }
@@ -22,7 +22,12 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   int _currentIndex = 0;
   final _pageCotroller = PageController();
-  final _pages = [HomeScreen(), ProjectScreen(), TaskScreen(), StaffsScreen()];
+  final _pages = [
+    TaskScreen(),
+    HomeScreen(),
+    ProjectScreen(),
+    StaffsScreen()
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,6 +48,7 @@ class _MainAppState extends State<MainApp> {
   SalomonBottomBar usingBottomNavigator() {
     return SalomonBottomBar(
         currentIndex: _currentIndex,
+        
         onTap: (index) {
           setState(() {
             _currentIndex = index;
@@ -51,7 +57,7 @@ class _MainAppState extends State<MainApp> {
           });
         },
         selectedItemColor: ColorPalette.primaryColor,
-        unselectedItemColor: ColorPalette.primaryColor.withOpacity(0.2),
+        unselectedItemColor: ColorPalette.primaryColor.withOpacity(0.4),
         margin: EdgeInsets.symmetric(
             horizontal: kMediumPadding, vertical: kDefaultPadding),
         items: [
@@ -60,25 +66,25 @@ class _MainAppState extends State<MainApp> {
                 FontAwesomeIcons.house,
                 size: kDefaultIconSize,
               ),
-              title: Text("Home")),
+              title: Text("Trang chủ")),
           SalomonBottomBarItem(
               icon: Icon(
-                FontAwesomeIcons.solidHeart,
+                FontAwesomeIcons.list,
                 size: kDefaultIconSize,
               ),
-              title: Text("Like")),
+              title: Text("Task")),
           SalomonBottomBarItem(
               icon: Icon(
                 FontAwesomeIcons.briefcase,
                 size: kDefaultIconSize,
               ),
-              title: Text("Booking")),
+              title: Text("Dự án")),
           SalomonBottomBarItem(
               icon: Icon(
                 FontAwesomeIcons.solidUser,
                 size: kDefaultIconSize,
               ),
-              title: Text("Profile"))
+              title: Text("Nhân viên"))
         ]);
   }
 }

@@ -6,7 +6,7 @@ class ColorPalette {
   static const Color yellowColor = Color(0xffFE9C5E);
 
   static const Color dividerColor = Color(0xFFE5E7EB);
-  static const Color text1Color = Color(0xFF323B4B);
+  static const Color text1Color = Color.fromARGB(255, 0, 57, 156);
   static const Color subTitleColor = Color(0xFF838383);
   static const Color backgroundScaffoldColor = Color(0xFFF2F2F2);
 }
