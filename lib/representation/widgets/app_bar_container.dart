@@ -15,14 +15,18 @@ class AppBarContainerWidget extends StatelessWidget {
       this.implementLoading = true,
       this.titleString,
       this.implementTraveling = false,
-      this.isHomePage = false});
+      this.isHomePage = false,
+      this.description,
+      this.titleCount});
 
   final Widget child;
   final Widget? title;
   final bool implementLoading;
   final String? titleString;
   final bool implementTraveling;
-  final bool isHomePage;
+  final bool? isHomePage;
+  final String? description;
+  final String? titleCount;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +34,7 @@ class AppBarContainerWidget extends StatelessWidget {
       body: Stack(
         children: [
           SizedBox(
-            height: 187,
+            height: isHomePage! ? 187 : 120,
             child: AppBar(
               centerTitle: true,
               automaticallyImplyLeading: false,
@@ -40,7 +44,7 @@ class AppBarContainerWidget extends StatelessWidget {
               title: title ??
                   Row(
                     children: [
-                      if (implementLoading)
+                      if (implementLoading && isHomePage!)
                         GestureDetector(
                           onTap: () {
                             Navigator.of(context).pop();
@@ -61,9 +65,22 @@ class AppBarContainerWidget extends StatelessWidget {
                       Expanded(
                           child: Center(
                         child: Column(children: [
-                          Text(titleString ?? "",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20))
+                          Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(titleString ?? "",
+                                      style: TextStyle(fontSize: 20)),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(titleCount ?? "",
+                                      style: TextStyle(fontSize: 20)),
+                                ]),
+                          ),
+                          Text(description ?? "",
+                              style: TextStyle(fontSize: 16)),
                         ]),
                       )),
                       if (implementTraveling)
@@ -108,7 +125,7 @@ class AppBarContainerWidget extends StatelessWidget {
             child: child,
             padding: EdgeInsets.symmetric(horizontal: kMediumPadding),
           ),
-          if (isHomePage)
+          if (isHomePage!)
             Container(
               margin: EdgeInsets.only(top: 120),
               padding: EdgeInsets.only(left: 40, right: 40),

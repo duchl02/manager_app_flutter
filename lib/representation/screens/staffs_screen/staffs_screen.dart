@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
+import '../../../core/constants/dismension_constants.dart';
+import '../../widgets/app_bar_container.dart';
+
 class StaffsScreen extends StatefulWidget {
   const StaffsScreen({super.key});
 
@@ -49,50 +52,61 @@ class _StaffsScreenState extends State<StaffsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder(
-        stream: readUsers(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-          if (snapshot.hasData) {
-            print("122");
-            final users = snapshot.data!;
-            return ListView(
-              children: users.map(buildUser).toList(),
-            );
-          } else {
-            print("321");
-            return Center(child: CircularProgressIndicator());
-          }
-        },
-        // future: readUser(),
-        // builder: (context, snapshot) {
-        //   if (snapshot.hasError) {
-        //     return Text("${snapshot.error}");
-        //   }
-        //   if (snapshot.hasData) {
-        //     final user = snapshot.data!;
-        //     return user == null
-        //         ? Center(child: Text("no user"))
-        //         : buildUser(user);
-        //   } else {
-        //     print("321");
-        //     return Center(child: CircularProgressIndicator());
-        //   }
-        // },
-      ),
-      appBar: AppBar(title: TextField(controller: textController), actions: [
-        IconButton(
-            onPressed: (() {
-              final name = textController.text;
-              createUser(name: name);
-              print(name);
-            }),
-            icon: Icon(Icons.add))
-      ]),
-    );
+    return AppBarContainerWidget(
+        titleString: "Nhân viên",
+        isHomePage: false,
+        titleCount: "0",
+        description: "Danh sách nhân viên",
+        child: Column(children: const [
+          SizedBox(
+            height: kDefaultPadding,
+          ),
+        ]));
+    // Scaffold(
+
+    // body: StreamBuilder(
+    //   stream: readUsers(),
+    //   builder: (context, snapshot) {
+    //     if (snapshot.hasError) {
+    //       return Text("${snapshot.error}");
+    //     }
+    //     if (snapshot.hasData) {
+    //       print("122");
+    //       final users = snapshot.data!;
+    //       return ListView(
+    //         children: users.map(buildUser).toList(),
+    //       );
+    //     } else {
+    //       print("321");
+    //       return Center(child: CircularProgressIndicator());
+    //     }
+    //   },
+    // future: readUser(),
+    // builder: (context, snapshot) {
+    //   if (snapshot.hasError) {
+    //     return Text("${snapshot.error}");
+    //   }
+    //   if (snapshot.hasData) {
+    //     final user = snapshot.data!;
+    //     return user == null
+    //         ? Center(child: Text("no user"))
+    //         : buildUser(user);
+    //   } else {
+    //     print("321");
+    //     return Center(child: CircularProgressIndicator());
+    //   }
+    // },
+    // ),
+    // appBar: AppBar(title: TextField(controller: textController), actions: [
+    //   IconButton(
+    //       onPressed: (() {
+    //         final name = textController.text;
+    //         createUser(name: name);
+    //         print(name);
+    //       }),
+    //       icon: Icon(Icons.add))
+    // ]),
+    // );
   }
 }
 

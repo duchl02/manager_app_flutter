@@ -6,8 +6,10 @@ import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
 import 'package:travel_app/representation/screens/form_login/login_screen.dart';
-import 'package:travel_app/representation/screens/home_screen.dart';
+import 'package:travel_app/representation/screens/home_screen/home_screen.dart';
+import 'package:travel_app/representation/screens/project_screen/project_screen.dart';
 import 'package:travel_app/representation/screens/staffs_screen/staffs_screen.dart';
+import 'package:travel_app/representation/screens/task_screen/task_screen.dart';
 import 'package:travel_app/representation/widgets/bottom_navigator.dart';
 
 class MainApp extends StatefulWidget {
@@ -20,16 +22,7 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   int _currentIndex = 0;
   final _pageCotroller = PageController();
-  final _pages = [
-    HomeScreen(),
-    StaffsScreen(),
-    Container(
-      color: Colors.amber,
-    ),
-    Container(
-      color: Colors.blue,
-    )
-  ];
+  final _pages = [HomeScreen(), ProjectScreen(), TaskScreen(), StaffsScreen()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
