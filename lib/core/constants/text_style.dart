@@ -21,4 +21,6 @@ class TextStyleCustom {
     color: Colors.blueGrey.shade900,
   );
   static TextStyle normalSize = TextStyle(fontSize: 18, color: Colors.white);
+  static TextStyle normalSizePrimary =
+      TextStyle(fontSize: 18, color: ColorPalette.primaryColor);
 }

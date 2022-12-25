@@ -13,12 +13,12 @@ class ButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: ontap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(kMediumPadding),
+          borderRadius: BorderRadius.circular(10),
           gradient:
               opacity != null ? null : Gradients.defaultGradientBackground,
           color: opacity,

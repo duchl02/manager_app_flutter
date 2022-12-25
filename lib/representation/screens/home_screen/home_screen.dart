@@ -88,7 +88,6 @@ class HomeScreen extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(bottom: 10),
             child: Row(
-              
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
@@ -104,18 +103,21 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-               Expanded(
-                 child: SingleChildScrollView(
-                   child: Column(children: const [
-                    listTask(),
-                    listTask(),
-                    listTask(),
-                    listTask(),
-                    listTask(),
-                    listTask(),
-                               ]),
-                 ),
-               ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(children: const [
+                listTask(),
+                listTask(),
+                listTask(),
+                listTask(),
+                listTask(),
+                listTask(),
+                listTask(),
+                listTask(),
+                listTask(),
+              ]),
+            ),
+          ),
         ]));
   }
 
@@ -145,5 +147,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
-
