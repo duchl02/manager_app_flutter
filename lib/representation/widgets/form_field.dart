@@ -25,30 +25,32 @@ class FormInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(label, style: const TextStyle(color: ColorPalette.primaryColor, fontSize: 18)),
-        const SizedBox(height: 10),
-        TextFormField(
-          maxLines: maxLines,
-          controller: controller,
-          focusNode: focusNode,
-          onTap: onTap,
-          readOnly: onTap != null,
-          validator: validator,
-          decoration: InputDecoration(
-            hintText: hintText,
-            fillColor: ColorPalette.dividerColor,
-            hintStyle: TextStyle(color: ColorPalette.primaryColor.withOpacity(0.5)),
-            suffixIcon: onTap != null ? const Icon(Icons.keyboard_arrow_down, color: ColorPalette.secondColor) : null,
-            focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: ColorPalette.primaryColor, width: 2.0), borderRadius: BorderRadius.all(Radius.circular(0))),
-            enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.black, width: 1.0), borderRadius: BorderRadius.all(Radius.circular(0))),
-            focusedErrorBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.red, width: 2.0), borderRadius: BorderRadius.all(Radius.circular(0))),
-            errorBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.red, width: 2.0), borderRadius: BorderRadius.all(Radius.circular(0))),
+    return Padding(
+      padding: EdgeInsets.only(top: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(label, style: const TextStyle(color: ColorPalette.primaryColor, fontSize: 18)),
+          TextFormField(
+            maxLines: maxLines,
+            controller: controller,
+            focusNode: focusNode,
+            onTap: onTap,
+            readOnly: onTap != null,
+            validator: validator,
+            decoration: InputDecoration(
+              hintText: hintText,
+              fillColor: ColorPalette.dividerColor,
+              hintStyle: TextStyle(color: ColorPalette.primaryColor.withOpacity(0.5)),
+              suffixIcon: onTap != null ? const Icon(Icons.keyboard_arrow_down, color: ColorPalette.secondColor) : null,
+              focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: ColorPalette.primaryColor, width: 2.0), borderRadius: BorderRadius.all(Radius.circular(10))),
+              enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.black, width: 1.0), borderRadius: BorderRadius.all(Radius.circular(10))),
+              focusedErrorBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.red, width: 2.0), borderRadius: BorderRadius.all(Radius.circular(10))),
+              errorBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.red, width: 2.0), borderRadius: BorderRadius.all(Radius.circular(10))),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

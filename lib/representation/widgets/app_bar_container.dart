@@ -119,18 +119,18 @@ class AppBarContainerWidget extends StatelessWidget {
               ),
             ),
           ),
-          if (isHomePage!)
+          // if (isHomePage!)
             Container(
               margin: EdgeInsets.only(top: 156),
               child: child,
               padding: EdgeInsets.symmetric(horizontal: kMediumPadding),
             ),
-          if (isHomePage == false)
-            Container(
-              margin: EdgeInsets.only(top: 40),
-              child: child,
-              padding: EdgeInsets.symmetric(horizontal: kItemPadding),
-            ),
+          // if (isHomePage == false)
+          //   Container(
+          //     margin: EdgeInsets.only(top: 40),
+          //     child: child,
+          //     padding: EdgeInsets.symmetric(horizontal: kItemPadding),
+          //   ),
           if (isHomePage!)
             Container(
               margin: EdgeInsets.only(top: 120),

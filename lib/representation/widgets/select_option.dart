@@ -5,25 +5,28 @@ import '../../core/constants/color_constants.dart';
 import '../../core/constants/text_style.dart';
 
 class SelectOption extends StatefulWidget {
-  const SelectOption({super.key, required this.list});
+   SelectOption({super.key, required this.list, required this.dropdownValue});
 
-  final List<String> list;
+   List<String> list;
 
   @override
   State<SelectOption> createState() => _SelectOptionState();
+
+  String dropdownValue ;
+
 }
 
 class _SelectOptionState extends State<SelectOption> {
-  String dropdownValue = list[0];
+  
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: ColorPalette.primaryColor, width: 2)),
+          border: Border.all(color: Colors.black, width: 2)),
       child: DropdownButton<String>(
-        value: dropdownValue,
+        value: widget.dropdownValue.isNotEmpty ?  widget.dropdownValue : null,
         isExpanded: true,
         icon: const Icon(Icons.arrow_drop_down),
         elevation: 16,
@@ -31,7 +34,7 @@ class _SelectOptionState extends State<SelectOption> {
         onChanged: (String? value) {
           // This is called when the user selects an item.
           setState(() {
-            dropdownValue = value!;
+             widget.dropdownValue = value!;
           });
         },
         items: widget.list.map<DropdownMenuItem<String>>((String value) {

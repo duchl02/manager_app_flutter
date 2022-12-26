@@ -23,8 +23,9 @@ class _MainAppState extends State<MainApp> {
   int _currentIndex = 0;
   final _pageCotroller = PageController();
   final _pages = [
-    TaskScreen(),
     HomeScreen(),
+
+    TaskScreen(),
     ProjectScreen(),
     StaffsScreen()
   ];

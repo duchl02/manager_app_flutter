@@ -18,48 +18,62 @@ class SelectDateScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBarContainerWidget(
-      titleString: "Select Date",
-      child: Column(children: [
-        SizedBox(
-          height: kMediumPadding,
-        ),
-        SfDateRangePicker(
-          view: DateRangePickerView.month,
-          selectionMode: DateRangePickerSelectionMode.range,
-          monthViewSettings:
-              DateRangePickerMonthViewSettings(firstDayOfWeek: 1),
-          selectionColor: ColorPalette.yellowColor,
-          startRangeSelectionColor: ColorPalette.yellowColor,
-          endRangeSelectionColor: ColorPalette.yellowColor,
-          rangeSelectionColor: ColorPalette.yellowColor.withOpacity(0.25),
-          todayHighlightColor: ColorPalette.yellowColor,
-          toggleDaySelection: true,
-          onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
-            if (args.value is PickerDateRange) {
-              rangeStartDate = args.value.startDate;
-              rangeEndDate = args.value.endDate;
-            }
-          },
-        ),
-        ButtonWidget(
-          title: "Select",
-          ontap: () {
-            // print(rangeEndDate);
-            Navigator.of(context).pop([rangeStartDate, rangeEndDate]);
-          },
-        ),
-        SizedBox(
-          height: kDefaultPadding,
-        ),
-        ButtonWidget(
-          title: "Cancel",
-          ontap: () {
-            Navigator.of(context).pop([]);
-          },
-          opacity: ColorPalette.primaryColor.withOpacity(0.3),
-        )
-      ]),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: ColorPalette.primaryColor,
+        title: Text("Chọn ngày tháng"),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(children: [
+          SizedBox(
+            height: kMediumPadding,
+          ),
+          SfDateRangePicker(
+            view: DateRangePickerView.month,
+            selectionMode: DateRangePickerSelectionMode.range,
+            monthViewSettings:
+                DateRangePickerMonthViewSettings(firstDayOfWeek: 1),
+            selectionColor: ColorPalette.yellowColor,
+            startRangeSelectionColor: ColorPalette.yellowColor,
+            endRangeSelectionColor: ColorPalette.yellowColor,
+            rangeSelectionColor: ColorPalette.yellowColor.withOpacity(0.25),
+            todayHighlightColor: ColorPalette.yellowColor,
+            toggleDaySelection: true,
+            onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+              if (args.value is PickerDateRange) {
+                rangeStartDate = args.value.startDate;
+                rangeEndDate = args.value.endDate;
+              }
+            },
+          ),
+          Row(children: [
+            Flexible(
+              flex: 1,
+              child: ButtonWidget(
+                title: "Cancel",
+                ontap: () {
+                  Navigator.of(context).pop([]);
+                },
+              ),
+            ),
+
+            SizedBox(
+              width: kDefaultPadding,
+            ),
+            Flexible(
+              flex: 1,
+              child: ButtonWidget(
+                title: "Select",
+                ontap: () {
+                  // print(rangeEndDate);
+                  Navigator.of(context).pop([rangeStartDate, rangeEndDate]);
+                },
+              ),
+            ),
+          ]),
+        ]),
+      ),
     );
   }
 }

@@ -4,17 +4,32 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/core/constants/text_style.dart';
 
+import '../../../Data/models/task_model.dart';
 import '../../../core/constants/dismension_constants.dart';
 import '../../../core/helpers/asset_helper.dart';
 import '../../../core/helpers/image_helper.dart';
+import '../../../services/services.dart';
 import '../../widgets/app_bar_container.dart';
 import '../../widgets/list_task.dart';
+import '../select_date_screen.dart';
+import '../task_screen/task_detail_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  static const routeName = "/home_screen";
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final TaskModal taskModalEmty = new TaskModal();
 
   @override
   Widget build(BuildContext context) {
+    getAllTasks();
+    getTask();
     return AppBarContainerWidget(
         title: Padding(
           padding: EdgeInsets.symmetric(horizontal: kMinPadding),
@@ -65,16 +80,20 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: _buildItemCategory(
-                    Icon(FontAwesomeIcons.plus), () {}, 'Điểm danh'),
+                child: _buildItemCategory(Icon(FontAwesomeIcons.plus), () {
+                  Navigator.of(context).pushNamed(SelectDateScreen.routeName);
+                }, 'Điểm danh'),
               ),
               Expanded(
-                child: _buildItemCategory(
-                    Icon(FontAwesomeIcons.calendar), () {}, 'Lịch làm việc'),
+                child: _buildItemCategory(Icon(FontAwesomeIcons.calendar), () {
+                  Navigator.of(context).pushNamed(SelectDateScreen.routeName);
+                }, 'Lịch làm việc'),
               ),
               Expanded(
-                child: _buildItemCategory(
-                    Icon(FontAwesomeIcons.list), () {}, 'Thêm task'),
+                child: _buildItemCategory(Icon(FontAwesomeIcons.list), () {
+                  Navigator.of(context).pushNamed(TaskDetail.routeName,
+                      arguments: taskModalEmty);
+                }, 'Thêm task'),
               ),
               Expanded(
                 child: _buildItemCategory(Icon(FontAwesomeIcons.userLargeSlash),
@@ -105,22 +124,39 @@ class HomeScreen extends StatelessWidget {
           ),
           Expanded(
             child: SingleChildScrollView(
-              child: Column(children: const [
-                listTask(),
-                listTask(),
-                listTask(),
-                listTask(),
-                listTask(),
-                listTask(),
-                listTask(),
-                listTask(),
-                listTask(),
-              ]),
+              child: StreamBuilder(
+                stream: getAllTasks(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    print("ádasdasdasd");
+                    return Text("${snapshot.error}");
+                  }
+                  if (snapshot.hasData) {
+                    final taskModal = snapshot.data!;
+                    taskModal.map(
+                      (e) {
+                        print(e.show());
+                      },
+                    );
+                    return ListView(
+                      children: taskModal.map(buildUser).toList(),
+                    );
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
             ),
           ),
         ]));
   }
 
+  Widget buildUser(TaskModal taskModal) => ListTile(
+        leading: CircleAvatar(
+            child: Text(taskModal.name != null ? "Text Null" : "sdfsdf")),
+        title: Text(taskModal.description ?? "hhajhdjahsdjhad"),
+        subtitle: Text(taskModal.createAt!.toIso8601String() ?? DateTime.now().toIso8601String()),
+      );
   Widget _buildItemCategory(Icon icon, Function() onTap, String title) {
     return InkWell(
       onTap: onTap,

@@ -1,33 +1,103 @@
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/core/constants/text_style.dart';
+import 'package:travel_app/representation/screens/task_screen/task_detail_screen.dart';
 import 'package:travel_app/representation/widgets/button_widget.dart';
 import 'package:travel_app/representation/widgets/list_task.dart';
 import 'package:travel_app/representation/widgets/search_input.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
 
-import '../../../core/constants/dismension_constants.dart';
-import '../../../core/constants/textstyle_ext.dart';
-import '../../../core/helpers/asset_helper.dart';
-import '../../../core/helpers/image_helper.dart';
-import '../../widgets/app_bar_container.dart';
+import '../../../Data/models/task_model.dart';
 
 class TaskScreen extends StatefulWidget {
-  const TaskScreen({super.key});
+  const TaskScreen({
+    super.key,
+  });
+
+  static const routeName = '/task_screen';
 
   @override
   State<TaskScreen> createState() => _TaskScreenState();
+  // final TaskModal taskModal;
 }
 
 class _TaskScreenState extends State<TaskScreen> {
-  String dropdownValue = list.first;
+  // String dropdownValue = list.first;
+
+  final List<TaskModal> listTasks = [
+    TaskModal(
+      name: "Task",
+      userId: "user_id",
+    ),
+    TaskModal(
+      name: "Task",
+      userId: "user_id",
+    ),
+    TaskModal(
+      name: "Task",
+      userId: "user_id",
+    ),
+    TaskModal(
+      name: "Task",
+      userId: "user_id",
+    ),
+    TaskModal(
+      name: "Task",
+      userId: "user_id",
+    ),
+    TaskModal(
+      name: "Task",
+      userId: "user_id",
+    ),
+    TaskModal(
+      name: "Task",
+      userId: "user_id",
+    ),
+    TaskModal(
+      name: "Task",
+      userId: "user_id",
+    ),
+    TaskModal(
+      name: "Task",
+      userId: "user_id",
+    ),
+    TaskModal(
+      name: "Task",
+      userId: "user_id",
+    ),
+    TaskModal(
+      name: "Task",
+      userId: "user_id",
+    ),
+    TaskModal(
+      name: "Task",
+      userId: "user_id",
+    ),
+  ];
+
+  final TaskModal taskModalEmty  = new TaskModal();
+   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Task (12)"),
         backgroundColor: ColorPalette.primaryColor,
+        actions: [
+          InkWell(
+            child: Padding(
+                padding: EdgeInsets.only(right: 10),
+                child: Icon(
+                  FontAwesomeIcons.plus,
+                )),
+            onTap: () {
+              Navigator.of(context).pushNamed(TaskDetail.routeName,arguments:taskModalEmty );
+            },
+          )
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.only(top: 10, left: 10, right: 10),
@@ -36,11 +106,12 @@ class _TaskScreenState extends State<TaskScreen> {
           SizedBox(
             height: 5,
           ),
-          Row(children: const [
+          Row(children: [
             Expanded(
               flex: 3,
               child: SelectOption(
-                list: list,
+                list: _list,
+                dropdownValue: _list[0],
               ),
             ),
             SizedBox(
@@ -54,21 +125,7 @@ class _TaskScreenState extends State<TaskScreen> {
           Expanded(
               child: SingleChildScrollView(
             child: Column(
-              children: const [
-                listTask(),
-                listTask(),
-                listTask(),
-                listTask(),
-                listTask(),
-                listTask(),
-                listTask(),
-                listTask(),
-                listTask(),
-                listTask(),
-                listTask(),
-                listTask(),
-                listTask(),
-              ],
+              children: listTasks.map((e) => ListTask(taskModal: e)).toList(),
             ),
           ))
         ]),
@@ -77,7 +134,7 @@ class _TaskScreenState extends State<TaskScreen> {
   }
 }
 
-const List<String> list = <String>[
+const List<String> _list = <String>[
   'Tên',
   'Tên nhân viên',
   'Trạng thái',

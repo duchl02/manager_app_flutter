@@ -4,12 +4,12 @@ import 'package:travel_app/core/constants/dismension_constants.dart';
 import 'package:travel_app/core/constants/textstyle_ext.dart';
 
 class ButtonWidget extends StatelessWidget {
-  const ButtonWidget({Key? key, required this.title, this.ontap, this.opacity})
+  const ButtonWidget({Key? key, required this.title, this.ontap, this.color})
       : super(key: key);
 
   final String title;
   final Function()? ontap;
-  final Color? opacity;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -20,15 +20,15 @@ class ButtonWidget extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           gradient:
-              opacity != null ? null : Gradients.defaultGradientBackground,
-          color: opacity,
+              color != null ? null : Gradients.defaultGradientBackground,
+          color: color,
         ),
         alignment: Alignment.center,
         child: Text(
           title,
           style: TextStyles.defaultStyle.bold.copyWith(
               color:
-                  opacity != null ? ColorPalette.primaryColor : Colors.white),
+                  color != null ? ColorPalette.primaryColor : Colors.white  ),
         ),
       ),
     );

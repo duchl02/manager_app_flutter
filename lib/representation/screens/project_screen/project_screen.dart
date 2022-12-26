@@ -9,6 +9,8 @@ import '../../widgets/app_bar_container.dart';
 class ProjectScreen extends StatefulWidget {
   const ProjectScreen({super.key});
 
+  static const String routeName = "/project";
+
   @override
   State<ProjectScreen> createState() => _ProjectScreenState();
 }
