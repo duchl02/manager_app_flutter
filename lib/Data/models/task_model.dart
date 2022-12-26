@@ -29,7 +29,8 @@ class TaskModal {
   }
 
   static TaskModal fromJson(Map<String, dynamic> json) => TaskModal(
-      name: json['name'],
-      description: json['description'],
-      createAt: (json['birthday'] as Timestamp).toDate());
+        name: json['name'],
+        description: json['description'],
+      );
+  // createAt: (json['birthday'] as Timestamp).toDate()
 }

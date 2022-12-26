@@ -9,21 +9,71 @@ Stream<List<TaskModal>> getAllTasks() {
   var data = FirebaseFirestore.instance.collection("tasks").snapshots().map(
       (snapshots) =>
           snapshots.docs.map((doc) => TaskModal.fromJson(doc.data())).toList());
+  // print("----------------------------");
 
-  // print(data);
-  // data.map((event) => print(event.map((e) => e.show())));
+  // var ndata = data.map((event) => event.map((e) => e));
+  // print(ndata);
+
   return data;
 }
 
-Future<TaskModal?> getTask() async {
-  final docUser = FirebaseFirestore.instance.collection("tasks").doc("ducid");
-  final snapshot = await docUser.get();
-  if (snapshot.exists) {
-    // print(snapshot.data());
-    return TaskModal.fromJson(snapshot.data()!);
-  }
-  return null;
+// List<TaskModal>? allTasks() {
+//   var data = FirebaseFirestore.instance.collection("tasks").snapshots().map(
+//       (snapshots) =>
+//           snapshots.docs.map((doc) => TaskModal.fromJson(doc.data())).toList());
+//   // print("----------------------------");
+
+//   // var ndata = data.map((event) => event.map((e) => e));
+//   // print(ndata);
+//   if (data != null) {
+
+//     return data.map((event) => event);
+//   } else {
+//     return null;
+//   }
+// }
+// Stream<List<User>> readUsers() =>
+//     FirebaseFirestore.instance.collection("user").snapshots().map((snapshots) =>
+//         snapshots.docs.map((doc) => User.fromJson(doc.data())).toList());
+// Stream<List<TaskModal>> getAllTasks() =>
+//     FirebaseFirestore.instance.collection("tasks").snapshots().map((snapshots) =>
+//         snapshots.docs.map((doc) => TaskModal.fromJson(doc.data())).toList());
+
+// Future<TaskModal?> getTask() async {
+//   final docUser = FirebaseFirestore.instance.collection("tasks").doc("ducid");
+//   final snapshot = await docUser.get();
+//   if (snapshot.exists) {
+//     // print(snapshot.data());
+//     return TaskModal.fromJson(snapshot.data()!);
+//   }
+//   return null;
+// }
+
+CollectionReference _collectionRef =
+    FirebaseFirestore.instance.collection("tasks");
+
+Future<void> getTask() async {
+  // Get docs from collection reference
+  QuerySnapshot querySnapshot = await _collectionRef.get();
+
+  // Get data from docs and convert map to List
+  final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+  print("------------------");
+  print(allData);
 }
+
+// Future<List<TaskModal>> getTask() async {
+//   final docUser =
+//       FirebaseFirestore.instance.collection("tasks").get().toString();
+//   print(docUser);
+//   // final snapshot = await docUser.get();
+
+//   // if (snapshot.exists) {
+//   //   // print(snapshot.data());
+//   //   return TaskModal.fromJson(snapshot.data()!);
+//   // }
+//   return null;
+// }
 
 
 // Stream<List<User>> readUsers() => FirebaseFirestore.instance

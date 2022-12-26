@@ -10,6 +10,7 @@ import 'package:travel_app/representation/widgets/form_field.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
 
 import '../../../core/constants/color_constants.dart';
+import '../../widgets/custom-select.dart';
 
 class TaskDetail extends StatefulWidget {
   const TaskDetail({super.key, required this.taskModal});
@@ -23,20 +24,31 @@ class TaskDetail extends StatefulWidget {
 }
 
 class _TaskDetailState extends State<TaskDetail> {
-  late TextEditingController nameController,
-      descriptionController,
-      priorityController,
-      statusController,
-      timeSuccessController,
-      userIdController,
-      projectController,
-      updateAtController,
-      createAtController;
+  TextEditingController? nameController = TextEditingController();
+  TextEditingController? timeSuccessController = TextEditingController();
+  TextEditingController? descriptionController = TextEditingController();
+  late String userId = _listSatff[0];
+  late String projectId = _listProject[0];
+  late String priorityId = _listPriority[0];
+  late String statusId = _listStatus[0];
   @override
   void initState() {
     super.initState();
+    setValue();
     // userController = TextEditingController();
     // passwordController = TextEditingController();
+  }
+
+  void setValue() {
+    if (widget.taskModal.name != null) {
+      nameController!.text = widget.taskModal.name!;
+    }
+    if (widget.taskModal.timeSuccess != null) {
+      timeSuccessController!.text = widget.taskModal.timeSuccess!;
+    }
+    if (widget.taskModal.description != null) {
+      descriptionController!.text = widget.taskModal.description!;
+    }
   }
 
   @override
@@ -52,7 +64,30 @@ class _TaskDetailState extends State<TaskDetail> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              FormInputField(label: "Tiêu đề", hintText: "Nhập tiêu đề"),
+              Row(
+                children: [
+                  Text("Ngày tạo: "),
+                  Text(widget.taskModal.createAt != null
+                      ? widget.taskModal.createAt!.toIso8601String()
+                      : "Chưa có")
+                ],
+              ),
+              Row(
+                children: [
+                  Text("Ngày chỉnh sửa: "),
+                  Text(widget.taskModal.updateAt != null
+                      ? widget.taskModal.updateAt!.toIso8601String()
+                      : "Chưa có")
+                ],
+              ),
+              FormInputField(
+                label: "Tiêu đề",
+                hintText: "Nhập tiêu đề",
+                controller: nameController,
+                onChanged: (value) {
+                  nameController!.text = value;
+                },
+              ),
               // FormInputField(label: "Người thực hiện", hintText: "Nhập tiêu đề"),
               Padding(
                 padding: EdgeInsets.only(top: 10, bottom: 2),
@@ -65,6 +100,9 @@ class _TaskDetailState extends State<TaskDetail> {
               SelectOption(
                 list: _listSatff,
                 dropdownValue: _listSatff[0],
+                onChanged: (p0) {
+                  userId = p0 as String;
+                },
               ),
               Padding(
                 padding: EdgeInsets.only(top: 10, bottom: 2),
@@ -77,6 +115,9 @@ class _TaskDetailState extends State<TaskDetail> {
               SelectOption(
                 list: _listProject,
                 dropdownValue: _listProject[0],
+                onChanged: (p0) {
+                  projectId = p0 as String;
+                },
               ),
               Padding(
                 padding: EdgeInsets.only(top: 10, bottom: 2),
@@ -89,6 +130,9 @@ class _TaskDetailState extends State<TaskDetail> {
               SelectOption(
                 list: _listPriority,
                 dropdownValue: _listPriority[0],
+                onChanged: (p0) {
+                  priorityId = p0 as String;
+                },
               ),
               Padding(
                 padding: EdgeInsets.only(top: 10, bottom: 2),
@@ -101,6 +145,9 @@ class _TaskDetailState extends State<TaskDetail> {
               SelectOption(
                 list: _listStatus,
                 dropdownValue: _listStatus[0],
+                onChanged: (p0) {
+                  statusId = p0 as String;
+                },
               ),
               FormInputField(
                 label: "Thời gian hoàn thành",
@@ -185,3 +232,4 @@ const List<String> _listStatus = <String>[
   'In progress',
   'Done'
 ];
+// List taskDetail1 = [];

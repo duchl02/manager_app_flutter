@@ -107,13 +107,13 @@ class _TaskScreenState extends State<TaskScreen> {
             height: 5,
           ),
           Row(children: [
-            Expanded(
-              flex: 3,
-              child: SelectOption(
-                list: _list,
-                dropdownValue: _list[0],
-              ),
-            ),
+            // Expanded(
+            //   flex: 3,
+            //   child: SelectOption(
+            //     list: _list,
+            //     dropdownValue: _list[0],
+            //   ),
+            // ),
             SizedBox(
               width: 10,
             ),

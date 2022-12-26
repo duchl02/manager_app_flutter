@@ -123,29 +123,27 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Expanded(
-            child: SingleChildScrollView(
-              child: StreamBuilder(
-                stream: getAllTasks(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    print("ádasdasdasd");
-                    return Text("${snapshot.error}");
-                  }
-                  if (snapshot.hasData) {
-                    final taskModal = snapshot.data!;
-                    taskModal.map(
-                      (e) {
-                        print(e.show());
-                      },
-                    );
-                    return ListView(
-                      children: taskModal.map(buildUser).toList(),
-                    );
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                },
-              ),
+            child: StreamBuilder(
+              stream: getAllTasks(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  print("ádasdasdasd");
+                  return Text("${snapshot.error}");
+                }
+                if (snapshot.hasData) {
+                  final taskModal = snapshot.data!;
+                  taskModal.map(
+                    (e) {
+                      print(e.show());
+                    },
+                  );
+                  return ListView(
+                    children: taskModal.map(buildUser).toList(),
+                  );
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              },
             ),
           ),
         ]));
@@ -153,9 +151,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildUser(TaskModal taskModal) => ListTile(
         leading: CircleAvatar(
-            child: Text(taskModal.name != null ? "Text Null" : "sdfsdf")),
-        title: Text(taskModal.description ?? "hhajhdjahsdjhad"),
-        subtitle: Text(taskModal.createAt!.toIso8601String() ?? DateTime.now().toIso8601String()),
+            child: Text(taskModal.name != null ? "${taskModal.name}" : "Null")),
+        title: Text(taskModal.description ?? "description null"),
+        // subtitle: Text(taskModal.createAt!.toIso8601String() ?? DateTime.now().toIso8601String()),
+        subtitle: Text(taskModal.createAt != null ? taskModal.createAt!.toIso8601String() : "is null"),
       );
   Widget _buildItemCategory(Icon icon, Function() onTap, String title) {
     return InkWell(
