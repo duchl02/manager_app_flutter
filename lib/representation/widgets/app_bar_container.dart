@@ -5,6 +5,7 @@ import 'package:travel_app/core/constants/dismension_constants.dart';
 import 'package:travel_app/core/constants/text_style.dart';
 import 'package:travel_app/core/helpers/asset_helper.dart';
 import 'package:travel_app/core/helpers/image_helper.dart';
+import 'package:travel_app/services/task_services.dart';
 
 class AppBarContainerWidget extends StatelessWidget {
   const AppBarContainerWidget(
@@ -120,11 +121,11 @@ class AppBarContainerWidget extends StatelessWidget {
             ),
           ),
           // if (isHomePage!)
-            Container(
-              margin: EdgeInsets.only(top: 156),
-              child: child,
-              padding: EdgeInsets.symmetric(horizontal: kMediumPadding),
-            ),
+          Container(
+            margin: EdgeInsets.only(top: 156),
+            child: child,
+            padding: EdgeInsets.symmetric(horizontal: kMediumPadding),
+          ),
           // if (isHomePage == false)
           //   Container(
           //     margin: EdgeInsets.only(top: 40),
@@ -137,9 +138,9 @@ class AppBarContainerWidget extends StatelessWidget {
               padding: EdgeInsets.only(left: 40, right: 40),
               child: Row(
                 children: [
-                  countNavBar("Điểm danh", "0"),
-                  countNavBar("Task", "0"),
-                  countNavBar("Dự án", "0"),
+                  countNavBar("Điểm danh", getAllTasks()),
+                  countNavBar("Task", getAllTasks()),
+                  countNavBar("Dự án", getAllTasks()),
                 ],
               ),
             ),
@@ -148,13 +149,29 @@ class AppBarContainerWidget extends StatelessWidget {
     );
   }
 
-  Expanded countNavBar(String name, String nameCount) {
+  Expanded countNavBar(String name, Stream<List<dynamic>> nameCount) {
     return Expanded(
         child: Column(
       children: [
-        Text(
-          nameCount,
-          style: TextStyleCustom.h1Text,
+        StreamBuilder(
+          stream: nameCount,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            if (snapshot.hasData) {
+              final taskModal = snapshot.data!;
+              taskModal.map(
+                (e) {},
+              );
+              return Text(
+                taskModal.length.toString(),
+                style: TextStyleCustom.h1Text,
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
         ),
         Text(
           name,

@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/Data/models/task_model.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
+import 'package:travel_app/core/extensions/date_time_format.dart';
 import 'package:travel_app/representation/widgets/button_widget.dart';
 import 'package:travel_app/representation/widgets/form_field.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
+import 'package:travel_app/services/task_services.dart';
 
 import '../../../core/constants/color_constants.dart';
-import '../../widgets/custom-select.dart';
 
 class TaskDetail extends StatefulWidget {
   const TaskDetail({super.key, required this.taskModal});
@@ -39,6 +41,15 @@ class _TaskDetailState extends State<TaskDetail> {
     // passwordController = TextEditingController();
   }
 
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    nameController!.dispose();
+    timeSuccessController!.dispose();
+    descriptionController!.dispose();
+    super.dispose();
+  }
+
   void setValue() {
     if (widget.taskModal.name != null) {
       nameController!.text = widget.taskModal.name!;
@@ -53,10 +64,30 @@ class _TaskDetailState extends State<TaskDetail> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.taskModal.toJson());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorPalette.primaryColor,
-        title: Text("Edit Task"),
+        title: Text(widget.taskModal.createAt != null
+            ? "Chỉnh sửa task"
+            : "Thêm mới task"),
+        actions: [
+          widget.taskModal.createAt != null
+              ? InkWell(
+                  child: Padding(
+                      padding: EdgeInsets.only(right: 20),
+                      child: Icon(
+                        FontAwesomeIcons.trash,
+                        color: Colors.red,
+                      )),
+                  onTap: () async {
+                    deleteTask(widget.taskModal.id.toString());
+                    await EasyLoading.showSuccess("Xóa thành công");
+                    Navigator.of(context).pop();
+                  },
+                )
+              : Text("")
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -68,7 +99,7 @@ class _TaskDetailState extends State<TaskDetail> {
                 children: [
                   Text("Ngày tạo: "),
                   Text(widget.taskModal.createAt != null
-                      ? widget.taskModal.createAt!.toIso8601String()
+                      ? formatDate(widget.taskModal.createAt)
                       : "Chưa có")
                 ],
               ),
@@ -76,7 +107,7 @@ class _TaskDetailState extends State<TaskDetail> {
                 children: [
                   Text("Ngày chỉnh sửa: "),
                   Text(widget.taskModal.updateAt != null
-                      ? widget.taskModal.updateAt!.toIso8601String()
+                      ? formatDate(widget.taskModal.updateAt)
                       : "Chưa có")
                 ],
               ),
@@ -85,7 +116,9 @@ class _TaskDetailState extends State<TaskDetail> {
                 hintText: "Nhập tiêu đề",
                 controller: nameController,
                 onChanged: (value) {
-                  nameController!.text = value;
+                  setState(() {
+                    nameController!.text = value;
+                  });
                 },
               ),
               // FormInputField(label: "Người thực hiện", hintText: "Nhập tiêu đề"),
@@ -99,7 +132,9 @@ class _TaskDetailState extends State<TaskDetail> {
               ),
               SelectOption(
                 list: _listSatff,
-                dropdownValue: _listSatff[0],
+                dropdownValue: widget.taskModal.userId != null
+                    ? widget.taskModal.userId.toString()
+                    : _listSatff[0],
                 onChanged: (p0) {
                   userId = p0 as String;
                 },
@@ -114,7 +149,7 @@ class _TaskDetailState extends State<TaskDetail> {
               ),
               SelectOption(
                 list: _listProject,
-                dropdownValue: _listProject[0],
+                dropdownValue: widget.taskModal.projectId ?? _listProject[0],
                 onChanged: (p0) {
                   projectId = p0 as String;
                 },
@@ -129,7 +164,9 @@ class _TaskDetailState extends State<TaskDetail> {
               ),
               SelectOption(
                 list: _listPriority,
-                dropdownValue: _listPriority[0],
+                dropdownValue: widget.taskModal.priority != null
+                    ? widget.taskModal.priority.toString()
+                    : _listPriority[0],
                 onChanged: (p0) {
                   priorityId = p0 as String;
                 },
@@ -144,19 +181,33 @@ class _TaskDetailState extends State<TaskDetail> {
               ),
               SelectOption(
                 list: _listStatus,
-                dropdownValue: _listStatus[0],
+                dropdownValue: widget.taskModal.status != null
+                    ? widget.taskModal.status.toString()
+                    : _listStatus[0],
                 onChanged: (p0) {
                   statusId = p0 as String;
                 },
               ),
               FormInputField(
                 label: "Thời gian hoàn thành",
+                controller: timeSuccessController,
                 hintText: "Nhập số giờ",
+                onChanged: (value) {
+                  setState(() {
+                    timeSuccessController!.text = value;
+                  });
+                },
               ),
               FormInputField(
                 label: "Mô tả",
                 hintText: "Nhập mô tả",
                 maxLines: 3,
+                controller: descriptionController,
+                onChanged: (value) {
+                  setState(() {
+                    descriptionController!.text = value;
+                  });
+                },
               ),
               Padding(
                 padding: EdgeInsets.only(top: 10, bottom: 10),
@@ -179,25 +230,46 @@ class _TaskDetailState extends State<TaskDetail> {
                         child: ButtonWidget(
                           title: "Xác nhận",
                           ontap: () async {
-                            // if (await confirm(
-                            //   context,
-                            //   title: const Text('Chỉnh sửa Task'),
-                            //   content: const Text('Bạn chắc chắn muốn sửa'),
-                            //   textOK: const Text('Có'),
-                            //   textCancel: const Text('Không'),
-                            // )) {
-                            await EasyLoading.showSuccess("Thành công");
+                            if (widget.taskModal.createAt != null) {
+                              print(widget.taskModal.id.toString());
+                              await updateTask(
+                                  id: widget.taskModal.id.toString(),
+                                  name: nameController!.text ?? "Khong co",
+                                  description:
+                                      descriptionController!.text ?? "trong",
+                                  priority: priorityId,
+                                  projectId: projectId,
+                                  userId: userId,
+                                  status: statusId,
+                                  timeSuccess:
+                                      timeSuccessController!.text ?? "Trong",
+                                  createAt: widget.taskModal.createAt ??
+                                      DateTime.now(),
+                                  updateAt: DateTime.now());
+                              await EasyLoading.showSuccess("Sửa thành công");
+                            } else {
+                              await createTask(
+                                  name: nameController!.text ?? "Khong co",
+                                  description:
+                                      descriptionController!.text ?? "trong",
+                                  priority: priorityId,
+                                  projectId: projectId,
+                                  userId: userId,
+                                  status: statusId,
+                                  timeSuccess:
+                                      timeSuccessController!.text ?? "Trong",
+                                  createAt: widget.taskModal.createAt ??
+                                      DateTime.now(),
+                                  updateAt: DateTime.now());
+                              await EasyLoading.showSuccess("Tạo thành công");
+                            }
+
                             Navigator.of(context).pop();
-                            //   Navigator.of(context).pop();
-                            //   // return null;
-                            // }
-                            // return null;
                           },
                         )),
                   ],
                 ),
-              ) // FormInputField(label: "Thời gian bắt đầu", hintText: "Nhập tiêu đề"),
-              // FormInputField(label: "Thời gian kết thúc", hintText: "Nhập tiêu đề"),
+              )
             ],
           ),
         ),

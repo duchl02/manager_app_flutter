@@ -1,32 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/dismension_constants.dart';
 import '../../core/constants/text_style.dart';
 
-class SearchInput extends StatefulWidget {
-  const SearchInput({
-    Key? key,
-  }) : super(key: key);
+class SearchInput extends StatelessWidget {
+  const SearchInput({super.key, this.controller, this.onChanged});
 
-  @override
-  State<SearchInput> createState() => _SearchInputState();
-}
-
-class _SearchInputState extends State<SearchInput> {
-  late TextEditingController valueController;
-  @override
-  void initState() {
-    super.initState();
-    valueController = TextEditingController();
-  }
+  final TextEditingController? controller;
+  final void Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         TextField(
+          // controller: controller,
           enabled: true,
           autocorrect: false,
           decoration: InputDecoration(
@@ -53,11 +45,7 @@ class _SearchInputState extends State<SearchInput> {
                 const EdgeInsets.symmetric(horizontal: kItemPadding),
           ),
           style: TextStyleCustom.normalSize,
-          onChanged: (value) {
-            setState(() {
-              valueController.text = value;
-            });
-          },
+          onChanged: onChanged,
           onSubmitted: (String submitValue) {},
         ),
       ],

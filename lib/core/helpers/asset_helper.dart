@@ -1,5 +1,5 @@
 mixin AssetHelper {
-  //Assets in icons
+  //Assets in 
   static const String icoOvalTop = 'assets/icons/ico_oval_top.png';
   static const String icoOvalBottom = 'assets/icons/ico_oval_bottom.png';
   static const String icoHotel = 'assets/icons/ico_hotel.png';

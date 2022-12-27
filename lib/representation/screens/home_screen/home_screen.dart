@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/core/constants/color_constants.dart';
@@ -8,7 +9,7 @@ import '../../../Data/models/task_model.dart';
 import '../../../core/constants/dismension_constants.dart';
 import '../../../core/helpers/asset_helper.dart';
 import '../../../core/helpers/image_helper.dart';
-import '../../../services/services.dart';
+import '../../../services/task_services.dart';
 import '../../widgets/app_bar_container.dart';
 import '../../widgets/list_task.dart';
 import '../select_date_screen.dart';
@@ -28,8 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    getAllTasks();
-    getTask();
+    // getAllTasks();
+    // getTask();
     return AppBarContainerWidget(
         title: Padding(
           padding: EdgeInsets.symmetric(horizontal: kMinPadding),
@@ -105,7 +106,6 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 30,
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 10),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -127,7 +127,6 @@ class _HomeScreenState extends State<HomeScreen> {
               stream: getAllTasks(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  print("ádasdasdasd");
                   return Text("${snapshot.error}");
                 }
                 if (snapshot.hasData) {
@@ -138,7 +137,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   );
                   return ListView(
-                    children: taskModal.map(buildUser).toList(),
+                    children: taskModal
+                        .map(((e) => ListTask(
+                              taskModal: e,
+                            )))
+                        .toList(),
                   );
                 } else {
                   return Center(child: CircularProgressIndicator());
@@ -149,13 +152,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ]));
   }
 
-  Widget buildUser(TaskModal taskModal) => ListTile(
-        leading: CircleAvatar(
-            child: Text(taskModal.name != null ? "${taskModal.name}" : "Null")),
-        title: Text(taskModal.description ?? "description null"),
-        // subtitle: Text(taskModal.createAt!.toIso8601String() ?? DateTime.now().toIso8601String()),
-        subtitle: Text(taskModal.createAt != null ? taskModal.createAt!.toIso8601String() : "is null"),
-      );
   Widget _buildItemCategory(Icon icon, Function() onTap, String title) {
     return InkWell(
       onTap: onTap,

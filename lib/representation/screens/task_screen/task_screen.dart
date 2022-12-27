@@ -11,6 +11,7 @@ import 'package:travel_app/representation/widgets/search_input.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
 
 import '../../../Data/models/task_model.dart';
+import '../../../services/task_services.dart';
 
 class TaskScreen extends StatefulWidget {
   const TaskScreen({
@@ -25,66 +26,44 @@ class TaskScreen extends StatefulWidget {
 }
 
 class _TaskScreenState extends State<TaskScreen> {
-  // String dropdownValue = list.first;
+  // String dropdownValue = list.first
 
-  final List<TaskModal> listTasks = [
-    TaskModal(
-      name: "Task",
-      userId: "user_id",
-    ),
-    TaskModal(
-      name: "Task",
-      userId: "user_id",
-    ),
-    TaskModal(
-      name: "Task",
-      userId: "user_id",
-    ),
-    TaskModal(
-      name: "Task",
-      userId: "user_id",
-    ),
-    TaskModal(
-      name: "Task",
-      userId: "user_id",
-    ),
-    TaskModal(
-      name: "Task",
-      userId: "user_id",
-    ),
-    TaskModal(
-      name: "Task",
-      userId: "user_id",
-    ),
-    TaskModal(
-      name: "Task",
-      userId: "user_id",
-    ),
-    TaskModal(
-      name: "Task",
-      userId: "user_id",
-    ),
-    TaskModal(
-      name: "Task",
-      userId: "user_id",
-    ),
-    TaskModal(
-      name: "Task",
-      userId: "user_id",
-    ),
-    TaskModal(
-      name: "Task",
-      userId: "user_id",
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    category = _list[0];
+  }
 
-  final TaskModal taskModalEmty  = new TaskModal();
-   
+  final TaskModal taskModalEmty = TaskModal();
+  List<TaskModal> list = [];
+  bool isSearch = false;
+  late String category;
+  TextEditingController textEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Task (12)"),
+        title: StreamBuilder(
+          stream: getAllTasks(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            if (snapshot.hasData) {
+              final taskModal = snapshot.data!;
+              taskModal.map(
+                (e) {},
+              );
+              return Text(
+                "Task (" + taskModal.length.toString() + ")",
+                // style: TextStyleCustom.h1Text,
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
         backgroundColor: ColorPalette.primaryColor,
         actions: [
           InkWell(
@@ -94,7 +73,8 @@ class _TaskScreenState extends State<TaskScreen> {
                   FontAwesomeIcons.plus,
                 )),
             onTap: () {
-              Navigator.of(context).pushNamed(TaskDetail.routeName,arguments:taskModalEmty );
+              Navigator.of(context)
+                  .pushNamed(TaskDetail.routeName, arguments: taskModalEmty);
             },
           )
         ],
@@ -102,32 +82,84 @@ class _TaskScreenState extends State<TaskScreen> {
       body: Padding(
         padding: EdgeInsets.only(top: 10, left: 10, right: 10),
         child: Column(children: [
-          SearchInput(),
+          SearchInput(
+            controller: textEditingController,
+            onChanged: (value) {
+              setState(() {
+                textEditingController.text = value;
+                print(textEditingController.text);
+              });
+            },
+          ),
           SizedBox(
             height: 5,
           ),
           Row(children: [
-            // Expanded(
-            //   flex: 3,
-            //   child: SelectOption(
-            //     list: _list,
-            //     dropdownValue: _list[0],
-            //   ),
-            // ),
+            Expanded(
+              flex: 3,
+              child: SelectOption(
+                list: _list,
+                dropdownValue: category,
+                onChanged: ((p0) {
+                  category = p0.toString();
+                }),
+              ),
+            ),
             SizedBox(
               width: 10,
             ),
-            Expanded(flex: 2, child: ButtonWidget(title: "Tìm kiếm"))
+            Expanded(
+                flex: 2,
+                child: ButtonWidget(
+                    title: "Tìm kiếm",
+                    ontap: () {
+                      var data;
+                      setState(() {
+                        if (isSearch == false) {
+                          isSearch = true;
+                        }
+                        list = searchTask(textEditingController.text, category,
+                            currentTaskData);
+                      });
+                    }))
           ]),
           SizedBox(
             height: 10,
           ),
           Expanded(
-              child: SingleChildScrollView(
-            child: Column(
-              children: listTasks.map((e) => ListTask(taskModal: e)).toList(),
-            ),
-          ))
+              child: isSearch == false
+                  ? StreamBuilder(
+                      stream: getAllTasks(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Text("${snapshot.error}");
+                        }
+                        if (snapshot.hasData) {
+                          final taskModal = snapshot.data!;
+                          currentTaskData = taskModal;
+                          // taskModal.map(
+                          //   (e) {
+                          //     print(e.show());
+                          //   },
+                          // );
+                          return ListView(
+                            children: taskModal
+                                .map(((e) => ListTask(
+                                      taskModal: e,
+                                    )))
+                                .toList(),
+                          );
+                        } else {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                      },
+                    )
+                  : SingleChildScrollView(
+                      child: Column(
+                        children:
+                            list.map((e) => ListTask(taskModal: e)).toList(),
+                      ),
+                    ))
         ]),
       ),
     );

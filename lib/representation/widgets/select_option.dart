@@ -34,9 +34,10 @@ class _SelectOptionState extends State<SelectOption> {
         elevation: 16,
         style: const TextStyle(color: Colors.deepPurple),
         onChanged: (String? value) {
+            widget.onChanged(value);
+
           // This is called when the user selects an item.
           setState(() {
-            widget.onChanged(value);
             widget.dropdownValue = value!;
           });
         },

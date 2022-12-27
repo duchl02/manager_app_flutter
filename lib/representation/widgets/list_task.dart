@@ -5,6 +5,7 @@ import 'package:travel_app/representation/screens/task_screen/task_detail_screen
 import 'package:travel_app/representation/screens/task_screen/task_screen.dart';
 
 import '../../core/constants/text_style.dart';
+import '../../core/extensions/date_time_format.dart';
 
 class ListTask extends StatelessWidget {
   const ListTask({
@@ -45,10 +46,11 @@ class ListTask extends StatelessWidget {
             Row(
               children: [
                 Text("Người tạo: "),
-                Text(taskModal.userId!),
+                Text(taskModal.userId ?? "null"),
                 Spacer(),
-                Text("Độ ưu tiên: ", style: TextStyleCustom.smallText),
-                Text("1", style: TextStyleCustom.smallText),
+                // Text("Độ ưu tiên: ", style: TextStyleCustom.smallText),
+                // Text(taskModal.priority ?? "null",
+                //     style: TextStyleCustom.smallText),
                 // Text("Ngày tạo: ", style: TextStyleCustom.smallText),
                 // Text("23/12/2022", style: TextStyleCustom.smallText),
               ],
@@ -59,12 +61,17 @@ class ListTask extends StatelessWidget {
             Row(
               children: [
                 Text("Trạng thái : ", style: TextStyleCustom.smallText),
-                Text("Coding", style: TextStyleCustom.smallText),
+                Text(taskModal.status ?? "null",
+                    style: TextStyleCustom.smallText),
                 Spacer(),
                 // Text("Hoàn thành: "),
                 // Text("25/12/2022 "),
                 Text("Ngày tạo: ", style: TextStyleCustom.smallText),
-                Text("23/12/2022", style: TextStyleCustom.smallText),
+                Text(
+                    taskModal.createAt != null
+                        ? formatDate(taskModal.createAt)
+                        : "null",
+                    style: TextStyleCustom.smallText),
               ],
             )
           ]),

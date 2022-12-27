@@ -29,8 +29,27 @@ class TaskModal {
   }
 
   static TaskModal fromJson(Map<String, dynamic> json) => TaskModal(
+        id: json["id"],
         name: json['name'],
         description: json['description'],
+        priority: json['priority'],
+        timeSuccess: json['timeSuccess'],
+        status: json['status'],
+        projectId: json['projectId'],
+        userId: json['userId'],
+        createAt: (json['createAt'] as Timestamp).toDate(),
+        updateAt: (json['updateAt'] as Timestamp).toDate(),
       );
-  // createAt: (json['birthday'] as Timestamp).toDate()
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "description": description,
+        "priority": priority,
+        "status": status,
+        "projectId": projectId,
+        "userId": userId,
+        "timeSuccess": timeSuccess,
+        "createAt": createAt,
+        "updateAt": updateAt,
+      };
 }
