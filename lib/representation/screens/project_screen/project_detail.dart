@@ -68,7 +68,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
 
   @override
   Widget build(BuildContext context) {
-    // print(widget.projectModal.users.toString());
+    print(widget.projectModal.users.toString());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorPalette.primaryColor,
@@ -160,8 +160,6 @@ class _ProjectDetailState extends State<ProjectDetail> {
                             (element) {
                               listUsers.forEach((element2) {
                                 if (element.id == element2) {
-                              // print("object");
-
                                   listUsersDefault.add(element);
                                 }
                               });
@@ -216,16 +214,14 @@ class _ProjectDetailState extends State<ProjectDetail> {
                               child: ButtonWidget(
                                 title: "Xác nhận",
                                 ontap: () async {
-                                  await listUsers.map((e) {
-                                    // print(
-                                    //     "-------------------------------------");
-                                    listUsersId.add(e.id);
-                                  });
+                                  if (listUsers )
+                                  for (var e in listUsers) {
+                                    listUsersId.add(e?.id);
+                                  }
 
-                                  // print(listUsersDefault);
-                                  // print(
-                                  //     "-------------------------------------");
-                                  // print(listUsers);
+                                  print(listUsersDefault);
+                                  print(
+                                      "-------------------------------------");
 
                                   if (widget.projectModal.createAt != null) {
                                     setState(() {
