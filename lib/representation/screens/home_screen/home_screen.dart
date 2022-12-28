@@ -1,9 +1,11 @@
+import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/core/constants/text_style.dart';
+import 'package:travel_app/core/extensions/date_time_format.dart';
 
 import '../../../Data/models/task_model.dart';
 import '../../../core/constants/dismension_constants.dart';
@@ -81,8 +83,19 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: _buildItemCategory(Icon(FontAwesomeIcons.plus), () {
-                  Navigator.of(context).pushNamed(SelectDateScreen.routeName);
+                child:
+                    _buildItemCategory(Icon(FontAwesomeIcons.plus), () async {
+                  if (await confirm(
+                    context,
+                    title: const Text('Điểm danh'),
+                    content: Text('Xác nhận đã điểm danh ngày hôm nay: ' +
+                        "${formatDate(DateTime.now())}"),
+                    textOK: const Text('Xác nhận'),
+                    textCancel: const Text('Thoát'),
+                  )) {
+                    return print('pressedOK');
+                  }
+                  return print('pressedCancel');
                 }, 'Điểm danh'),
               ),
               Expanded(

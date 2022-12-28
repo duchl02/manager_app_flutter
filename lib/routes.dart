@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_app/Data/models/project_model.dart';
 import 'package:travel_app/Data/models/task_model.dart';
 import 'package:travel_app/representation/screens/Guest_and_room_booking_screen.dart';
 import 'package:travel_app/representation/screens/check_out_screen.dart';
@@ -10,6 +11,7 @@ import 'package:travel_app/representation/screens/hotel_detail_screen.dart';
 import 'package:travel_app/representation/screens/hotel_screen.dart';
 import 'package:travel_app/representation/screens/intro_screen.dart';
 import 'package:travel_app/representation/screens/main_app.dart';
+import 'package:travel_app/representation/screens/project_screen/project_detail.dart';
 import 'package:travel_app/representation/screens/project_screen/project_screen.dart';
 import 'package:travel_app/representation/screens/room_screen.dart';
 import 'package:travel_app/representation/screens/select_date_screen.dart';
@@ -42,8 +44,16 @@ PageRoute? generateRoutes(RouteSettings settings) {
       return CupertinoPageRoute(
         settings: settings,
         builder: (context) => TaskDetail(
-            taskModal: taskModal,
-            ),
+          taskModal: taskModal,
+        ),
+      );
+    case ProjectDetail.routeName:
+      late final ProjectModal projectModal = (settings.arguments as ProjectModal);
+      return CupertinoPageRoute(
+        settings: settings,
+        builder: (context) => ProjectDetail(
+          projectModal: projectModal,
+        ),
       );
 
     case HotelScreenDetail.routeName:

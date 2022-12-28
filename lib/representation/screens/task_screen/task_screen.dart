@@ -32,6 +32,14 @@ class _TaskScreenState extends State<TaskScreen> {
   void initState() {
     super.initState();
     category = _list[0];
+    isSearch = false;
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    isSearch = false;
   }
 
   final TaskModal taskModalEmty = TaskModal();
@@ -42,6 +50,7 @@ class _TaskScreenState extends State<TaskScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(isSearch);
     return Scaffold(
       appBar: AppBar(
         title: StreamBuilder(
@@ -137,6 +146,7 @@ class _TaskScreenState extends State<TaskScreen> {
                         if (snapshot.hasData) {
                           final taskModal = snapshot.data!;
                           currentTaskData = taskModal;
+                          print("object--------------------------------");
                           // taskModal.map(
                           //   (e) {
                           //     print(e.show());

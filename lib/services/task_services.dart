@@ -47,7 +47,6 @@ List<TaskModal> searchTask(name, category, list) {
       listSearch.add(element);
     }
   });
-  print(listSearch);
   return listSearch;
 }
 
@@ -110,7 +109,7 @@ Future updateTask(
   await docTask.update(json);
 }
 
-void deleteTask(id) async {
+Future deleteTask(id) async {
   print(id);
   final docTask = FirebaseFirestore.instance.collection("tasks").doc(id);
   await docTask.delete();

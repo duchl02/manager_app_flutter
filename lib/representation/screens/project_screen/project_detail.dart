@@ -4,76 +4,79 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:travel_app/Data/models/task_model.dart';
+import 'package:travel_app/Data/models/project_model.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
 import 'package:travel_app/core/extensions/date_time_format.dart';
 import 'package:travel_app/representation/widgets/button_widget.dart';
 import 'package:travel_app/representation/widgets/form_field.dart';
+import 'package:travel_app/representation/widgets/selectMultiCustom.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
+import 'package:travel_app/services/project_services.dart';
 import 'package:travel_app/services/task_services.dart';
 
 import '../../../core/constants/color_constants.dart';
+import '../../../services/home_services.dart';
 
-class TaskDetail extends StatefulWidget {
-  const TaskDetail({super.key, required this.taskModal});
+class ProjectDetail extends StatefulWidget {
+  const ProjectDetail({super.key, required this.projectModal});
 
-  static const String routeName = "/task_detail";
+  static const String routeName = "/project_detail";
 
-  final TaskModal taskModal;
+  final ProjectModal projectModal;
 
   @override
-  State<TaskDetail> createState() => _TaskDetailState();
+  State<ProjectDetail> createState() => _ProjectDetailState();
 }
 
-class _TaskDetailState extends State<TaskDetail> {
+class _ProjectDetailState extends State<ProjectDetail> {
   bool isLoading = false;
   TextEditingController? nameController = TextEditingController();
-  TextEditingController? timeSuccessController = TextEditingController();
+  TextEditingController? shortNameController = TextEditingController();
   TextEditingController? descriptionController = TextEditingController();
-  late String userId = _listSatff[0];
-  late String projectId = _listProject[0];
-  late String priorityId = _listPriority[0];
-  late String statusId = _listStatus[0];
+
+  List listUsers = [];
+  List<String> listUsersId = [];
+  List listUsersDefault = [];
+
   @override
   void initState() {
     super.initState();
+    listUsers = widget.projectModal.users ?? [];
     setValue();
-    // userController = TextEditingController();
-    // passwordController = TextEditingController();
   }
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     nameController!.dispose();
-    timeSuccessController!.dispose();
+    shortNameController!.dispose();
     descriptionController!.dispose();
     super.dispose();
   }
 
   void setValue() {
-    if (widget.taskModal.name != null) {
-      nameController!.text = widget.taskModal.name!;
+    if (widget.projectModal.name != null) {
+      nameController!.text = widget.projectModal.name!;
     }
-    if (widget.taskModal.timeSuccess != null) {
-      timeSuccessController!.text = widget.taskModal.timeSuccess!;
+    if (widget.projectModal.shortName != null) {
+      shortNameController!.text = widget.projectModal.shortName!;
     }
-    if (widget.taskModal.description != null) {
-      descriptionController!.text = widget.taskModal.description!;
+    if (widget.projectModal.description != null) {
+      descriptionController!.text = widget.projectModal.description!;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    print(widget.taskModal.toJson());
+    // print(widget.projectModal.users.toString());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorPalette.primaryColor,
-        title: Text(widget.taskModal.createAt != null
-            ? "Chỉnh sửa task"
-            : "Thêm mới task"),
+        title: Text(widget.projectModal.createAt != null
+            ? "Chỉnh sửa dự án"
+            : "Thêm mới dự án"),
         actions: [
-          widget.taskModal.createAt != null
+          widget.projectModal.createAt != null
               ? InkWell(
                   child: Padding(
                       padding: EdgeInsets.only(right: 20),
@@ -85,7 +88,7 @@ class _TaskDetailState extends State<TaskDetail> {
                     setState(() {
                       isLoading = true;
                     });
-                    await deleteTask(widget.taskModal.id.toString());
+                    await deleteProject(widget.projectModal.id.toString());
                     setState(() {
                       isLoading = false;
                     });
@@ -109,22 +112,22 @@ class _TaskDetailState extends State<TaskDetail> {
                     Row(
                       children: [
                         Text("Ngày tạo: "),
-                        Text(widget.taskModal.createAt != null
-                            ? formatDate(widget.taskModal.createAt)
+                        Text(widget.projectModal.createAt != null
+                            ? formatDate(widget.projectModal.createAt)
                             : "Chưa có")
                       ],
                     ),
                     Row(
                       children: [
                         Text("Ngày chỉnh sửa: "),
-                        Text(widget.taskModal.updateAt != null
-                            ? formatDate(widget.taskModal.updateAt)
+                        Text(widget.projectModal.updateAt != null
+                            ? formatDate(widget.projectModal.updateAt)
                             : "Chưa có")
                       ],
                     ),
                     FormInputField(
-                      label: "Tiêu đề",
-                      hintText: "Nhập tiêu đề",
+                      label: "Tên dự án",
+                      hintText: "Nhập tên dự án",
                       controller: nameController,
                       onChanged: (value) {
                         setState(() {
@@ -132,82 +135,53 @@ class _TaskDetailState extends State<TaskDetail> {
                         });
                       },
                     ),
-                    // FormInputField(label: "Người thực hiện", hintText: "Nhập tiêu đề"),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, bottom: 2),
-                      child: Text(
-                        "Người thực hiện",
-                        style: TextStyle(
-                            color: ColorPalette.primaryColor, fontSize: 18),
-                      ),
-                    ),
-                    SelectOption(
-                      list: _listSatff,
-                      dropdownValue: widget.taskModal.userId != null
-                          ? widget.taskModal.userId.toString()
-                          : _listSatff[0],
-                      onChanged: (p0) {
-                        userId = p0 as String;
-                      },
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, bottom: 2),
-                      child: Text(
-                        "Dự án",
-                        style: TextStyle(
-                            color: ColorPalette.primaryColor, fontSize: 18),
-                      ),
-                    ),
-                    SelectOption(
-                      list: _listProject,
-                      dropdownValue:
-                          widget.taskModal.projectId ?? _listProject[0],
-                      onChanged: (p0) {
-                        projectId = p0 as String;
-                      },
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, bottom: 2),
-                      child: Text(
-                        "Độ ưu tiên",
-                        style: TextStyle(
-                            color: ColorPalette.primaryColor, fontSize: 18),
-                      ),
-                    ),
-                    SelectOption(
-                      list: _listPriority,
-                      dropdownValue: widget.taskModal.priority != null
-                          ? widget.taskModal.priority.toString()
-                          : _listPriority[0],
-                      onChanged: (p0) {
-                        priorityId = p0 as String;
-                      },
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, bottom: 2),
-                      child: Text(
-                        "Trạng thái",
-                        style: TextStyle(
-                            color: ColorPalette.primaryColor, fontSize: 18),
-                      ),
-                    ),
-                    SelectOption(
-                      list: _listStatus,
-                      dropdownValue: widget.taskModal.status != null
-                          ? widget.taskModal.status.toString()
-                          : _listStatus[0],
-                      onChanged: (p0) {
-                        statusId = p0 as String;
-                      },
-                    ),
+
                     FormInputField(
-                      label: "Thời gian hoàn thành",
-                      controller: timeSuccessController,
-                      hintText: "Nhập số giờ",
+                      label: "Tên ngắn gọn",
+                      controller: shortNameController,
+                      hintText: "Nhập tên",
                       onChanged: (value) {
                         setState(() {
-                          timeSuccessController!.text = value;
+                          shortNameController!.text = value;
                         });
+                      },
+                    ),
+                    // FormInputField(label: "Người thực hiện", hintText: "Nhập tiêu đề"),
+
+                    StreamBuilder(
+                      stream: getAllTasks(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Text("${snapshot.error}");
+                        }
+                        if (snapshot.hasData) {
+                          final projectModal = snapshot.data!;
+                          projectModal.forEach(
+                            (element) {
+                              listUsers.forEach((element2) {
+                                if (element.id == element2) {
+                              // print("object");
+
+                                  listUsersDefault.add(element);
+                                }
+                              });
+                            },
+                          );
+                          // convertToListModal(projectModal, listUsers);
+                          return SelectMultiCustom(
+                            title: "Nhân viên",
+                            listValues: projectModal,
+                            defaultListValues: listUsersDefault ?? [],
+                            onTap: (value) {
+                              // print("---------------------------------------");
+
+                              // print(listUsers);
+                              listUsers = value;
+                            },
+                          );
+                        } else {
+                          return Center(child: CircularProgressIndicator());
+                        }
                       },
                     ),
                     FormInputField(
@@ -242,26 +216,33 @@ class _TaskDetailState extends State<TaskDetail> {
                               child: ButtonWidget(
                                 title: "Xác nhận",
                                 ontap: () async {
-                                  if (widget.taskModal.createAt != null) {
+                                  await listUsers.map((e) {
+                                    // print(
+                                    //     "-------------------------------------");
+                                    listUsersId.add(e.id);
+                                  });
+
+                                  // print(listUsersDefault);
+                                  // print(
+                                  //     "-------------------------------------");
+                                  // print(listUsers);
+
+                                  if (widget.projectModal.createAt != null) {
                                     setState(() {
                                       isLoading = true;
                                     });
-                                    await updateTask(
-                                        id: widget.taskModal.id.toString(),
+                                    await updateProject(
+                                        id: widget.projectModal.id.toString(),
                                         name:
                                             nameController!.text ?? "Khong co",
                                         description:
                                             descriptionController!.text ??
                                                 "trong",
-                                        priority: priorityId,
-                                        projectId: projectId,
-                                        userId: userId,
-                                        status: statusId,
-                                        timeSuccess:
-                                            timeSuccessController!.text ??
-                                                "Trong",
-                                        createAt: widget.taskModal.createAt ??
-                                            DateTime.now(),
+                                        users: listUsersId,
+                                        shortName: shortNameController!.text,
+                                        createAt:
+                                            widget.projectModal.createAt ??
+                                                DateTime.now(),
                                         updateAt: DateTime.now());
                                     setState(() {
                                       isLoading = false;
@@ -274,21 +255,17 @@ class _TaskDetailState extends State<TaskDetail> {
                                     setState(() {
                                       isLoading = true;
                                     });
-                                    await createTask(
+                                    await createProject(
                                         name:
                                             nameController!.text ?? "Khong co",
                                         description:
                                             descriptionController!.text ??
                                                 "trong",
-                                        priority: priorityId,
-                                        projectId: projectId,
-                                        userId: userId,
-                                        status: statusId,
-                                        timeSuccess:
-                                            timeSuccessController!.text ??
-                                                "Trong",
-                                        createAt: widget.taskModal.createAt ??
-                                            DateTime.now(),
+                                        users: listUsersId,
+                                        shortName: shortNameController!.text,
+                                        createAt:
+                                            widget.projectModal.createAt ??
+                                                DateTime.now(),
                                         updateAt: DateTime.now());
                                     setState(() {
                                       isLoading = false;
@@ -310,31 +287,3 @@ class _TaskDetailState extends State<TaskDetail> {
     );
   }
 }
-
-const List<String> _listSatff = <String>[
-  'Nguyễn Văn Đức',
-  'Trần Ngọc Quý',
-  'Trần Ngọc Hà',
-  'Nguyễn Nhân Hiệu'
-];
-
-const List<String> _listProject = <String>[
-  'Học Flutter',
-  'Học OOP',
-  'App quản lý Công việc',
-  'App quản lý task'
-];
-const List<String> _listPriority = <String>[
-  'Không ưu tiên',
-  'Ưu tiên vừa',
-  'Ưu tiên',
-  'Cấp độ'
-];
-
-const List<String> _listStatus = <String>[
-  'Coding',
-  'HoldOn',
-  'In progress',
-  'Done'
-];
-// List taskDetail1 = [];

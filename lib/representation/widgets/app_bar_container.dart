@@ -5,6 +5,7 @@ import 'package:travel_app/core/constants/dismension_constants.dart';
 import 'package:travel_app/core/constants/text_style.dart';
 import 'package:travel_app/core/helpers/asset_helper.dart';
 import 'package:travel_app/core/helpers/image_helper.dart';
+import 'package:travel_app/services/project_services.dart';
 import 'package:travel_app/services/task_services.dart';
 
 class AppBarContainerWidget extends StatelessWidget {
@@ -140,7 +141,7 @@ class AppBarContainerWidget extends StatelessWidget {
                 children: [
                   countNavBar("Điểm danh", getAllTasks()),
                   countNavBar("Task", getAllTasks()),
-                  countNavBar("Dự án", getAllTasks()),
+                  countNavBar("Dự án", getAllProjects()),
                 ],
               ),
             ),
