@@ -18,7 +18,7 @@ class StaffsScreen extends StatefulWidget {
 class _StaffsScreenState extends State<StaffsScreen> {
   final textController = TextEditingController();
 
-  Stream<List<User>> readUsers() => FirebaseFirestore.instance
+  Stream<List<User>> readUsers () => FirebaseFirestore.instance
       .collection("user")
       .snapshots()
       .map((snapshots) =>

@@ -81,7 +81,8 @@ class _ProjectScreenState extends State<ProjectScreen> {
                   FontAwesomeIcons.plus,
                 )),
             onTap: () {
-              Navigator.of(context).pushNamed(ProjectDetail.routeName ,arguments:projectModalEmty );
+              Navigator.of(context).pushNamed(ProjectDetail.routeName,
+                  arguments: projectModalEmty);
             },
           )
         ],
@@ -118,46 +119,49 @@ class _ProjectScreenState extends State<ProjectScreen> {
                 flex: 2,
                 child: ButtonWidget(
                   title: "Tìm kiếm",
+                  ontap: () {
+                    setState(() {
+                      isSearch = true;
+                    });
+                  },
                 ))
           ]),
           SizedBox(
             height: 10,
           ),
           Expanded(
-              child: isSearch == false
-                  ? StreamBuilder(
-                      stream: getAllProjects(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return Text("${snapshot.error}");
-                        }
-                        if (snapshot.hasData) {
-                          final projectModal = snapshot.data!;
-                          currentProjectData = projectModal;
-                          // projectModal.map(
-                          //   (e) {
-                          //     print(e.show());
-                          //   },
-                          // );
-                          return ListView(
-                            children: projectModal
-                                .map(((e) => ListProject(
-                                      projectModal: e,
-                                    )))
-                                .toList(),
-                          );
-                        } else {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      },
-                    )
-                  : SingleChildScrollView(
-                      child: Column(
-                        children: list
-                            .map((e) => ListProject(projectModal: e))
-                            .toList(),
-                      ),
-                    ))
+              child: StreamBuilder(
+            stream: getAllProjects(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              if (snapshot.hasData) {
+                final projectModal = snapshot.data!;
+                currentProjectData = searchProject(
+                    textEditingController.text, category, projectModal);
+                if (isSearch == false) {
+                  return ListView(
+                    children: projectModal
+                        .map(((e) => ListProject(
+                              projectModal: e,
+                            )))
+                        .toList(),
+                  );
+                } else {
+                  return ListView(
+                    children: currentProjectData
+                        .map(((e) => ListProject(
+                              projectModal: e,
+                            )))
+                        .toList(),
+                  );
+                }
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          ))
         ]),
       ),
     );

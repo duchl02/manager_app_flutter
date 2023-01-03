@@ -50,7 +50,6 @@ class _TaskScreenState extends State<TaskScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(isSearch);
     return Scaffold(
       appBar: AppBar(
         title: StreamBuilder(
@@ -96,7 +95,6 @@ class _TaskScreenState extends State<TaskScreen> {
             onChanged: (value) {
               setState(() {
                 textEditingController.text = value;
-                print(textEditingController.text);
               });
             },
           ),
@@ -146,7 +144,6 @@ class _TaskScreenState extends State<TaskScreen> {
                         if (snapshot.hasData) {
                           final taskModal = snapshot.data!;
                           currentTaskData = taskModal;
-                          print("object--------------------------------");
                           // taskModal.map(
                           //   (e) {
                           //     print(e.show());

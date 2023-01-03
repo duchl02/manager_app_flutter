@@ -35,13 +35,13 @@ class _ProjectDetailState extends State<ProjectDetail> {
   TextEditingController? descriptionController = TextEditingController();
 
   List listUsers = [];
-  List<String> listUsersId = [];
+  List listUsersId = [];
   List listUsersDefault = [];
 
   @override
   void initState() {
     super.initState();
-    listUsers = widget.projectModal.users ?? [];
+    listUsersId = widget.projectModal.users ?? [];
     setValue();
   }
 
@@ -69,6 +69,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
   @override
   Widget build(BuildContext context) {
     print(widget.projectModal.users.toString());
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorPalette.primaryColor,
@@ -158,18 +159,24 @@ class _ProjectDetailState extends State<ProjectDetail> {
                           final projectModal = snapshot.data!;
                           projectModal.forEach(
                             (element) {
-                              listUsers.forEach((element2) {
+                              listUsersId.forEach((element2) {
+                                listUsersDefault = [];
                                 if (element.id == element2) {
                                   listUsersDefault.add(element);
                                 }
                               });
                             },
                           );
+                          print("object");
+                          print("object");
+                          print("object");
+                          print("object");
+                          print(listUsersDefault);
                           // convertToListModal(projectModal, listUsers);
                           return SelectMultiCustom(
                             title: "Nhân viên",
                             listValues: projectModal,
-                            defaultListValues: listUsersDefault ?? [],
+                            defaultListValues: projectModal,
                             onTap: (value) {
                               // print("---------------------------------------");
 
@@ -214,14 +221,18 @@ class _ProjectDetailState extends State<ProjectDetail> {
                               child: ButtonWidget(
                                 title: "Xác nhận",
                                 ontap: () async {
-                                  if (listUsers )
-                                  for (var e in listUsers) {
-                                    listUsersId.add(e?.id);
+                                  print("---------------------");
+
+                                  if (listUsers != []) {
+                                    listUsersId = [];
+                                    for (var e in listUsers) {
+                                      listUsersId.add(e.id);
+                                    }
                                   }
 
+                                  print("object");
                                   print(listUsersDefault);
-                                  print(
-                                      "-------------------------------------");
+                                  print("object");
 
                                   if (widget.projectModal.createAt != null) {
                                     setState(() {

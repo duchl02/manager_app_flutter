@@ -7,17 +7,38 @@ import '../../core/constants/color_constants.dart';
 import '../../core/constants/dismension_constants.dart';
 import '../../core/constants/text_style.dart';
 
-class SearchInput extends StatelessWidget {
+class SearchInput extends StatefulWidget {
   const SearchInput({super.key, this.controller, this.onChanged});
 
   final TextEditingController? controller;
   final void Function(String)? onChanged;
 
   @override
+  State<SearchInput> createState() => _SearchInputState();
+}
+
+class _SearchInputState extends State<SearchInput> {
+  final _focusNode = FocusNode();
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() {
+      print("Has focus: ${_focusNode.hasFocus}");
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         TextField(
+          focusNode: _focusNode,
           // controller: controller,
           enabled: true,
           autocorrect: false,
@@ -45,7 +66,7 @@ class SearchInput extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: kItemPadding),
           ),
           style: TextStyleCustom.normalSize,
-          onChanged: onChanged,
+          onChanged: widget.onChanged,
           onSubmitted: (String submitValue) {},
         ),
       ],

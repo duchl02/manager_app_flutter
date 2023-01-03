@@ -49,28 +49,28 @@ List<ProjectModal> currentProjectData = [];
 //   return projectData;
 //   // print(data.toString());
 // }
-// List<ProjectModal> searchProject(name, category, list) {
-//   print(name);
-//   print(category);
-//   List<ProjectModal> data = list;
-//   List<ProjectModal> listSearch = [];
-//   data.forEach((element) {
-//     if ( category == "Tên" && element.name.toString().contains(name)) {
-//       listSearch.add(element);
-//     }
-//     if ('Tên nhân viên' == category && element.userId.toString().contains(name)) {
-//       listSearch.add(element);
-//     }
-//     if ("Trạng thái" == category && element.status.toString().contains(name)) {
-//       listSearch.add(element);
-//     }
-//     if ("Độ ưu tiên" == category && element.priority.toString().contains(name)) {
-//       listSearch.add(element);
-//     }
-//   });
-//   print(listSearch);
-//   return listSearch;
-// }
+List<ProjectModal> searchProject(name, category, list) {
+  print(name);
+  print(category);
+  List<ProjectModal> data = list;
+  List<ProjectModal> listSearch = [];
+  data.forEach((element) {
+    if (category == "Tên" && element.name.toString().contains(name)) {
+      listSearch.add(element);
+    }
+    if ('Tên nhân viên' == category &&
+        element.users.toString().contains(name)) {
+      listSearch.add(element);
+    }
+    if ("Tên task" == category && element.tasks.toString().contains(name)) {
+      listSearch.add(element);
+    }
+    if ("Tên ngắn" == category && element.shortName.toString().contains(name)) {
+      listSearch.add(element);
+    }
+  });
+  return listSearch;
+}
 
 Future createProject(
     {name, description, shortName, users, tasks, createAt, updateAt}) async {
