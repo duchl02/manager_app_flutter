@@ -31,9 +31,9 @@ class UserModal {
   final String? phoneNumber;
   final String? position;
   final String? email;
-  final List<DateTime>? checkIn;
-  final List<ProjectModal>? projects;
-  final List<TaskModal>? tasks;
+  final List? checkIn;
+  final List? projects;
+  final List? tasks;
   final DateTime? createAt;
   final DateTime? updateAt;
 
@@ -42,16 +42,33 @@ class UserModal {
         name: json['name'],
         userName: json['userName'],
         password: json['password'],
-        birthday: json['birthday'],
+        birthday: (json['birthday'] as Timestamp).toDate(),
         address: json['address'],
         idNumber: json['idNumber'],
         phoneNumber: json['phoneNumber'],
         position: json['position'],
         email: json['email'],
-        checkIn: (json['checkIn'] as List<DateTime>).toList(),
-        projects: (json['projects'] as List<ProjectModal>).toList(),
-        tasks: (json['task'] as List<TaskModal>).toList(),
+        checkIn: (json['checkIn'] ?? [] as List).toList(),
+        projects: (json['projects'] ?? [] as List).toList(),
+        tasks: (json['tasks'] ?? [] as List).toList(),
         createAt: (json['createAt'] as Timestamp).toDate(),
         updateAt: (json['updateAt'] as Timestamp).toDate(),
       );
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "userName": userName,
+        "password": password,
+        "birthday": birthday,
+        "address": address,
+        "idNumber": idNumber,
+        "phoneNumber": phoneNumber,
+        "position": position,
+        "email": email,
+        "checkIn": checkIn,
+        "projects": projects,
+        "tasks": tasks,
+        "createAt": createAt,
+        "updateAt": updateAt,
+      };
 }

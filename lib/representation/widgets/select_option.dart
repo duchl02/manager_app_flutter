@@ -24,6 +24,7 @@ class _SelectOptionState extends State<SelectOption> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(4),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: Colors.black, width: 2)),
@@ -32,7 +33,7 @@ class _SelectOptionState extends State<SelectOption> {
         isExpanded: true,
         icon: const Icon(Icons.arrow_drop_down),
         elevation: 16,
-        style: const TextStyle(color: Colors.deepPurple),
+        style: const TextStyle(color: ColorPalette.primaryColor),
         onChanged: (String? value) {
             widget.onChanged(value);
 
@@ -47,7 +48,7 @@ class _SelectOptionState extends State<SelectOption> {
             value: value,
             child: Text(
               value,
-              style: TextStyleCustom.normalSizePrimary,
+              style: TextStyleCustom.normalText,
             ),
           );
         }).toList(),

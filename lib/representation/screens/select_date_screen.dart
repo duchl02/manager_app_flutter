@@ -15,6 +15,7 @@ class SelectDateScreen extends StatelessWidget {
 
   DateTime? rangeStartDate;
   DateTime? rangeEndDate;
+  bool selectionSingle = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class SelectDateScreen extends StatelessWidget {
           ),
           SfDateRangePicker(
             view: DateRangePickerView.month,
-            selectionMode: DateRangePickerSelectionMode.range,
+            selectionMode: selectionSingle ? DateRangePickerSelectionMode.single : DateRangePickerSelectionMode.range,
             monthViewSettings:
                 DateRangePickerMonthViewSettings(firstDayOfWeek: 1),
             selectionColor: ColorPalette.yellowColor,
@@ -51,7 +52,7 @@ class SelectDateScreen extends StatelessWidget {
             Flexible(
               flex: 1,
               child: ButtonWidget(
-                title: "Cancel",
+                title: "Hủy",
                 ontap: () {
                   Navigator.of(context).pop([]);
                 },
@@ -64,7 +65,7 @@ class SelectDateScreen extends StatelessWidget {
             Flexible(
               flex: 1,
               child: ButtonWidget(
-                title: "Select",
+                title: "Xác nhận",
                 ontap: () {
                   // print(rangeEndDate);
                   Navigator.of(context).pop([rangeStartDate, rangeEndDate]);

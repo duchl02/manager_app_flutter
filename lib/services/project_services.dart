@@ -6,7 +6,7 @@ import 'package:travel_app/Data/models/project_model.dart';
 import 'package:travel_app/Data/models/project_model.dart';
 import 'package:travel_app/services/task_services.dart';
 
-import '../representation/screens/staffs_screen/staffs_screen.dart';
+import '../representation/screens/users_screen/users_screen.dart';
 
 Stream<List<ProjectModal>> getAllProjects() {
   var data = FirebaseFirestore.instance.collection("projects").snapshots().map(

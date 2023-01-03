@@ -7,6 +7,7 @@ import 'package:travel_app/core/helpers/asset_helper.dart';
 import 'package:travel_app/core/helpers/image_helper.dart';
 import 'package:travel_app/services/project_services.dart';
 import 'package:travel_app/services/task_services.dart';
+import 'package:travel_app/services/user_services.dart';
 
 class AppBarContainerWidget extends StatelessWidget {
   const AppBarContainerWidget(
@@ -139,7 +140,7 @@ class AppBarContainerWidget extends StatelessWidget {
               padding: EdgeInsets.only(left: 40, right: 40),
               child: Row(
                 children: [
-                  countNavBar("Điểm danh", getAllTasks()),
+                  countNavBar("Điểm danh", getAllUsers()),
                   countNavBar("Task", getAllTasks()),
                   countNavBar("Dự án", getAllProjects()),
                 ],
@@ -162,11 +163,14 @@ class AppBarContainerWidget extends StatelessWidget {
             }
             if (snapshot.hasData) {
               final taskModal = snapshot.data!;
-              taskModal.map(
-                (e) {},
-              );
-              return Text(
-                taskModal.length.toString(),
+              // if (taskModal.checkIn != null){
+              //    return Text(
+              //   taskModal.checkIn.length.toString(),
+              //   style: TextStyleCustom.h1Text,
+              // );
+              // }
+              return Text( 
+                taskModal.length.toString() ,
                 style: TextStyleCustom.h1Text,
               );
             } else {

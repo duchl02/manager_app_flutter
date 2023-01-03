@@ -83,7 +83,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                       padding: EdgeInsets.only(right: 20),
                       child: Icon(
                         FontAwesomeIcons.trash,
-                        color: Colors.red,
+                        color: Colors.white,
                       )),
                   onTap: () async {
                     setState(() {

@@ -51,6 +51,7 @@ class _SelectMultiCustomState extends State<SelectMultiCustom> {
                   MultiSelectBottomSheetField(
                     initialChildSize: 0.4,
                     listType: MultiSelectListType.CHIP,
+                    initialValue: widget.listValues,
                     searchable: true,
                     buttonText: Text("Chọn " + widget.title),
                     title: Text(widget.title),

@@ -3,7 +3,6 @@ import 'package:travel_app/core/constants/dismension_constants.dart';
 import 'package:travel_app/core/helpers/asset_helper.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:travel_app/core/helpers/image_helper.dart';
-import 'package:travel_app/representation/screens/home_booking_screen.dart';
 import 'package:travel_app/representation/screens/main_app.dart';
 import 'package:travel_app/representation/widgets/button_widget.dart';
 import 'package:travel_app/representation/widgets/form_field.dart';
