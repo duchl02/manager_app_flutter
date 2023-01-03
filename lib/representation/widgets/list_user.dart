@@ -49,7 +49,7 @@ class ListUser extends StatelessWidget {
                     ? formatDate(userModal.birthday)
                     : "null"),
                 Spacer(),
-                Text("SĐT ", style: TextStyleCustom.smallText),
+                Text("SĐT: ", style: TextStyleCustom.smallText),
                 Text(userModal.phoneNumber ?? "null",
                     style: TextStyleCustom.smallText),
               ],
@@ -60,8 +60,8 @@ class ListUser extends StatelessWidget {
             Row(
               children: [
                 Text("Địa chỉ: ", style: TextStyleCustom.smallText),
-                Text(userModal.address ?? "null" , style: TextStyleCustom.smallText),
-
+                Text(userModal.address ?? "null",
+                    style: TextStyleCustom.smallText),
                 Spacer(),
               ],
             )

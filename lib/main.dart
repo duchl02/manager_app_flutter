@@ -24,6 +24,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LocalStorageHelper.setValue('checkLogin', false);
+
     return MaterialApp(
       title: 'Travel App',
       theme: ThemeData(
@@ -39,4 +41,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

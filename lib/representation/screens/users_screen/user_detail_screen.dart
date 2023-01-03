@@ -209,6 +209,16 @@ class _UserDetailState extends State<UserDetail> {
                       },
                     ),
                     FormInputField(
+                      label: "Số điện thoại",
+                      controller: phoneNumberController,
+                      hintText: "Nhập số điện thoại",
+                      onChanged: (value) {
+                        setState(() {
+                          phoneNumberController!.text = value;
+                        });
+                      },
+                    ),
+                    FormInputField(
                       label: "CMND",
                       controller: idNumberController,
                       hintText: "Nhập CMND",
@@ -314,6 +324,7 @@ class _UserDetailState extends State<UserDetail> {
                                         phoneNumber:
                                             phoneNumberController!.text,
                                         email: emailController!.text,
+                                        address: addressController!.text,
                                         createAt: widget.userModal.createAt ??
                                             DateTime.now(),
                                         updateAt: DateTime.now());
@@ -334,6 +345,7 @@ class _UserDetailState extends State<UserDetail> {
                                         password: passwordController!.text,
                                         birthday: dateTime,
                                         idNumber: idNumberController!.text,
+                                        address: addressController!.text,
                                         phoneNumber:
                                             phoneNumberController!.text,
                                         email: emailController!.text,

@@ -1,4 +1,7 @@
+import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:travel_app/Data/models/user_model.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
 import 'package:travel_app/core/helpers/asset_helper.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,6 +12,7 @@ import 'package:travel_app/representation/widgets/form_field.dart';
 
 import '../../../Data/models/user_login_modal.dart';
 import '../../../core/helpers/local_storage_helper.dart';
+import '../../../services/user_services.dart';
 
 class FormLoginScreen extends StatefulWidget {
   const FormLoginScreen({super.key});
@@ -21,6 +25,7 @@ class FormLoginScreen extends StatefulWidget {
 
 class _FormLoginScreenState extends State<FormLoginScreen> {
   late TextEditingController userController, passwordController;
+  List<UserModal>? listUser;
 
   @override
   void initState() {
@@ -39,17 +44,37 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
     final pasword = LocalStorageHelper.setValue('password', passwordInput);
   }
 
-  void checkLogin(userInput, passwordInput) {
-    UserLoginModal userLogin =
-        UserLoginModal(password: passwordInput, user: userInput);
-    for (int i = 0; i < listUsers.length; i++) {
-      if (listUsers[i].user == userInput &&
-          listUsers[i].password == passwordInput) {
+  void checkLogin(userInput, passwordInput) async {
+    bool checkLogin = false;
+    listUser?.forEach((element) async {
+      if (element.userName == userInput && element.password == passwordInput) {
+        checkLogin = true;
         LocalStorageHelper.setValue('checkLogin', true);
-        // Navigator.pushNamed(context, MainApp.routeName);
         Navigator.pushReplacementNamed(context, MainApp.routeName);
+        await EasyLoading.showSuccess("Đăng nhập thành công");
+        return;
       }
+    });
+    if (checkLogin == false) {
+      await confirm(
+        context,
+        title: const Text('Lỗi đăng nhập'),
+        content: Text('Mật khẩu hoặc tên đăng nhập không đúng'),
+        textOK: const Text('Xác nhận'),
+        textCancel: const Text('Thoát'),
+      );
     }
+
+    // UserLoginModal userLogin =
+    //     UserLoginModal(password: passwordInput, user: userInput);
+    // for (int i = 0; i < listUsers.length; i++) {
+    //   if (listUsers[i].user == userInput &&
+    //       listUsers[i].password == passwordInput) {
+    //     LocalStorageHelper.setValue('checkLogin', true);
+    //     // Navigator.pushNamed(context, MainApp.routeName);
+    //     Navigator.pushReplacementNamed(context, MainApp.routeName);
+    //   }
+    // }
   }
 
   @override
@@ -59,6 +84,21 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          StreamBuilder(
+            stream: getAllUsers(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              if (snapshot.hasData) {
+                final userModal = snapshot.data!;
+                listUser = userModal;
+                return Text('');
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
           Padding(
             padding: EdgeInsets.all(kDefaultPadding),
             child: FormInputField(
@@ -80,6 +120,7 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
             child: ButtonWidget(
               title: "Đăng nhập",
               ontap: () async {
+                print(listUser);
                 saveUserPassword(userController.text, passwordController.text);
                 checkLogin(userController.text, passwordController.text);
               },
