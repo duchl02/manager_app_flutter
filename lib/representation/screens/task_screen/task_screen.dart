@@ -107,6 +107,7 @@ class _TaskScreenState extends State<TaskScreen> {
               flex: 3,
               child: SelectOption(
                 list: _list,
+                searchOption: 0,
                 dropdownValue: category,
                 onChanged: ((p0) {
                   category = p0.toString();
@@ -173,8 +174,6 @@ class _TaskScreenState extends State<TaskScreen> {
     );
   }
 }
-
-
 
 List<OptionModal> _list = [
   OptionModal(value: "name", display: "Tên"),

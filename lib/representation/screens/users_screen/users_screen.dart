@@ -82,7 +82,8 @@ class _UserScreenState extends State<UserScreen> {
                   FontAwesomeIcons.plus,
                 )),
             onTap: () {
-              Navigator.of(context).pushNamed(UserDetail.routeName , arguments: userModalEmty);
+              Navigator.of(context)
+                  .pushNamed(UserDetail.routeName, arguments: userModalEmty);
             },
           )
         ],
@@ -105,6 +106,7 @@ class _UserScreenState extends State<UserScreen> {
             Expanded(
               flex: 3,
               child: SelectOption(
+                searchOption: 0,
                 list: _list,
                 dropdownValue: category,
                 onChanged: ((p0) {
@@ -170,7 +172,7 @@ class _UserScreenState extends State<UserScreen> {
 
 List<OptionModal> _list = [
   OptionModal(value: "name", display: "Tên"),
-  OptionModal(value: "userName", display: "Tên nhân viên"),
-  OptionModal(value: "shortName", display: "Tên ngắn"),
-  OptionModal(value: "task", display: "Tên task"),
+  OptionModal(value: "userName", display: "Tên user"),
+  OptionModal(value: "phoneNumber", display: "Số điện thoại"),
+  OptionModal(value: "project", display: "Tên project"),
 ];

@@ -10,9 +10,11 @@ class SelectOption<T> extends StatefulWidget {
       {super.key,
       required this.list,
       required this.dropdownValue,
-      required this.onChanged});
+      required this.onChanged,
+      this.searchOption});
 
   List<OptionModal> list;
+  double? searchOption;
 
   @override
   State<SelectOption> createState() => _SelectOptionState();
@@ -25,7 +27,7 @@ class _SelectOptionState extends State<SelectOption> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(4),
+      padding: EdgeInsets.all(widget.searchOption ?? 4),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: Colors.black, width: 2)),
@@ -58,4 +60,3 @@ class _SelectOptionState extends State<SelectOption> {
     );
   }
 }
-

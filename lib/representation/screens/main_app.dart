@@ -8,7 +8,7 @@ import 'package:travel_app/core/constants/dismension_constants.dart';
 import 'package:travel_app/representation/screens/form_login/login_screen.dart';
 import 'package:travel_app/representation/screens/home_screen/home_screen.dart';
 import 'package:travel_app/representation/screens/project_screen/project_screen.dart';
-import 'package:travel_app/representation/widgets/selectMultiCustom.dart';
+import 'package:travel_app/representation/widgets/select_multi_custom.dart';
 import 'package:travel_app/representation/screens/users_screen/users_screen.dart';
 import 'package:travel_app/representation/screens/task_screen/task_screen.dart';
 
@@ -23,13 +23,10 @@ class _MainAppState extends State<MainApp> {
   int _currentIndex = 0;
   final _pageCotroller = PageController();
   final _pages = [
-    UserScreen(),
-    
-    ProjectScreen(),
-
     HomeScreen(),
-
     TaskScreen(),
+    ProjectScreen(),
+    UserScreen(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -51,7 +48,6 @@ class _MainAppState extends State<MainApp> {
   SalomonBottomBar usingBottomNavigator() {
     return SalomonBottomBar(
         currentIndex: _currentIndex,
-        
         onTap: (index) {
           setState(() {
             _currentIndex = index;

@@ -2,16 +2,21 @@ import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/core/constants/text_style.dart';
 import 'package:travel_app/core/extensions/date_time_format.dart';
 
 import '../../../Data/models/task_model.dart';
+import '../../../Data/models/user_model.dart';
 import '../../../core/constants/dismension_constants.dart';
 import '../../../core/helpers/asset_helper.dart';
 import '../../../core/helpers/image_helper.dart';
+import '../../../core/helpers/local_storage_helper.dart';
+import '../../../services/project_services.dart';
 import '../../../services/task_services.dart';
+import '../../../services/user_services.dart';
 import '../../widgets/app_bar_container.dart';
 import '../../widgets/list_task.dart';
 import '../select_date_screen.dart';
@@ -31,8 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // getAllTasks();
-    // getTask();
+    var userLogin = LocalStorageHelper.getValue('userLogin');
+    // userLogin = UserModal.fromJson(userLogin);
+    print(userLogin);
     return AppBarContainerWidget(
         title: Padding(
           padding: EdgeInsets.symmetric(horizontal: kMinPadding),
@@ -40,16 +46,37 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text("Xin Chào",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                   SizedBox(
                     height: kMinPadding,
                   ),
-                  Text("Nguyễn Văn Đức",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  StreamBuilder(
+                    stream: getAllUsers(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Text("${snapshot.error}");
+                      }
+                      if (snapshot.hasData) {
+                        final userModal = snapshot.data!;
+                        var userLogin =
+                            LocalStorageHelper.getValue('userLogin');
+                        var userName;
+                        for (var e in userModal) {
+                          if (e.id == userLogin["id"]) {
+                            userName = e.name;
+                          }
+                        }
+                        return Text(userName,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16));
+                      } else {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  ),
                 ],
               ),
               Spacer(),
@@ -83,21 +110,46 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child:
-                    _buildItemCategory(Icon(FontAwesomeIcons.plus), () async {
-                  if (await confirm(
-                    context,
-                    title: const Text('Điểm danh'),
-                    content: Text('Xác nhận đã điểm danh ngày hôm nay: ' +
-                        "${formatDate(DateTime.now())}"),
-                    textOK: const Text('Xác nhận'),
-                    textCancel: const Text('Thoát'),
-                  )) {
-                    return print('pressedOK');
+                  child: StreamBuilder(
+                stream: getAllUsers(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
                   }
-                  return print('pressedCancel');
-                }, 'Điểm danh'),
-              ),
+                  if (snapshot.hasData) {
+                    final projectModal = snapshot.data!;
+                    return _buildItemCategory(Icon(FontAwesomeIcons.plus),
+                        () async {
+                      if (await confirm(
+                        context,
+                        title: const Text('Điểm danh'),
+                        content: Text('Xác nhận đã điểm danh ngày hôm nay: ' +
+                            "${formatDate(DateTime.now())}"),
+                        textOK: const Text('Xác nhận'),
+                        textCancel: const Text('Thoát'),
+                      )) {
+                        var user = findUserById(userLogin["id"], projectModal);
+                        if (user != [] && checkDate(DateTime.now(), user)) {
+                          var today = DateTime.now();
+                          var listDate = [];
+                          listDate.add(today);
+                          await updateUserCheckIn(
+                              id: userLogin["id"].toString(),
+                              checkIn: listDate,
+                              updateAt: DateTime.now());
+                          await EasyLoading.showSuccess("Điểm danh thành công");
+                        } else {
+                          await EasyLoading.showError(
+                              "Bạn đã điểm danh ngày hôm nay");
+                        }
+                      }
+                      return print('pressedCancel');
+                    }, 'Điểm danh');
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                },
+              )),
               Expanded(
                 child: _buildItemCategory(Icon(FontAwesomeIcons.calendar), () {
                   Navigator.of(context).pushNamed(SelectDateScreen.routeName);

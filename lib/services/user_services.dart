@@ -76,14 +76,24 @@ UserModal findUserById(name, List<UserModal> list) {
   List<UserModal> data = list;
   UserModal user = UserModal();
   for (var e in data) {
-
-    if ( e.id.toString().contains(name)) {
-      print(name);
-
+    if (e.id.toString().contains(name)) {
       user = e;
     }
   }
   return user;
+}
+
+bool checkDate(DateTime date, UserModal modal) {
+  var check = true;
+  for (var e in modal.checkIn!) {
+    if (date.year == e.toDate().year &&
+        date.month == e.toDate().month &&
+        date.day == e.toDate().day) {
+      check = false;
+      break;
+    }
+  }
+  return check;
 }
 
 // UserModal searchUserById(name, list) {
@@ -173,6 +183,20 @@ Future updateUser(
   final json = userModal.toJson();
 
   await docUser.update(json);
+}
+
+Future updateUserCheckIn({id, checkIn, updateAt}) async {
+  final docUser = FirebaseFirestore.instance.collection("users").doc(id);
+
+  final userModal = UserModal(
+      id: docUser.id, checkIn: checkIn, updateAt: updateAt ?? DateTime.now());
+
+  final json = userModal.toJson();
+
+  await docUser.update({
+    "id": id,
+    "checkIn": checkIn,
+  });
 }
 
 Future deleteUser(id) async {

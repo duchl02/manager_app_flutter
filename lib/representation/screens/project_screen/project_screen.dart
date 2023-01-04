@@ -10,6 +10,7 @@ import 'package:travel_app/representation/widgets/search_input.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
 import 'package:travel_app/services/project_services.dart';
 
+import '../../../Data/models/option_modal.dart';
 import '../../../Data/models/project_model.dart';
 import '../../../services/project_services.dart';
 
@@ -31,7 +32,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
   @override
   void initState() {
     super.initState();
-    category = _list[0];
+    category = _list[0].value;
     isSearch = false;
   }
 
@@ -102,16 +103,17 @@ class _ProjectScreenState extends State<ProjectScreen> {
             height: 5,
           ),
           Row(children: [
-            // Expanded(
-            //   flex: 3,
-            //   child: SelectOption(
-            //     list: _list,
-            //     dropdownValue: category,
-            //     onChanged: ((p0) {
-            //       category = p0.toString();
-            //     }),
-            //   ),
-            // ),
+            Expanded(
+              flex: 3,
+              child: SelectOption(
+                searchOption: 0,
+                list: _list,
+                dropdownValue: category,
+                onChanged: ((p0) {
+                  category = p0.toString();
+                }),
+              ),
+            ),
             SizedBox(
               width: 10,
             ),
@@ -167,9 +169,10 @@ class _ProjectScreenState extends State<ProjectScreen> {
     );
   }
 }
-List<String> _list = <String>[
-  'Tên',
-  'Tên nhân viên',
-  'Tên ngắn',
-  'Tên task',
+
+List<OptionModal> _list = [
+  OptionModal(value: "name", display: "Tên"),
+  OptionModal(value: "userName", display: "Tên nhân viên"),
+  OptionModal(value: "shortName", display: "Tên ngắn"),
+  OptionModal(value: "task", display: "Tên task"),
 ];

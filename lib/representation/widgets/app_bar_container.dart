@@ -9,6 +9,8 @@ import 'package:travel_app/services/project_services.dart';
 import 'package:travel_app/services/task_services.dart';
 import 'package:travel_app/services/user_services.dart';
 
+import '../../core/helpers/local_storage_helper.dart';
+
 class AppBarContainerWidget extends StatelessWidget {
   const AppBarContainerWidget(
       {super.key,
@@ -140,7 +142,40 @@ class AppBarContainerWidget extends StatelessWidget {
               padding: EdgeInsets.only(left: 40, right: 40),
               child: Row(
                 children: [
-                  countNavBar("Điểm danh", getAllUsers()),
+                  Expanded(
+                      child: Column(
+                    children: [
+                      StreamBuilder(
+                        stream: getAllUsers(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Text("${snapshot.error}");
+                          }
+                          if (snapshot.hasData) {
+                            final userModal = snapshot.data!;
+                            var userLogin =
+                                LocalStorageHelper.getValue('userLogin');
+                            var listDay;
+                            for (var e in userModal) {
+                              if (e.id == userLogin["id"]) {
+                                listDay = e.checkIn;
+                              }
+                            }
+                            return Text(
+                              listDay.length.toString(),
+                              style: TextStyleCustom.h1Text,
+                            );
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        },
+                      ),
+                      Text(
+                        "Điểm danh",
+                        style: TextStyleCustom.nomalTextWhile,
+                      ),
+                    ],
+                  )),
                   countNavBar("Task", getAllTasks()),
                   countNavBar("Dự án", getAllProjects()),
                 ],
@@ -169,8 +204,8 @@ class AppBarContainerWidget extends StatelessWidget {
               //   style: TextStyleCustom.h1Text,
               // );
               // }
-              return Text( 
-                taskModal.length.toString() ,
+              return Text(
+                taskModal.length.toString(),
                 style: TextStyleCustom.h1Text,
               );
             } else {

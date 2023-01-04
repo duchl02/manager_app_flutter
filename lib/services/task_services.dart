@@ -13,8 +13,7 @@ Stream<List<TaskModal>> getAllTasks() {
   return data;
 }
 
-CollectionReference taskDb =
-    FirebaseFirestore.instance.collection("tasks");
+CollectionReference taskDb = FirebaseFirestore.instance.collection("tasks");
 
 List<Object?> taskData = [];
 List<TaskModal> currentTaskData = [];
@@ -34,16 +33,16 @@ List<TaskModal> searchTask(name, category, list) {
   List<TaskModal> data = list;
   List<TaskModal> listSearch = [];
   data.forEach((element) {
-    if ( category == "Tên" && element.name.toString().contains(name)) {
+    if (category == "name" && element.name.toString().contains(name)) {
       listSearch.add(element);
     }
-    if ('Tên nhân viên' == category && element.userId.toString().contains(name)) {
+    if ('userName' == category && element.userId.toString().contains(name)) {
       listSearch.add(element);
     }
-    if ("Trạng thái" == category && element.status.toString().contains(name)) {
+    if ("status" == category && element.status.toString().contains(name)) {
       listSearch.add(element);
     }
-    if ("Độ ưu tiên" == category && element.priority.toString().contains(name)) {
+    if ("priority" == category && element.priority.toString().contains(name)) {
       listSearch.add(element);
     }
   });
