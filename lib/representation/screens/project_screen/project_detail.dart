@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/Data/models/project_model.dart';
+import 'package:travel_app/Data/models/user_model.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
 import 'package:travel_app/core/extensions/date_time_format.dart';
 import 'package:travel_app/representation/widgets/button_widget.dart';
@@ -13,6 +14,7 @@ import 'package:travel_app/representation/widgets/selectMultiCustom.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
 import 'package:travel_app/services/project_services.dart';
 import 'package:travel_app/services/task_services.dart';
+import 'package:travel_app/services/user_services.dart';
 
 import '../../../core/constants/color_constants.dart';
 import '../../../services/home_services.dart';
@@ -36,7 +38,6 @@ class _ProjectDetailState extends State<ProjectDetail> {
 
   List listUsers = [];
   List listUsersId = [];
-  List listUsersDefault = [];
 
   @override
   void initState() {
@@ -64,11 +65,14 @@ class _ProjectDetailState extends State<ProjectDetail> {
     if (widget.projectModal.description != null) {
       descriptionController!.text = widget.projectModal.description!;
     }
+    listUsers = listUsersDefault;
   }
+
+  List<UserModal> listUsersDefault = [];
 
   @override
   Widget build(BuildContext context) {
-    print(widget.projectModal.users.toString());
+    print(listUsersId);
 
     return Scaffold(
       appBar: AppBar(
@@ -150,33 +154,26 @@ class _ProjectDetailState extends State<ProjectDetail> {
                     // FormInputField(label: "Người thực hiện", hintText: "Nhập tiêu đề"),
 
                     StreamBuilder(
-                      stream: getAllTasks(),
+                      stream: getAllUsers(),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
                           return Text("${snapshot.error}");
                         }
                         if (snapshot.hasData) {
                           final projectModal = snapshot.data!;
-                          projectModal.forEach(
-                            (element) {
-                              listUsersId.forEach((element2) {
-                                listUsersDefault = [];
-                                if (element.id == element2) {
-                                  listUsersDefault.add(element);
-                                }
-                              });
-                            },
-                          );
-                          print("object");
-                          print("object");
-                          print("object");
-                          print("object");
-                          print(listUsersDefault);
-                          // convertToListModal(projectModal, listUsers);
+                          // listUsersDefault = projectModal;
+                          listUsersDefault = [];
+                          for (var e in projectModal) {
+                            for (var e2 in listUsersId) {
+                              if (e.id == e2) {
+                                listUsersDefault.add(e);
+                              }
+                            }
+                          }
                           return SelectMultiCustom(
                             title: "Nhân viên",
                             listValues: projectModal,
-                            defaultListValues: projectModal,
+                            defaultListValues: listUsersDefault,
                             onTap: (value) {
                               // print("---------------------------------------");
 
@@ -221,8 +218,6 @@ class _ProjectDetailState extends State<ProjectDetail> {
                               child: ButtonWidget(
                                 title: "Xác nhận",
                                 ontap: () async {
-                                  print("---------------------");
-
                                   if (listUsers != []) {
                                     listUsersId = [];
                                     for (var e in listUsers) {
@@ -230,9 +225,6 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                     }
                                   }
 
-                                  print("object");
-                                  print(listUsersDefault);
-                                  print("object");
 
                                   if (widget.projectModal.createAt != null) {
                                     setState(() {
@@ -240,11 +232,9 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                     });
                                     await updateProject(
                                         id: widget.projectModal.id.toString(),
-                                        name:
-                                            nameController!.text ?? "Khong co",
+                                        name: nameController!.text,
                                         description:
-                                            descriptionController!.text ??
-                                                "trong",
+                                            descriptionController!.text,
                                         users: listUsersId,
                                         shortName: shortNameController!.text,
                                         createAt:
@@ -263,11 +253,9 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                       isLoading = true;
                                     });
                                     await createProject(
-                                        name:
-                                            nameController!.text ?? "Khong co",
+                                        name: nameController!.text,
                                         description:
-                                            descriptionController!.text ??
-                                                "trong",
+                                            descriptionController!.text,
                                         users: listUsersId,
                                         shortName: shortNameController!.text,
                                         createAt:

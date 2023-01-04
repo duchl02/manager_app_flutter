@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -50,11 +52,13 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
       if (element.userName == userInput && element.password == passwordInput) {
         checkLogin = true;
         LocalStorageHelper.setValue('checkLogin', true);
+        LocalStorageHelper.setValue('userLogin', element.toJson());
         Navigator.pushReplacementNamed(context, MainApp.routeName);
         await EasyLoading.showSuccess("Đăng nhập thành công");
         return;
       }
     });
+    print(LocalStorageHelper.getValue('userLogin'));
     if (checkLogin == false) {
       await confirm(
         context,

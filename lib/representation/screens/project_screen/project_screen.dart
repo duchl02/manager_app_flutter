@@ -102,16 +102,16 @@ class _ProjectScreenState extends State<ProjectScreen> {
             height: 5,
           ),
           Row(children: [
-            Expanded(
-              flex: 3,
-              child: SelectOption(
-                list: _list,
-                dropdownValue: category,
-                onChanged: ((p0) {
-                  category = p0.toString();
-                }),
-              ),
-            ),
+            // Expanded(
+            //   flex: 3,
+            //   child: SelectOption(
+            //     list: _list,
+            //     dropdownValue: category,
+            //     onChanged: ((p0) {
+            //       category = p0.toString();
+            //     }),
+            //   ),
+            // ),
             SizedBox(
               width: 10,
             ),
@@ -167,8 +167,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
     );
   }
 }
-
-const List<String> _list = <String>[
+List<String> _list = <String>[
   'Tên',
   'Tên nhân viên',
   'Tên ngắn',

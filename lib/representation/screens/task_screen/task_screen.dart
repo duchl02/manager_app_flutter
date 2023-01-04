@@ -10,6 +10,7 @@ import 'package:travel_app/representation/widgets/list_task.dart';
 import 'package:travel_app/representation/widgets/search_input.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
 
+import '../../../Data/models/option_modal.dart';
 import '../../../Data/models/task_model.dart';
 import '../../../services/task_services.dart';
 
@@ -31,7 +32,7 @@ class _TaskScreenState extends State<TaskScreen> {
   @override
   void initState() {
     super.initState();
-    category = _list[0];
+    category = _list[0].value;
     isSearch = false;
   }
 
@@ -173,9 +174,11 @@ class _TaskScreenState extends State<TaskScreen> {
   }
 }
 
-const List<String> _list = <String>[
-  'Tên',
-  'Tên nhân viên',
-  'Trạng thái',
-  'Độ ưu tiên'
+
+
+List<OptionModal> _list = [
+  OptionModal(value: "name", display: "Tên"),
+  OptionModal(value: "userName", display: "Tên nhân viên"),
+  OptionModal(value: "status", display: "Trạng thái"),
+  OptionModal(value: "priority", display: "Độ ưu tiên"),
 ];

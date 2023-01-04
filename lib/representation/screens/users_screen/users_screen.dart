@@ -3,11 +3,13 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/core/constants/color_constants.dart';
+import 'package:travel_app/representation/screens/users_screen/user_detail_screen.dart';
 import 'package:travel_app/representation/widgets/button_widget.dart';
 import 'package:travel_app/representation/widgets/search_input.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
 import 'package:travel_app/services/user_services.dart';
 
+import '../../../Data/models/option_modal.dart';
 import '../../../Data/models/user_model.dart';
 import '../../../services/user_services.dart';
 import '../../widgets/list_user.dart';
@@ -30,7 +32,7 @@ class _UserScreenState extends State<UserScreen> {
   @override
   void initState() {
     super.initState();
-    category = _list[0];
+    category = _list[0].value;
     isSearch = false;
   }
 
@@ -80,7 +82,7 @@ class _UserScreenState extends State<UserScreen> {
                   FontAwesomeIcons.plus,
                 )),
             onTap: () {
-              createUser(name: "jdasd", birthday: DateTime.now());
+              Navigator.of(context).pushNamed(UserDetail.routeName , arguments: userModalEmty);
             },
           )
         ],
@@ -166,9 +168,9 @@ class _UserScreenState extends State<UserScreen> {
   }
 }
 
-const List<String> _list = <String>[
-  'Tên',
-  'Tên nhân viên',
-  'Tên ngắn',
-  'Tên task',
+List<OptionModal> _list = [
+  OptionModal(value: "name", display: "Tên"),
+  OptionModal(value: "userName", display: "Tên nhân viên"),
+  OptionModal(value: "shortName", display: "Tên ngắn"),
+  OptionModal(value: "task", display: "Tên task"),
 ];

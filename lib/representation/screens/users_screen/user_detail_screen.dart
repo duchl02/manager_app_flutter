@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:travel_app/Data/models/option_modal.dart';
 import 'package:travel_app/Data/models/user_model.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
 import 'package:travel_app/core/extensions/date_time_format.dart';
@@ -36,9 +37,8 @@ class _UserDetailState extends State<UserDetail> {
   TextEditingController? emailController = TextEditingController();
   TextEditingController? phoneNumberController = TextEditingController();
 
-  List listUsers = [];
-  List listUsersId = [];
-  List listUsersDefault = [];
+  List listProject = [];
+  List listProjectsId = [];
   String positionId = "";
 
   @override
@@ -83,7 +83,21 @@ class _UserDetailState extends State<UserDetail> {
     if (widget.userModal.phoneNumber != null) {
       phoneNumberController!.text = widget.userModal.phoneNumber!;
     }
+    if (widget.userModal.address != null) {
+      addressController!.text = widget.userModal.address!;
+    }
+    if (widget.userModal.position != null) {
+      positionId = widget.userModal.position!;
+    }
+    if (widget.userModal.birthday != null) {
+      dateTime = widget.userModal.birthday!;
+    }
+    if (widget.userModal.projects != null) {
+      listProjectsId = widget.userModal.projects!;
+    }
   }
+
+  List listProjectsDefault = [];
 
   late DateTime dateTime = DateTime.now();
 
@@ -240,7 +254,7 @@ class _UserDetailState extends State<UserDetail> {
                       list: _listPositions,
                       dropdownValue: widget.userModal.position != null
                           ? widget.userModal.position.toString()
-                          : _listPositions[0],
+                          : _listPositions[0].value,
                       onChanged: (p0) {
                         positionId = p0 as String;
                       },
@@ -264,24 +278,21 @@ class _UserDetailState extends State<UserDetail> {
                           return Text("${snapshot.error}");
                         }
                         if (snapshot.hasData) {
-                          final userModal = snapshot.data!;
-                          userModal.forEach(
-                            (element) {
-                              listUsersId.forEach((element2) {
-                                listUsersDefault = [];
-                                if (element.id == element2) {
-                                  listUsersDefault.add(element);
-                                }
-                              });
-                            },
-                          );
-                          // convertToListModal(userModal, listUsers);
+                          final projectModal = snapshot.data!;
+                          listProjectsDefault = [];
+                          for (var e in projectModal) {
+                            for (var e2 in listProjectsId) {
+                              if (e.id == e2) {
+                                listProjectsDefault.add(e);
+                              }
+                            }
+                          }
                           return SelectMultiCustom(
                             title: "Dự án",
-                            listValues: userModal,
-                            defaultListValues: userModal,
+                            listValues: projectModal,
+                            defaultListValues: listProjectsDefault,
                             onTap: (value) {
-                              listUsers = value;
+                              listProject = value;
                             },
                           );
                         } else {
@@ -310,6 +321,12 @@ class _UserDetailState extends State<UserDetail> {
                               child: ButtonWidget(
                                 title: "Xác nhận",
                                 ontap: () async {
+                                  if (listProject != [] && listProject.length != 0) {
+                                    listProjectsId = [];
+                                    for (var e in listProject) {
+                                      listProjectsId.add(e.id);
+                                    }
+                                  }
                                   if (widget.userModal.createAt != null) {
                                     setState(() {
                                       isLoading = true;
@@ -321,6 +338,8 @@ class _UserDetailState extends State<UserDetail> {
                                         password: passwordController!.text,
                                         birthday: dateTime,
                                         idNumber: idNumberController!.text,
+                                        position: positionId,
+                                        projects: listProjectsId,
                                         phoneNumber:
                                             phoneNumberController!.text,
                                         email: emailController!.text,
@@ -348,6 +367,7 @@ class _UserDetailState extends State<UserDetail> {
                                         address: addressController!.text,
                                         phoneNumber:
                                             phoneNumberController!.text,
+                                        position: positionId,
                                         email: emailController!.text,
                                         createAt: widget.userModal.createAt ??
                                             DateTime.now(),
@@ -379,8 +399,8 @@ class _UserDetailState extends State<UserDetail> {
       lastDate: DateTime(2100));
 }
 
-const List<String> _listPositions = <String>[
-  'Nhân viên',
-  'Quản lý',
-  'Admin',
+List<OptionModal> _listPositions = [
+  OptionModal(value: "NV", display: "Nhân viên"),
+  OptionModal(value: "Quản lý", display: "Quản lý"),
+  OptionModal(value: "Admin", display: "Admin"),
 ];

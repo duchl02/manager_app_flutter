@@ -72,6 +72,30 @@ List<UserModal> currentUserData = [];
 //   return listSearch;
 // }
 
+UserModal findUserById(name, List<UserModal> list) {
+  List<UserModal> data = list;
+  UserModal user = UserModal();
+  for (var e in data) {
+
+    if ( e.id.toString().contains(name)) {
+      print(name);
+
+      user = e;
+    }
+  }
+  return user;
+}
+
+// UserModal searchUserById(name, list) {
+//   List<UserModal> data = list;
+//   UserModal user = [] as UserModal;
+//   data.forEach((element) {
+//     if (element.name.toString().contains(name)) {
+//       user = element;
+//     }
+//   });
+//   return user;
+// }
 Future createUser(
     {name,
     userName,
@@ -112,7 +136,8 @@ Future createUser(
 }
 
 Future updateUser(
-    {id,name,
+    {id,
+    name,
     userName,
     password,
     birthday,
@@ -129,7 +154,7 @@ Future updateUser(
   final docUser = FirebaseFirestore.instance.collection("users").doc(id);
 
   final userModal = UserModal(
-       id: docUser.id,
+      id: docUser.id,
       name: name,
       userName: userName,
       password: password,

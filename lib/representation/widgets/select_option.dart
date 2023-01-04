@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/Data/models/option_modal.dart';
 import 'package:travel_app/representation/screens/task_screen/task_screen.dart';
 
 import '../../core/constants/color_constants.dart';
@@ -11,7 +12,7 @@ class SelectOption<T> extends StatefulWidget {
       required this.dropdownValue,
       required this.onChanged});
 
-  List<String> list;
+  List<OptionModal> list;
 
   @override
   State<SelectOption> createState() => _SelectOptionState();
@@ -30,12 +31,13 @@ class _SelectOptionState extends State<SelectOption> {
           border: Border.all(color: Colors.black, width: 2)),
       child: DropdownButton<String>(
         value: widget.dropdownValue.isNotEmpty ? widget.dropdownValue : null,
+        underline: SizedBox(),
         isExpanded: true,
         icon: const Icon(Icons.arrow_drop_down),
         elevation: 16,
         style: const TextStyle(color: ColorPalette.primaryColor),
         onChanged: (String? value) {
-            widget.onChanged(value);
+          widget.onChanged(value);
 
           // This is called when the user selects an item.
           setState(() {
@@ -43,11 +45,11 @@ class _SelectOptionState extends State<SelectOption> {
           });
         },
         // onChanged: widget.onChanged,
-        items: widget.list.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
+        items: widget.list.map<DropdownMenuItem<String>>((OptionModal value) {
+          return DropdownMenuItem(
+            value: value.value,
             child: Text(
-              value,
+              value.display.toString(),
               style: TextStyleCustom.normalText,
             ),
           );
@@ -56,3 +58,4 @@ class _SelectOptionState extends State<SelectOption> {
     );
   }
 }
+

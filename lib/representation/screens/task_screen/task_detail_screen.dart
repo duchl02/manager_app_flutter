@@ -4,15 +4,19 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:travel_app/Data/models/option_modal.dart';
 import 'package:travel_app/Data/models/task_model.dart';
+import 'package:travel_app/Data/models/user_model.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
 import 'package:travel_app/core/extensions/date_time_format.dart';
 import 'package:travel_app/representation/widgets/button_widget.dart';
 import 'package:travel_app/representation/widgets/form_field.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
+import 'package:travel_app/services/project_services.dart';
 import 'package:travel_app/services/task_services.dart';
 
 import '../../../core/constants/color_constants.dart';
+import '../../../services/user_services.dart';
 
 class TaskDetail extends StatefulWidget {
   const TaskDetail({super.key, required this.taskModal});
@@ -30,10 +34,10 @@ class _TaskDetailState extends State<TaskDetail> {
   TextEditingController? nameController = TextEditingController();
   TextEditingController? timeSuccessController = TextEditingController();
   TextEditingController? descriptionController = TextEditingController();
-  late String userId = _listSatff[0];
-  late String projectId = _listProject[0];
-  late String priorityId = _listPriority[0];
-  late String statusId = _listStatus[0];
+  late String userId;
+  late String projectId;
+  late String priorityId;
+  late String statusId;
   @override
   void initState() {
     super.initState();
@@ -60,6 +64,18 @@ class _TaskDetailState extends State<TaskDetail> {
     }
     if (widget.taskModal.description != null) {
       descriptionController!.text = widget.taskModal.description!;
+    }
+    if (widget.taskModal.userId != null) {
+      userId = widget.taskModal.userId!;
+    }
+    if (widget.taskModal.priority != null) {
+      priorityId = widget.taskModal.priority!;
+    }
+    if (widget.taskModal.status != null) {
+      statusId = widget.taskModal.status!;
+    }
+    if (widget.taskModal.projectId != null) {
+      projectId = widget.taskModal.projectId!;
     }
   }
 
@@ -132,7 +148,6 @@ class _TaskDetailState extends State<TaskDetail> {
                         });
                       },
                     ),
-                    // FormInputField(label: "Người thực hiện", hintText: "Nhập tiêu đề"),
                     Padding(
                       padding: EdgeInsets.only(top: 10, bottom: 2),
                       child: Text(
@@ -141,13 +156,34 @@ class _TaskDetailState extends State<TaskDetail> {
                             color: ColorPalette.primaryColor, fontSize: 18),
                       ),
                     ),
-                    SelectOption(
-                      list: _listSatff,
-                      dropdownValue: widget.taskModal.userId != null
-                          ? widget.taskModal.userId.toString()
-                          : _listSatff[0],
-                      onChanged: (p0) {
-                        userId = p0 as String;
+                    StreamBuilder(
+                      stream: getAllUsers(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Text("${snapshot.error}");
+                        }
+                        if (snapshot.hasData) {
+                          final userModal = snapshot.data!;
+                          List<OptionModal> _listSatff = [];
+                          for (var e in userModal) {
+                            _listSatff.add(
+                                OptionModal(value: e.id!, display: e.name!));
+                          }
+                          // UserModal userDefaults =
+                          //     findUserById(userId, userModal);
+
+                          return SelectOption(
+                            list: _listSatff,
+                            dropdownValue: widget.taskModal.userId != null
+                                ? widget.taskModal.userId.toString()
+                                : "",
+                            onChanged: (p0) {
+                              userId = p0 as String;
+                            },
+                          );
+                        } else {
+                          return Center(child: CircularProgressIndicator());
+                        }
                       },
                     ),
                     Padding(
@@ -158,12 +194,34 @@ class _TaskDetailState extends State<TaskDetail> {
                             color: ColorPalette.primaryColor, fontSize: 18),
                       ),
                     ),
-                    SelectOption(
-                      list: _listProject,
-                      dropdownValue:
-                          widget.taskModal.projectId ?? _listProject[0],
-                      onChanged: (p0) {
-                        projectId = p0 as String;
+                    StreamBuilder(
+                      stream: getAllProjects(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Text("${snapshot.error}");
+                        }
+                        if (snapshot.hasData) {
+                          final projectModal = snapshot.data!;
+                          List<OptionModal> _listProject = [];
+                          for (var e in projectModal) {
+                            _listProject.add(
+                                OptionModal(value: e.id!, display: e.name!));
+                          }
+                          // UserModal userDefaults =
+                          //     findUserById(userId, userModal);
+
+                          return SelectOption(
+                            list: _listProject,
+                            dropdownValue: widget.taskModal.projectId != null
+                                ? widget.taskModal.projectId.toString()
+                                : "",
+                            onChanged: (p0) {
+                              projectId = p0 as String;
+                            },
+                          );
+                        } else {
+                          return Center(child: CircularProgressIndicator());
+                        }
                       },
                     ),
                     Padding(
@@ -178,7 +236,7 @@ class _TaskDetailState extends State<TaskDetail> {
                       list: _listPriority,
                       dropdownValue: widget.taskModal.priority != null
                           ? widget.taskModal.priority.toString()
-                          : _listPriority[0],
+                          : "",
                       onChanged: (p0) {
                         priorityId = p0 as String;
                       },
@@ -195,7 +253,7 @@ class _TaskDetailState extends State<TaskDetail> {
                       list: _listStatus,
                       dropdownValue: widget.taskModal.status != null
                           ? widget.taskModal.status.toString()
-                          : _listStatus[0],
+                          : "",
                       onChanged: (p0) {
                         statusId = p0 as String;
                       },
@@ -248,18 +306,15 @@ class _TaskDetailState extends State<TaskDetail> {
                                     });
                                     await updateTask(
                                         id: widget.taskModal.id.toString(),
-                                        name:
-                                            nameController!.text ?? "Khong co",
+                                        name: nameController!.text,
                                         description:
-                                            descriptionController!.text ??
-                                                "trong",
+                                            descriptionController!.text,
                                         priority: priorityId,
                                         projectId: projectId,
                                         userId: userId,
                                         status: statusId,
                                         timeSuccess:
-                                            timeSuccessController!.text ??
-                                                "Trong",
+                                            timeSuccessController!.text,
                                         createAt: widget.taskModal.createAt ??
                                             DateTime.now(),
                                         updateAt: DateTime.now());
@@ -275,18 +330,15 @@ class _TaskDetailState extends State<TaskDetail> {
                                       isLoading = true;
                                     });
                                     await createTask(
-                                        name:
-                                            nameController!.text ?? "Khong co",
+                                        name: nameController!.text,
                                         description:
-                                            descriptionController!.text ??
-                                                "trong",
+                                            descriptionController!.text,
                                         priority: priorityId,
                                         projectId: projectId,
                                         userId: userId,
                                         status: statusId,
                                         timeSuccess:
-                                            timeSuccessController!.text ??
-                                                "Trong",
+                                            timeSuccessController!.text,
                                         createAt: widget.taskModal.createAt ??
                                             DateTime.now(),
                                         updateAt: DateTime.now());
@@ -311,30 +363,15 @@ class _TaskDetailState extends State<TaskDetail> {
   }
 }
 
-const List<String> _listSatff = <String>[
-  'Nguyễn Văn Đức',
-  'Trần Ngọc Quý',
-  'Trần Ngọc Hà',
-  'Nguyễn Nhân Hiệu'
+List<OptionModal> _listPriority = [
+  OptionModal(value: "P1", display: "Không ưu tiên"),
+  OptionModal(value: "P2", display: "Ưu tiên vừa"),
+  OptionModal(value: "P3", display: "Ưu tiên"),
+  OptionModal(value: "P4", display: "Cấp bách"),
 ];
-
-const List<String> _listProject = <String>[
-  'Học Flutter',
-  'Học OOP',
-  'App quản lý Công việc',
-  'App quản lý task'
+List<OptionModal> _listStatus = [
+  OptionModal(value: "S1", display: "Coding"),
+  OptionModal(value: "S2", display: "HoldOn"),
+  OptionModal(value: "S3", display: "In progress"),
+  OptionModal(value: "S4", display: "Done"),
 ];
-const List<String> _listPriority = <String>[
-  'Không ưu tiên',
-  'Ưu tiên vừa',
-  'Ưu tiên',
-  'Cấp độ'
-];
-
-const List<String> _listStatus = <String>[
-  'Coding',
-  'HoldOn',
-  'In progress',
-  'Done'
-];
-// List taskDetail1 = [];

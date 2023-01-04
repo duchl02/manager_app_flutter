@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/Data/models/task_model.dart';
-import 'package:travel_app/representation/screens/home_screen/home_screen.dart';
 import 'package:travel_app/representation/screens/task_screen/task_detail_screen.dart';
-import 'package:travel_app/representation/screens/task_screen/task_screen.dart';
+import 'package:travel_app/services/user_services.dart';
 
 import '../../core/constants/text_style.dart';
 import '../../core/extensions/date_time_format.dart';
@@ -43,17 +42,25 @@ class ListTask extends StatelessWidget {
             SizedBox(
               height: 6,
             ),
-            Row(
-              children: [
-                Text("Người tạo: "),
-                Text(taskModal.userId ?? "null"),
-                Spacer(),
-                // Text("Độ ưu tiên: ", style: TextStyleCustom.smallText),
-                // Text(taskModal.priority ?? "null",
-                //     style: TextStyleCustom.smallText),
-                // Text("Ngày tạo: ", style: TextStyleCustom.smallText),
-                // Text("23/12/2022", style: TextStyleCustom.smallText),
-              ],
+            StreamBuilder(
+              stream: getAllUsers(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                if (snapshot.hasData) {
+                  final userModal = snapshot.data!;
+                  String name = findUserById(taskModal.userId, userModal).name ?? "null";
+                  return Row(
+                    children: [
+                      Text("Người tạo: "),
+                      Text(name),
+                    ],
+                  );
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              },
             ),
             SizedBox(
               height: 6,
