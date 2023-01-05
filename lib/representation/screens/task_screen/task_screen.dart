@@ -2,6 +2,8 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:travel_app/Data/models/project_model.dart';
+import 'package:travel_app/Data/models/user_model.dart';
 import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/core/constants/text_style.dart';
 import 'package:travel_app/representation/screens/task_screen/task_detail_screen.dart';
@@ -9,6 +11,8 @@ import 'package:travel_app/representation/widgets/button_widget.dart';
 import 'package:travel_app/representation/widgets/list_task.dart';
 import 'package:travel_app/representation/widgets/search_input.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
+import 'package:travel_app/services/project_services.dart';
+import 'package:travel_app/services/user_services.dart';
 
 import '../../../Data/models/option_modal.dart';
 import '../../../Data/models/task_model.dart';
@@ -45,6 +49,9 @@ class _TaskScreenState extends State<TaskScreen> {
 
   final TaskModal taskModalEmty = TaskModal();
   List<TaskModal> list = [];
+  List<UserModal> _listUser = [];
+  List<ProjectModal> _listProject = [];
+
   bool isSearch = false;
   late String category;
   TextEditingController textEditingController = TextEditingController();
@@ -102,73 +109,73 @@ class _TaskScreenState extends State<TaskScreen> {
           SizedBox(
             height: 5,
           ),
-          Row(children: [
-            Expanded(
-              flex: 3,
-              child: SelectOption(
-                list: _list,
-                searchOption: 0,
-                dropdownValue: category,
-                onChanged: ((p0) {
-                  category = p0.toString();
-                }),
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Expanded(
-                flex: 2,
-                child: ButtonWidget(
-                    title: "Tìm kiếm",
-                    ontap: () {
-                      var data;
-                      setState(() {
-                        if (isSearch == false) {
-                          isSearch = true;
-                        }
-                        list = searchTask(textEditingController.text, category,
-                            currentTaskData);
-                      });
-                    }))
-          ]),
+          SelectOption(
+            list: _list,
+            searchOption: 0,
+            dropdownValue: category,
+            onChanged: ((p0) {
+              setState(() {
+                category = p0.toString();
+              });
+            }),
+          ),
           SizedBox(
             height: 10,
           ),
+          StreamBuilder(
+            stream: getAllUsers(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              if (snapshot.hasData) {
+                _listUser = snapshot.data!;
+
+                return SizedBox();
+              } else {
+                return SizedBox();
+              }
+            },
+          ),
+          StreamBuilder(
+            stream: getAllProjects(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              if (snapshot.hasData) {
+                _listProject = snapshot.data!;
+
+                return SizedBox();
+              } else {
+                return SizedBox();
+              }
+            },
+          ),
           Expanded(
-              child: isSearch == false
-                  ? StreamBuilder(
-                      stream: getAllTasks(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return Text("${snapshot.error}");
-                        }
-                        if (snapshot.hasData) {
-                          final taskModal = snapshot.data!;
-                          currentTaskData = taskModal;
-                          // taskModal.map(
-                          //   (e) {
-                          //     print(e.show());
-                          //   },
-                          // );
-                          return ListView(
-                            children: taskModal
-                                .map(((e) => ListTask(
-                                      taskModal: e,
-                                    )))
-                                .toList(),
-                          );
-                        } else {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      },
-                    )
-                  : SingleChildScrollView(
-                      child: Column(
-                        children:
-                            list.map((e) => ListTask(taskModal: e)).toList(),
-                      ),
-                    ))
+              child: StreamBuilder(
+            stream: getAllTasks(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              if (snapshot.hasData) {
+                final taskModal = snapshot.data!;
+                currentTaskData = searchTask(textEditingController.text,
+                    category, taskModal, _listUser, _listProject);
+
+                return ListView(
+                  children: currentTaskData
+                      .map(((e) => ListTask(
+                            taskModal: e,
+                          )))
+                      .toList(),
+                );
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          ))
         ]),
       ),
     );
@@ -176,8 +183,8 @@ class _TaskScreenState extends State<TaskScreen> {
 }
 
 List<OptionModal> _list = [
-  OptionModal(value: "name", display: "Tên"),
+  OptionModal(value: "name", display: "Tên task"),
   OptionModal(value: "userName", display: "Tên nhân viên"),
+  OptionModal(value: "project", display: "Dự án"),
   OptionModal(value: "status", display: "Trạng thái"),
-  OptionModal(value: "priority", display: "Độ ưu tiên"),
 ];

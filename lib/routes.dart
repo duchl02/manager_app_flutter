@@ -48,13 +48,20 @@ PageRoute? generateRoutes(RouteSettings settings) {
           projectModal: projectModal,
         ),
       );
-      case UserDetail.routeName:
-      late final UserModal userModal =
-          (settings.arguments as UserModal);
+    case UserDetail.routeName:
+      late final UserModal userModal = (settings.arguments as UserModal);
       return CupertinoPageRoute(
         settings: settings,
         builder: (context) => UserDetail(
           userModal: userModal,
+        ),
+      );
+    case SelectDateScreen.routeName:
+      late final List<DateTime> listDates = (settings.arguments as List<DateTime>);
+      return CupertinoPageRoute(
+        settings: settings,
+        builder: (context) => SelectDateScreen(
+          initialDates: listDates,
         ),
       );
 
@@ -65,9 +72,9 @@ PageRoute? generateRoutes(RouteSettings settings) {
       return CupertinoPageRoute(
           builder: (context) => IntroScreen(), settings: settings);
 
-    case SelectDateScreen.routeName:
-      return CupertinoPageRoute(
-          builder: (context) => SelectDateScreen(), settings: settings);
+    // case SelectDateScreen.routeName:
+    //   return CupertinoPageRoute(
+    //       builder: (context) => SelectDateScreen(), settings: settings);
 
     case FormLoginScreen.routeName:
       return CupertinoPageRoute(

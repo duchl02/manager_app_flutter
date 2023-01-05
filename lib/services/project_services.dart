@@ -16,39 +16,12 @@ Stream<List<ProjectModal>> getAllProjects() {
   return data;
 }
 
-// CollectionReference _collectionRef =
-//     FirebaseFirestore.instance.collection("projects");
-// List getdtaa() {
-//   StreamBuilder(
-//     stream: getAllTasks(),
-//     builder: (context, snapshot) {
-//       if (snapshot.hasError) {
-//         return Text("${snapshot.error}");
-//       }
-//       if (snapshot.hasData) {
-//         final taskModal = snapshot.data!;
-//         currentTaskData = taskModal;
-//         print("object--------------------------------");
-//         return taskModal ;
-//       } else {
-//         return Center(child: CircularProgressIndicator());
-//       }
-//     },
-//   );
-// }
+
 
 List<Object?> projectData = [];
 List<ProjectModal> currentProjectData = [];
 
-// Future<List<Object?>> getAllDataProject(
-// ) async {
-//   QuerySnapshot querySnapshot = await _collectionRef.get();
-//   projectData = querySnapshot.docs.map((doc) => doc.data()).toList();
-//   print(projectData);
-//   currentProjectData = projectData.toList();
-//   return projectData;
-//   // print(data.toString());
-// }
+
 List<ProjectModal> searchProject(name, category, list) {
   print(name);
   print(category);
@@ -121,4 +94,15 @@ Future deleteProject(id) async {
   print(id);
   final docProject = FirebaseFirestore.instance.collection("projects").doc(id);
   await docProject.delete();
+}
+
+ProjectModal findProjectById(name, List<ProjectModal> list) {
+  List<ProjectModal> data = list;
+  ProjectModal user = ProjectModal();
+  for (var e in data) {
+    if (e.id.toString().contains(name)) {
+      user = e;
+    }
+  }
+  return user;
 }

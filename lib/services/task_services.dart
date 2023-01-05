@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/Data/models/task_model.dart';
+import 'package:travel_app/services/project_services.dart';
+import 'package:travel_app/services/user_services.dart';
 
 import '../representation/screens/users_screen/users_screen.dart';
 
@@ -27,23 +29,40 @@ List<TaskModal> currentTaskData = [];
 //   return taskData;
 //   // print(data.toString());
 // }
-List<TaskModal> searchTask(name, category, list) {
-  print(name);
-  print(category);
+List<TaskModal> searchTask(name, category, list, listUser, listProject) {
+  print("-----------------------------------------------");
   List<TaskModal> data = list;
   List<TaskModal> listSearch = [];
   data.forEach((element) {
-    if (category == "name" && element.name.toString().contains(name)) {
+    if (category == "name" &&
+        element.name.toString().toLowerCase().contains(name)) {
       listSearch.add(element);
     }
-    if ('userName' == category && element.userId.toString().contains(name)) {
+    if ('userName' == category) {
+      var listUserName = [];
+      for (var e in data) {
+        var userName = findUserById(e.userId, listUser).name ?? "##";
+        listUserName.add(userName);
+      }
+      for (var e in listUserName) {
+        if (e.toLowerCase().contains(name) && name != '') {
+          if (listSearch.contains(element)) {
+          } else {
+            print("0000000000000000000000");
+            listSearch.add(element);
+          }
+        }
+      }
+    }
+    if ("status" == category &&
+        element.status.toString().toLowerCase().contains(name)) {
       listSearch.add(element);
     }
-    if ("status" == category && element.status.toString().contains(name)) {
-      listSearch.add(element);
-    }
-    if ("priority" == category && element.priority.toString().contains(name)) {
-      listSearch.add(element);
+    if ("project" == category) {
+      var projectName = findProjectById(name, listProject).name ?? "##";
+      if (element.priority.toString().toLowerCase().contains(projectName)) {
+        listSearch.add(element);
+      }
     }
   });
   return listSearch;

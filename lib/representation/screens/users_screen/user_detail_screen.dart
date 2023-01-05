@@ -271,35 +271,35 @@ class _UserDetailState extends State<UserDetail> {
                     ),
                     // FormInputField(label: "Người thực hiện", hintText: "Nhập tiêu đề"),
 
-                    StreamBuilder(
-                      stream: getAllProjects(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return Text("${snapshot.error}");
-                        }
-                        if (snapshot.hasData) {
-                          final projectModal = snapshot.data!;
-                          listProjectsDefault = [];
-                          for (var e in projectModal) {
-                            for (var e2 in listProjectsId) {
-                              if (e.id == e2) {
-                                listProjectsDefault.add(e);
-                              }
-                            }
-                          }
-                          return SelectMultiCustom(
-                            title: "Dự án",
-                            listValues: projectModal,
-                            defaultListValues: listProjectsDefault,
-                            onTap: (value) {
-                              listProject = value;
-                            },
-                          );
-                        } else {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      },
-                    ),
+                    // StreamBuilder(
+                    //   stream: getAllProjects(),
+                    //   builder: (context, snapshot) {
+                    //     if (snapshot.hasError) {
+                    //       return Text("${snapshot.error}");
+                    //     }
+                    //     if (snapshot.hasData) {
+                    //       final projectModal = snapshot.data!;
+                    //       listProjectsDefault = [];
+                    //       for (var e in projectModal) {
+                    //         for (var e2 in listProjectsId) {
+                    //           if (e.id == e2) {
+                    //             listProjectsDefault.add(e);
+                    //           }
+                    //         }
+                    //       }
+                    //       return SelectMultiCustom(
+                    //         title: "Dự án",
+                    //         listValues: projectModal,
+                    //         defaultListValues: listProjectsDefault,
+                    //         onTap: (value) {
+                    //           listProject = value;
+                    //         },
+                    //       );
+                    //     } else {
+                    //       return Center(child: CircularProgressIndicator());
+                    //     }
+                    //   },
+                    // ),
 
                     Padding(
                       padding: EdgeInsets.only(top: 10, bottom: 10),
@@ -339,7 +339,8 @@ class _UserDetailState extends State<UserDetail> {
                                         birthday: dateTime,
                                         idNumber: idNumberController!.text,
                                         position: positionId,
-                                        projects: listProjectsId,
+                                        // projects: listProjectsId,
+                                        checkIn: widget.userModal.checkIn ?? [],
                                         phoneNumber:
                                             phoneNumberController!.text,
                                         email: emailController!.text,

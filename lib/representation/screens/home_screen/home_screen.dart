@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/core/constants/text_style.dart';
 import 'package:travel_app/core/extensions/date_time_format.dart';
+import 'package:travel_app/representation/screens/form_login/login_screen.dart';
 
 import '../../../Data/models/task_model.dart';
 import '../../../Data/models/user_model.dart';
@@ -80,9 +81,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               Spacer(),
-              Icon(
-                FontAwesomeIcons.bell,
-                size: kDefaultIconSize,
+              InkWell(
+                onTap: () async {
+                  if (await confirm(
+                    context,
+                    title: const Text('Đăng xuất'),
+                    content: Text("Xác nhận đăng xuất khỏi app"),
+                    textOK: const Text('Xác nhận'),
+                    textCancel: const Text('Thoát'),
+                  )) {
+                    LocalStorageHelper.setValue('checkLogin', false);
+                    Navigator.pushReplacementNamed(
+                        context, FormLoginScreen.routeName);
+                  }
+                  ;
+                },
+                child: Icon(
+                  FontAwesomeIcons.rightToBracket,
+                  size: kDefaultIconSize,
+                ),
               ),
               SizedBox(
                 width: 20,
@@ -91,10 +108,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(kMinPadding),
+                  borderRadius: BorderRadius.circular(20),
                   color: Colors.white,
                 ),
-                child: ImageHelper.loadFromAsset(AssetHelper.catCute),
+                child: ImageHelper.loadFromAsset(AssetHelper.catCute,
+                    radius: BorderRadius.circular(20)),
               )
             ],
           ),
@@ -123,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (await confirm(
                         context,
                         title: const Text('Điểm danh'),
-                        content: Text('Xác nhận đã điểm danh ngày hôm nay: ' +
+                        content: Text('Xác nhận điểm danh ngày hôm nay: ' +
                             "${formatDate(DateTime.now())}"),
                         textOK: const Text('Xác nhận'),
                         textCancel: const Text('Thoát'),
@@ -151,10 +169,35 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               )),
               Expanded(
-                child: _buildItemCategory(Icon(FontAwesomeIcons.calendar), () {
-                  Navigator.of(context).pushNamed(SelectDateScreen.routeName);
-                }, 'Lịch làm việc'),
-              ),
+                  child: StreamBuilder(
+                stream: getAllUsers(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  if (snapshot.hasData) {
+                    final projectModal = snapshot.data!;
+                    var user = findUserById(userLogin["id"], projectModal);
+
+                    List<DateTime> listDate = [];
+
+                    if (user.checkIn != null) {
+                      for (var e in user.checkIn!) {
+                        listDate.add(e.toDate());
+                      }
+                    }
+                    print(listDate);
+                    return _buildItemCategory(Icon(FontAwesomeIcons.calendar),
+                        () {
+                      Navigator.of(context).pushNamed(
+                          SelectDateScreen.routeName,
+                          arguments: listDate);
+                    }, 'Lịch làm việc');
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                },
+              )),
               Expanded(
                 child: _buildItemCategory(Icon(FontAwesomeIcons.list), () {
                   Navigator.of(context).pushNamed(TaskDetail.routeName,
@@ -176,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
                 Text(
-                  "Danh sách task",
+                  "Danh sách task của bạn",
                   style: TextStyleCustom.h2TextPrimary,
                 ),
                 Icon(
@@ -196,13 +239,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
                 if (snapshot.hasData) {
                   final taskModal = snapshot.data!;
-                  taskModal.map(
-                    (e) {
-                      print(e.show());
-                    },
-                  );
+                  var userLogin = LocalStorageHelper.getValue('userLogin');
+                  List<TaskModal> listTasks = [];
+                  for (var e in taskModal) {
+                    if (e.userId == userLogin["id"]) {
+                      listTasks.add(e);
+                    }
+                  }
                   return ListView(
-                    children: taskModal
+                    children: listTasks
                         .map(((e) => ListTask(
                               taskModal: e,
                             )))

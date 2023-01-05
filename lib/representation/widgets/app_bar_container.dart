@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:travel_app/Data/models/project_model.dart';
+import 'package:travel_app/Data/models/task_model.dart';
 import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
 import 'package:travel_app/core/constants/text_style.dart';
 import 'package:travel_app/core/helpers/asset_helper.dart';
 import 'package:travel_app/core/helpers/image_helper.dart';
+import 'package:travel_app/representation/screens/project_screen/project_detail.dart';
 import 'package:travel_app/services/project_services.dart';
 import 'package:travel_app/services/task_services.dart';
 import 'package:travel_app/services/user_services.dart';
@@ -176,8 +179,76 @@ class AppBarContainerWidget extends StatelessWidget {
                       ),
                     ],
                   )),
-                  countNavBar("Task", getAllTasks()),
-                  countNavBar("Dự án", getAllProjects()),
+                  Expanded(
+                      child: Column(
+                    children: [
+                      StreamBuilder(
+                        stream: getAllTasks(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Text("${snapshot.error}");
+                          }
+                          if (snapshot.hasData) {
+                            final taskModal = snapshot.data!;
+                            var userLogin =
+                                LocalStorageHelper.getValue('userLogin');
+                            List<TaskModal> listTasks = [];
+                            for (var e in taskModal) {
+                              if (e.userId == userLogin["id"]) {
+                                listTasks.add(e);
+                              }
+                            }
+                            return Text(
+                              listTasks.length.toString(),
+                              style: TextStyleCustom.h1Text,
+                            );
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        },
+                      ),
+                      Text(
+                        "Task",
+                        style: TextStyleCustom.nomalTextWhile,
+                      ),
+                    ],
+                  )),
+                  Expanded(
+                      child: Column(
+                    children: [
+                      StreamBuilder(
+                        stream: getAllProjects(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Text("${snapshot.error}");
+                          }
+                          if (snapshot.hasData) {
+                            final taskModal = snapshot.data!;
+                            var userLogin =
+                                LocalStorageHelper.getValue('userLogin');
+                            List<ProjectModal> listTasks = [];
+                            for (var e in taskModal) {
+                              for (var e2 in e.users!) {
+                                if (e2 == userLogin["id"]) {
+                                  listTasks.add(e);
+                                }
+                              }
+                            }
+                            return Text(
+                              listTasks.length.toString(),
+                              style: TextStyleCustom.h1Text,
+                            );
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        },
+                      ),
+                      Text(
+                        "Dự án",
+                        style: TextStyleCustom.nomalTextWhile,
+                      ),
+                    ],
+                  )),
                 ],
               ),
             ),

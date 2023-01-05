@@ -7,7 +7,7 @@ import '../../core/constants/text_style.dart';
 import '../../core/extensions/date_time_format.dart';
 
 class ListTask extends StatelessWidget {
-  const ListTask({
+  ListTask({
     Key? key,
     this.onTapTask,
     required this.taskModal,
@@ -15,9 +15,19 @@ class ListTask extends StatelessWidget {
 
   final Function? onTapTask;
   final TaskModal taskModal;
+  String statusDisplay = "";
 
   @override
   Widget build(BuildContext context) {
+    if (taskModal.status == "S1") {
+      statusDisplay = "Coding";
+    } else if (taskModal.status == "S3") {
+      statusDisplay = "In Progress";
+    } else if (taskModal.status == "S2") {
+      statusDisplay = "HoldOn";
+    } else if (taskModal.status == "S4") {
+      statusDisplay = "Done";
+    }
     return InkWell(
       onTap: (() {
         Navigator.of(context)
@@ -50,7 +60,8 @@ class ListTask extends StatelessWidget {
                 }
                 if (snapshot.hasData) {
                   final userModal = snapshot.data!;
-                  String name = findUserById(taskModal.userId, userModal).name ?? "null";
+                  String name =
+                      findUserById(taskModal.userId, userModal).name ?? "null";
                   return Row(
                     children: [
                       Text("Người tạo: "),
@@ -68,8 +79,7 @@ class ListTask extends StatelessWidget {
             Row(
               children: [
                 Text("Trạng thái : ", style: TextStyleCustom.smallText),
-                Text(taskModal.status ?? "null",
-                    style: TextStyleCustom.smallText),
+                Text(statusDisplay, style: TextStyleCustom.smallText),
                 Spacer(),
                 // Text("Hoàn thành: "),
                 // Text("25/12/2022 "),

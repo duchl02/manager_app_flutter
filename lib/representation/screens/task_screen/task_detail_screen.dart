@@ -15,7 +15,9 @@ import 'package:travel_app/representation/widgets/select_option.dart';
 import 'package:travel_app/services/project_services.dart';
 import 'package:travel_app/services/task_services.dart';
 
+import '../../../Data/models/project_model.dart';
 import '../../../core/constants/color_constants.dart';
+import '../../../core/helpers/local_storage_helper.dart';
 import '../../../services/user_services.dart';
 
 class TaskDetail extends StatefulWidget {
@@ -165,13 +167,29 @@ class _TaskDetailState extends State<TaskDetail> {
                         if (snapshot.hasData) {
                           final userModal = snapshot.data!;
                           List<OptionModal> _listSatff = [];
+                          var userLogin =
+                              LocalStorageHelper.getValue('userLogin');
+                          List<UserModal> user = [];
                           for (var e in userModal) {
-                            _listSatff.add(
-                                OptionModal(value: e.id!, display: e.name!));
+                            if (e.id == userLogin["id"]) {
+                              user.add(e);
+                            }
                           }
+                          if (userLogin["id"] != widget.taskModal.userId) {
+                            for (var e in userModal) {
+                              _listSatff.add(
+                                  OptionModal(value: e.id!, display: e.name!));
+                            }
+                          } else {
+                            for (var e in user) {
+                              _listSatff.add(
+                                  OptionModal(value: e.id!, display: e.name!));
+                            }
+                          }
+
                           // UserModal userDefaults =
                           //     findUserById(userId, userModal);
-
+                          print(widget.taskModal.userId);
                           return SelectOption(
                             list: _listSatff,
                             dropdownValue: widget.taskModal.userId != null
@@ -203,7 +221,17 @@ class _TaskDetailState extends State<TaskDetail> {
                         if (snapshot.hasData) {
                           final projectModal = snapshot.data!;
                           List<OptionModal> _listProject = [];
+                          var userLogin =
+                              LocalStorageHelper.getValue('userLogin');
+                          List<ProjectModal> listTasks = [];
                           for (var e in projectModal) {
+                            for (var e2 in e.users!) {
+                              if (e2 == userLogin["id"]) {
+                                listTasks.add(e);
+                              }
+                            }
+                          }
+                          for (var e in listTasks) {
                             _listProject.add(
                                 OptionModal(value: e.id!, display: e.name!));
                           }

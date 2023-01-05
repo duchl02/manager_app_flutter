@@ -36,23 +36,28 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
     passwordController = TextEditingController();
   }
 
-  final List<UserLoginModal> listUsers = [
-    UserLoginModal(user: "admin", password: "admin"),
-    UserLoginModal(user: "user", password: "user"),
-  ];
+  // final List<UserLoginModal> listUsers = [
+  //   UserLoginModal(user: "admin", password: "admin"),
+  //   UserLoginModal(user: "user", password: "user"),
+  // ];
 
-  void saveUserPassword(userInput, passwordInput) async {
-    final user = LocalStorageHelper.setValue('user', userInput);
-    final pasword = LocalStorageHelper.setValue('password', passwordInput);
-  }
+  // void saveUserPassword(userInput, passwordInput) async {
+  //   final user = LocalStorageHelper.setValue('user', userInput);
+  //   final pasword = LocalStorageHelper.setValue('password', passwordInput);
+  // }
 
   void checkLogin(userInput, passwordInput) async {
     bool checkLogin = false;
     listUser?.forEach((element) async {
       if (element.userName == userInput && element.password == passwordInput) {
         checkLogin = true;
+        UserLoginModal userLoginModal = UserLoginModal(
+            password: element.password!,
+            user: element.userName!,
+            id: element.id!,
+            position: element.position!);
         LocalStorageHelper.setValue('checkLogin', true);
-        LocalStorageHelper.setValue('userLogin', element.toJson());
+        LocalStorageHelper.setValue('userLogin', userLoginModal.toJson());
         Navigator.pushReplacementNamed(context, MainApp.routeName);
         await EasyLoading.showSuccess("Đăng nhập thành công");
         return;
@@ -121,8 +126,6 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
               child: ButtonWidget(
                 title: "Đăng nhập",
                 ontap: () async {
-                  saveUserPassword(
-                      userController.text, passwordController.text);
                   checkLogin(userController.text, passwordController.text);
                 },
               ),
