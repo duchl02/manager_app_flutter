@@ -1,13 +1,19 @@
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:confirm_dialog/confirm_dialog.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/core/constants/text_style.dart';
 import 'package:travel_app/core/extensions/date_time_format.dart';
 import 'package:travel_app/representation/screens/form_login/login_screen.dart';
+import 'package:travel_app/representation/screens/users_screen/user_detail_screen.dart';
 
 import '../../../Data/models/task_model.dart';
 import '../../../Data/models/user_model.dart';
@@ -34,11 +40,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final TaskModal taskModalEmty = new TaskModal();
+  File? file;
+  String? imageUser;
+  UserModal userModal = new UserModal();
 
   @override
   Widget build(BuildContext context) {
     var userLogin = LocalStorageHelper.getValue('userLogin');
-    // userLogin = UserModal.fromJson(userLogin);
     print(userLogin);
     return AppBarContainerWidget(
         title: Padding(
@@ -111,8 +119,25 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(20),
                   color: Colors.white,
                 ),
-                child: ImageHelper.loadFromAsset(AssetHelper.catCute,
-                    radius: BorderRadius.circular(20)),
+                child: InkWell(
+                  onTap: () {
+                    print(userModal.imageUser);
+                    Navigator.of(context)
+                        .pushNamed(UserDetail.routeName, arguments: userModal);
+                  },
+                  child: userModal.imageUser != null
+                      ? Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              image: DecorationImage(image: NetworkImage(userModal.imageUser!), fit: BoxFit.cover)),
+                          // child: Image.network(
+                          //   userModal.imageUser!,
+                          //   fit: BoxFit.contain,
+                          // ),
+                          )
+                      : ImageHelper.loadFromAsset(AssetHelper.user,
+                          radius: BorderRadius.circular(20)),
+                ),
               )
             ],
           ),
@@ -177,7 +202,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
                   if (snapshot.hasData) {
                     final projectModal = snapshot.data!;
-                    var user = findUserById(userLogin["id"], projectModal);
+                    userModal = findUserById(userLogin["id"], projectModal);
+                    var user = userModal;
 
                     List<DateTime> listDate = [];
 
@@ -206,8 +232,19 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Expanded(
                 child: _buildItemCategory(Icon(FontAwesomeIcons.userLargeSlash),
-                    () {}, 'Đăng ký nghỉ phép'),
+                    () async {
+                  // chooseImage();
+                }, 'Đăng ký nghỉ phép'),
               ),
+              // Expanded(
+              //   child: _buildItemCategory(Icon(FontAwesomeIcons.userLargeSlash),
+              //       () async {
+              //     String url = await uploadImage();
+
+              //     await updateUserImageUser(
+              //         id: userModal.id, imageUser: url);
+              //   }, 'Đăng ký nghỉ phép'),
+              // ),
             ],
           ),
           SizedBox(

@@ -11,9 +11,9 @@ class TextStyleCustom {
   static const TextStyle nomalTextWhile =
       TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14);
   static const TextStyle h1Text =
-      TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 26);
+      TextStyle(color: ColorPalette.text1Color, fontWeight: FontWeight.bold, fontSize: 26);
   static const TextStyle h2Text =
-      TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20);
+      TextStyle(color: ColorPalette.text1Color, fontWeight: FontWeight.bold, fontSize: 20);
   static const TextStyle h2TextPrimary = TextStyle(
       color: ColorPalette.text1Color,
       fontWeight: FontWeight.bold,
@@ -26,5 +26,5 @@ class TextStyleCustom {
   static TextStyle normalSize = TextStyle(fontSize: 18, color: Colors.white);
   static TextStyle normalSizeBlack = TextStyle(fontSize: 18, color: Colors.black);
   static TextStyle normalSizePrimary =
-      TextStyle(fontSize: 18, color: ColorPalette.primaryColor);
+      TextStyle(fontSize: 18, color: ColorPalette.text1Color);
 }

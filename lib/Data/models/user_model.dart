@@ -16,6 +16,7 @@ class UserModal {
     this.password,
     this.projects,
     this.tasks,
+    this.imageUser,
     this.checkIn,
     this.createAt,
     this.updateAt,
@@ -31,6 +32,7 @@ class UserModal {
   final String? phoneNumber;
   final String? position;
   final String? email;
+  final String? imageUser;
   final List? checkIn;
   final List? projects;
   final List? tasks;
@@ -48,6 +50,7 @@ class UserModal {
         phoneNumber: json['phoneNumber'],
         position: json['position'],
         email: json['email'],
+        imageUser: json['imageUser'],
         checkIn: (json['checkIn'] ?? [] as List).toList(),
         projects: (json['projects'] ?? [] as List).toList(),
         tasks: (json['tasks'] ?? [] as List).toList(),
@@ -68,6 +71,7 @@ class UserModal {
         "checkIn": checkIn,
         "projects": projects,
         "tasks": tasks,
+        "imageUser": imageUser,
         "createAt": createAt,
         "updateAt": updateAt,
       };

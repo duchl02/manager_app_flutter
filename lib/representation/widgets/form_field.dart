@@ -45,7 +45,7 @@ class FormInputField extends StatelessWidget {
             validator: validator,
             decoration: InputDecoration(
               hintText: hintText,
-              fillColor: ColorPalette.dividerColor,
+              fillColor: ColorPalette.secondColor,
               hintStyle:
                   TextStyle(color: ColorPalette.primaryColor.withOpacity(0.5)),
               suffixIcon: onTap != null
@@ -54,7 +54,7 @@ class FormInputField extends StatelessWidget {
                   : null,
               focusedBorder: const OutlineInputBorder(
                   borderSide:
-                      BorderSide(color: ColorPalette.primaryColor, width: 2.0),
+                      BorderSide(color: ColorPalette.text1Color, width: 2.0),
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.black, width: 1.0),

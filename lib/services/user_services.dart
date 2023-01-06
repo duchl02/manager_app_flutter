@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:travel_app/Data/models/user_model.dart';
 import 'package:travel_app/Data/models/user_model.dart';
 import 'package:travel_app/services/task_services.dart';
@@ -106,6 +111,7 @@ bool checkDate(DateTime date, UserModal modal) {
 //   });
 //   return user;
 // }
+
 Future createUser(
     {name,
     userName,
@@ -114,6 +120,7 @@ Future createUser(
     address,
     idNumber,
     phoneNumber,
+    imageUser,
     position,
     email,
     checkIn,
@@ -130,6 +137,7 @@ Future createUser(
       password: password,
       birthday: birthday,
       address: address,
+      imageUser: imageUser,
       idNumber: idNumber,
       phoneNumber: phoneNumber,
       position: position,
@@ -156,6 +164,7 @@ Future updateUser(
     phoneNumber,
     position,
     email,
+    imageUser,
     checkIn,
     projects,
     tasks,
@@ -166,6 +175,7 @@ Future updateUser(
   final userModal = UserModal(
       id: docUser.id,
       name: name,
+      imageUser: imageUser,
       userName: userName,
       password: password,
       birthday: birthday,
@@ -198,6 +208,7 @@ Future updateUserCheckIn({id, checkIn, updateAt}) async {
     "checkIn": checkIn,
   });
 }
+
 
 Future deleteUser(id) async {
   print(id);

@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
         primaryColor: ColorPalette.primaryColor,
         scaffoldBackgroundColor: ColorPalette.backgroundScaffoldColor,
         backgroundColor: ColorPalette.backgroundScaffoldColor,
+        fontFamily: "Roboto",
       ),
       home: const SplashScreen(),
       debugShowCheckedModeBanner: false,

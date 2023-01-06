@@ -1,6 +1,12 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:confirm_dialog/confirm_dialog.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:travel_app/Data/models/option_modal.dart';
 import 'package:travel_app/Data/models/user_model.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
@@ -13,6 +19,9 @@ import 'package:travel_app/services/user_services.dart';
 import 'package:travel_app/services/task_services.dart';
 
 import '../../../core/constants/color_constants.dart';
+import '../../../core/helpers/asset_helper.dart';
+import '../../../core/helpers/local_storage_helper.dart';
+import '../../../services/home_services.dart';
 import '../../widgets/select_option.dart';
 
 class UserDetail extends StatefulWidget {
@@ -95,14 +104,22 @@ class _UserDetailState extends State<UserDetail> {
     if (widget.userModal.projects != null) {
       listProjectsId = widget.userModal.projects!;
     }
+    if (widget.userModal.imageUser != null) {
+      imagePath = widget.userModal.imageUser!;
+    }
   }
 
   List listProjectsDefault = [];
 
   late DateTime dateTime = DateTime.now();
+  File? file;
+  String? imagePath;
 
   @override
   Widget build(BuildContext context) {
+    dynamic _userLoginPosition =
+        LocalStorageHelper.getValue('userLogin')["position"];
+    dynamic _userLoginId = LocalStorageHelper.getValue('userLogin')["id"];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorPalette.primaryColor,
@@ -119,15 +136,27 @@ class _UserDetailState extends State<UserDetail> {
                         color: Colors.white,
                       )),
                   onTap: () async {
-                    setState(() {
-                      isLoading = true;
-                    });
-                    await deleteUser(widget.userModal.id.toString());
-                    setState(() {
-                      isLoading = false;
-                    });
-                    Navigator.of(context).pop();
-                    await EasyLoading.showSuccess("Xóa thành công");
+                    if (_userLoginPosition == "admin") {
+                      if (await confirm(
+                        context,
+                        title: const Text('Xác nhận'),
+                        content: Text('Xác nhận xóa nhân viên'),
+                        textOK: const Text('Xác nhận'),
+                        textCancel: const Text('Thoát'),
+                      )) {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await deleteUser(widget.userModal.id.toString());
+                        setState(() {
+                          isLoading = false;
+                        });
+                        Navigator.of(context).pop();
+                        await EasyLoading.showSuccess("Xóa thành công");
+                      }
+                    } else {
+                      notAlowAction(context);
+                    }
                   },
                 )
               : Text("")
@@ -139,26 +168,60 @@ class _UserDetailState extends State<UserDetail> {
             )
           : SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Text("Ngày tạo: "),
-                        Text(widget.userModal.createAt != null
-                            ? formatDate(widget.userModal.createAt)
-                            : "Chưa có")
-                      ],
+                    // Center(
+                    //   child: Container(
+                    //     width: 100,
+                    //     height: 100,
+                    //     decoration: BoxDecoration(
+                    //         image: DecorationImage(
+                    //             image: AssetImage(imagePath),
+                    //             fit: BoxFit.cover)),
+                    //   ),
+                    // ),
+                    Center(
+                      child: InkWell(
+                        onTap: () {
+                          chooseImage();
+                        },
+                        child: Container(
+                          height: 160,
+                          width: 160,
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 3, color: Colors.black),
+                            shape: BoxShape.circle,
+                            image: file == null
+                                ? imagePath == null
+                                    ? DecorationImage(
+                                        image: AssetImage(AssetHelper.user),
+                                        fit: BoxFit.cover)
+                                    : DecorationImage(
+                                        image: NetworkImage(imagePath!),
+                                        fit: BoxFit.cover)
+                                : DecorationImage(
+                                    image: FileImage(file!), fit: BoxFit.cover),
+                          ),
+                          alignment: Alignment.center,
+                          child: Container(
+                              height: 160,
+                              width: 160,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                color: Colors.blue,
+                              ),
+                              margin: EdgeInsets.only(
+                                  left: 110, top: 120, right: 10),
+                              child: Icon(
+                                Icons.edit,
+                                size: 20,
+                              )),
+                        ),
+                      ),
                     ),
-                    Row(
-                      children: [
-                        Text("Ngày chỉnh sửa: "),
-                        Text(widget.userModal.updateAt != null
-                            ? formatDate(widget.userModal.updateAt)
-                            : "Chưa có")
-                      ],
-                    ),
+
                     FormInputField(
                       label: "Họ và tên",
                       hintText: "Nhập họ và tên",
@@ -269,6 +332,34 @@ class _UserDetailState extends State<UserDetail> {
                         });
                       },
                     ),
+                    Row(
+                      children: [
+                        Text(
+                          "Ngày tạo: ",
+                          style: TextStyle(color: ColorPalette.subTitleColor),
+                        ),
+                        Text(
+                          widget.userModal.createAt != null
+                              ? formatDate(widget.userModal.createAt)
+                              : "Chưa có",
+                          style: TextStyle(color: ColorPalette.subTitleColor),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "Ngày chỉnh sửa: ",
+                          style: TextStyle(color: ColorPalette.subTitleColor),
+                        ),
+                        Text(
+                          widget.userModal.updateAt != null
+                              ? formatDate(widget.userModal.updateAt)
+                              : "Chưa có",
+                          style: TextStyle(color: ColorPalette.subTitleColor),
+                        )
+                      ],
+                    ),
                     // FormInputField(label: "Người thực hiện", hintText: "Nhập tiêu đề"),
 
                     // StreamBuilder(
@@ -321,65 +412,109 @@ class _UserDetailState extends State<UserDetail> {
                               child: ButtonWidget(
                                 title: "Xác nhận",
                                 ontap: () async {
-                                  if (listProject != [] && listProject.length != 0) {
-                                    listProjectsId = [];
-                                    for (var e in listProject) {
-                                      listProjectsId.add(e.id);
+                                  if (_userLoginPosition == "admin" ||
+                                      _userLoginId == widget.userModal.id ||
+                                      widget.userModal.id == null) {
+                                    if (listProject != [] &&
+                                        listProject.length != 0) {
+                                      listProjectsId = [];
+                                      for (var e in listProject) {
+                                        listProjectsId.add(e.id);
+                                      }
                                     }
-                                  }
-                                  if (widget.userModal.createAt != null) {
-                                    setState(() {
-                                      isLoading = true;
-                                    });
-                                    await updateUser(
-                                        id: widget.userModal.id.toString(),
-                                        name: nameController!.text,
-                                        userName: userNameController!.text,
-                                        password: passwordController!.text,
-                                        birthday: dateTime,
-                                        idNumber: idNumberController!.text,
-                                        position: positionId,
-                                        // projects: listProjectsId,
-                                        checkIn: widget.userModal.checkIn ?? [],
-                                        phoneNumber:
-                                            phoneNumberController!.text,
-                                        email: emailController!.text,
-                                        address: addressController!.text,
-                                        createAt: widget.userModal.createAt ??
-                                            DateTime.now(),
-                                        updateAt: DateTime.now());
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                    Navigator.of(context).pop();
+                                    if (widget.userModal.createAt != null) {
+                                      if (await confirm(
+                                        context,
+                                        title: const Text('Xác nhận'),
+                                        content: Text('Xác nhận sửa nhân viên'),
+                                        textOK: const Text('Xác nhận'),
+                                        textCancel: const Text('Thoát'),
+                                      )) {
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        String? url;
+                                        if (file != null) {
+                                          url = await uploadImage();
+                                        } else {
+                                          url = widget.userModal.imageUser;
+                                        }
 
-                                    await EasyLoading.showSuccess(
-                                        "Sửa thành công");
+                                        await updateUser(
+                                            imageUser: url,
+                                            id: widget.userModal.id.toString(),
+                                            name: nameController!.text,
+                                            userName: userNameController!.text,
+                                            password: passwordController!.text,
+                                            birthday: dateTime,
+                                            idNumber: idNumberController!.text,
+                                            position: positionId,
+                                            // projects: listProjectsId,
+                                            checkIn:
+                                                widget.userModal.checkIn ?? [],
+                                            phoneNumber:
+                                                phoneNumberController!.text,
+                                            email: emailController!.text,
+                                            address: addressController!.text,
+                                            createAt:
+                                                widget.userModal.createAt ??
+                                                    DateTime.now(),
+                                            updateAt: DateTime.now());
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                        Navigator.of(context).pop();
+
+                                        await EasyLoading.showSuccess(
+                                            "Sửa thành công");
+                                      }
+                                    } else {
+                                      if (await confirm(
+                                        context,
+                                        title: const Text('Xác nhận'),
+                                        content:
+                                            Text('Xác nhận tạo mới nhân viên'),
+                                        textOK: const Text('Xác nhận'),
+                                        textCancel: const Text('Thoát'),
+                                      )) {
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        String? url;
+
+                                        if (file != null) {
+                                          url = await uploadImage();
+                                        } else {
+                                          url = widget.userModal.imageUser;
+                                        }
+
+                                        await createUser(
+                                            imageUser: url,
+                                            name: nameController!.text,
+                                            userName: userNameController!.text,
+                                            password: passwordController!.text,
+                                            birthday: dateTime,
+                                            idNumber: idNumberController!.text,
+                                            address: addressController!.text,
+                                            phoneNumber:
+                                                phoneNumberController!.text,
+                                            position: positionId,
+                                            email: emailController!.text,
+                                            createAt:
+                                                widget.userModal.createAt ??
+                                                    DateTime.now(),
+                                            updateAt: DateTime.now());
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                        Navigator.of(context).pop();
+
+                                        await EasyLoading.showSuccess(
+                                            "Tạo thành công");
+                                      }
+                                    }
                                   } else {
-                                    setState(() {
-                                      isLoading = true;
-                                    });
-                                    await createUser(
-                                        name: nameController!.text,
-                                        userName: userNameController!.text,
-                                        password: passwordController!.text,
-                                        birthday: dateTime,
-                                        idNumber: idNumberController!.text,
-                                        address: addressController!.text,
-                                        phoneNumber:
-                                            phoneNumberController!.text,
-                                        position: positionId,
-                                        email: emailController!.text,
-                                        createAt: widget.userModal.createAt ??
-                                            DateTime.now(),
-                                        updateAt: DateTime.now());
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                    Navigator.of(context).pop();
-
-                                    await EasyLoading.showSuccess(
-                                        "Tạo thành công");
+                                    notAlowAction(context);
                                   }
                                 },
                               )),
@@ -393,6 +528,26 @@ class _UserDetailState extends State<UserDetail> {
     );
   }
 
+  void chooseImage() async {
+    XFile? xfile = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    print('xFile + ${xfile?.path}');
+
+    file = File(xfile!.path);
+    setState(() {});
+  }
+
+  Future<String> uploadImage() async {
+    TaskSnapshot taskSnapshot = await FirebaseStorage.instance
+        .ref()
+        .child('profile')
+        .child(
+            '${FirebaseFirestore.instance.collection("users").id}_${widget.userModal.id}')
+        .putFile(file!);
+    print(' 11 ${taskSnapshot.ref.getDownloadURL()}');
+    return taskSnapshot.ref.getDownloadURL();
+  }
+
   Future<DateTime?> pickDate() => showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -401,7 +556,7 @@ class _UserDetailState extends State<UserDetail> {
 }
 
 List<OptionModal> _listPositions = [
-  OptionModal(value: "NV", display: "Nhân viên"),
-  OptionModal(value: "Quản lý", display: "Quản lý"),
-  OptionModal(value: "Admin", display: "Admin"),
+  OptionModal(value: "user", display: "Nhân viên"),
+  OptionModal(value: "manager", display: "Quản lý"),
+  OptionModal(value: "admin", display: "Admin"),
 ];

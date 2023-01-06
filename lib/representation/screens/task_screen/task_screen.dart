@@ -11,6 +11,7 @@ import 'package:travel_app/representation/widgets/button_widget.dart';
 import 'package:travel_app/representation/widgets/list_task.dart';
 import 'package:travel_app/representation/widgets/search_input.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
+import 'package:travel_app/services/home_services.dart';
 import 'package:travel_app/services/project_services.dart';
 import 'package:travel_app/services/user_services.dart';
 
@@ -89,6 +90,7 @@ class _TaskScreenState extends State<TaskScreen> {
                   FontAwesomeIcons.plus,
                 )),
             onTap: () {
+              
               Navigator.of(context)
                   .pushNamed(TaskDetail.routeName, arguments: taskModalEmty);
             },

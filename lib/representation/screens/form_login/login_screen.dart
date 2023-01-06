@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:travel_app/Data/models/user_model.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
+import 'package:travel_app/core/constants/text_style.dart';
 import 'package:travel_app/core/helpers/asset_helper.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:travel_app/core/helpers/image_helper.dart';
@@ -92,8 +93,8 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
       body: Padding(
         padding: EdgeInsets.all(kDefaultPadding),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+          // crossAxisAlignment: CrossAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             StreamBuilder(
               stream: getAllUsers(),
@@ -106,9 +107,31 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
                   listUser = userModal;
                   return Text('');
                 } else {
-                  return Center(child: CircularProgressIndicator());
+                  return Text('');
                 }
               },
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 40, top: 80),
+              child: Column(children: [
+                ImageHelper.loadFromAsset(
+                  AssetHelper.flutterLogo, width: MediaQuery.of(context).size.width * 0.5
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 30),
+                  child: Text(
+                    "Chào mừng quay trở lại!",
+                    style: TextStyleCustom.h1Text,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: Text(
+                    "Đăng nhập để bắt đầu",
+                    style: TextStyleCustom.h2Text,
+                  ),
+                )
+              ]),
             ),
             FormInputField(
               label: "Tên User",

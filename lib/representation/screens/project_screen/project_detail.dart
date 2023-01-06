@@ -17,6 +17,7 @@ import 'package:travel_app/services/task_services.dart';
 import 'package:travel_app/services/user_services.dart';
 
 import '../../../core/constants/color_constants.dart';
+import '../../../core/helpers/local_storage_helper.dart';
 import '../../../services/home_services.dart';
 
 class ProjectDetail extends StatefulWidget {
@@ -72,7 +73,9 @@ class _ProjectDetailState extends State<ProjectDetail> {
 
   @override
   Widget build(BuildContext context) {
-    print(listUsersId);
+    dynamic _userLoginPosition =
+        LocalStorageHelper.getValue('userLogin')["position"];
+    dynamic _userLoginId = LocalStorageHelper.getValue('userLogin')["id"];
 
     return Scaffold(
       appBar: AppBar(
@@ -90,15 +93,27 @@ class _ProjectDetailState extends State<ProjectDetail> {
                         color: Colors.white,
                       )),
                   onTap: () async {
-                    setState(() {
-                      isLoading = true;
-                    });
-                    await deleteProject(widget.projectModal.id.toString());
-                    setState(() {
-                      isLoading = false;
-                    });
-                    Navigator.of(context).pop();
-                    await EasyLoading.showSuccess("Xóa thành công");
+                    if (_userLoginPosition == "admin") {
+                      if (await confirm(
+                        context,
+                        title: const Text('Xác nhận'),
+                        content: Text('Xác nhận xóa dự án'),
+                        textOK: const Text('Xác nhận'),
+                        textCancel: const Text('Thoát'),
+                      )) {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await deleteProject(widget.projectModal.id.toString());
+                        setState(() {
+                          isLoading = false;
+                        });
+                        Navigator.of(context).pop();
+                        await EasyLoading.showSuccess("Xóa thành công");
+                      }
+                    } else {
+                      notAlowAction(context);
+                    }
                   },
                 )
               : Text("")
@@ -218,56 +233,79 @@ class _ProjectDetailState extends State<ProjectDetail> {
                               child: ButtonWidget(
                                 title: "Xác nhận",
                                 ontap: () async {
-                                  if (listUsers != []) {
-                                    listUsersId = [];
-                                    for (var e in listUsers) {
-                                      listUsersId.add(e.id);
+                                  if (_userLoginPosition == "admin") {
+                                    if (listUsers != []) {
+                                      listUsersId = [];
+                                      for (var e in listUsers) {
+                                        listUsersId.add(e.id);
+                                      }
                                     }
-                                  }
 
-                                  if (widget.projectModal.createAt != null) {
-                                    setState(() {
-                                      isLoading = true;
-                                    });
-                                    await updateProject(
-                                        id: widget.projectModal.id.toString(),
-                                        name: nameController!.text,
-                                        description:
-                                            descriptionController!.text,
-                                        users: listUsersId,
-                                        shortName: shortNameController!.text,
-                                        createAt:
-                                            widget.projectModal.createAt ??
-                                                DateTime.now(),
-                                        updateAt: DateTime.now());
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                    Navigator.of(context).pop();
+                                    if (widget.projectModal.createAt != null) {
+                                      if (await confirm(
+                                        context,
+                                        title: const Text('Xác nhận'),
+                                        content: Text('Xác nhận sửa dự án'),
+                                        textOK: const Text('Xác nhận'),
+                                        textCancel: const Text('Thoát'),
+                                      )) {
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        await updateProject(
+                                            id: widget.projectModal.id
+                                                .toString(),
+                                            name: nameController!.text,
+                                            description:
+                                                descriptionController!.text,
+                                            users: listUsersId,
+                                            shortName:
+                                                shortNameController!.text,
+                                            createAt:
+                                                widget.projectModal.createAt ??
+                                                    DateTime.now(),
+                                            updateAt: DateTime.now());
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                        Navigator.of(context).pop();
 
-                                    await EasyLoading.showSuccess(
-                                        "Sửa thành công");
+                                        await EasyLoading.showSuccess(
+                                            "Sửa thành công");
+                                      }
+                                    } else {
+                                      if (await confirm(
+                                        context,
+                                        title: const Text('Xác nhận'),
+                                        content: Text('Xác nhận thêm mới dự án'),
+                                        textOK: const Text('Xác nhận'),
+                                        textCancel: const Text('Thoát'),
+                                      )) {
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        await createProject(
+                                            name: nameController!.text,
+                                            description:
+                                                descriptionController!.text,
+                                            users: listUsersId,
+                                            shortName:
+                                                shortNameController!.text,
+                                            createAt:
+                                                widget.projectModal.createAt ??
+                                                    DateTime.now(),
+                                            updateAt: DateTime.now());
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                        Navigator.of(context).pop();
+
+                                        await EasyLoading.showSuccess(
+                                            "Tạo thành công");
+                                      }
+                                    }
                                   } else {
-                                    setState(() {
-                                      isLoading = true;
-                                    });
-                                    await createProject(
-                                        name: nameController!.text,
-                                        description:
-                                            descriptionController!.text,
-                                        users: listUsersId,
-                                        shortName: shortNameController!.text,
-                                        createAt:
-                                            widget.projectModal.createAt ??
-                                                DateTime.now(),
-                                        updateAt: DateTime.now());
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                    Navigator.of(context).pop();
-
-                                    await EasyLoading.showSuccess(
-                                        "Tạo thành công");
+                                    notAlowAction(context);
                                   }
                                 },
                               )),

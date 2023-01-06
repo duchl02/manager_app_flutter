@@ -11,6 +11,7 @@ import 'package:travel_app/services/user_services.dart';
 
 import '../../../Data/models/option_modal.dart';
 import '../../../Data/models/user_model.dart';
+import '../../../core/helpers/local_storage_helper.dart';
 import '../../../services/user_services.dart';
 import '../../widgets/list_user.dart';
 
@@ -51,6 +52,8 @@ class _UserScreenState extends State<UserScreen> {
 
   @override
   Widget build(BuildContext context) {
+    dynamic _userLoginPosition =
+        LocalStorageHelper.getValue('userLogin')["position"];
     return Scaffold(
       appBar: AppBar(
         title: StreamBuilder(
@@ -75,17 +78,19 @@ class _UserScreenState extends State<UserScreen> {
         ),
         backgroundColor: ColorPalette.primaryColor,
         actions: [
-          InkWell(
-            child: Padding(
-                padding: EdgeInsets.only(right: 10),
-                child: Icon(
-                  FontAwesomeIcons.plus,
-                )),
-            onTap: () {
-              Navigator.of(context)
-                  .pushNamed(UserDetail.routeName, arguments: userModalEmty);
-            },
-          )
+          _userLoginPosition == "admin"
+              ? InkWell(
+                  child: Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child: Icon(
+                        FontAwesomeIcons.plus,
+                      )),
+                  onTap: () {
+                    Navigator.of(context).pushNamed(UserDetail.routeName,
+                        arguments: userModalEmty);
+                  },
+                )
+              : SizedBox()
         ],
       ),
       body: Padding(

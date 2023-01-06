@@ -12,6 +12,7 @@ import 'package:travel_app/core/extensions/date_time_format.dart';
 import 'package:travel_app/representation/widgets/button_widget.dart';
 import 'package:travel_app/representation/widgets/form_field.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
+import 'package:travel_app/services/home_services.dart';
 import 'package:travel_app/services/project_services.dart';
 import 'package:travel_app/services/task_services.dart';
 
@@ -83,7 +84,9 @@ class _TaskDetailState extends State<TaskDetail> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.taskModal.toJson());
+    dynamic _userLoginPosition =
+        LocalStorageHelper.getValue('userLogin')["position"];
+    dynamic _userLoginId = LocalStorageHelper.getValue('userLogin')["id"];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorPalette.primaryColor,
@@ -100,15 +103,29 @@ class _TaskDetailState extends State<TaskDetail> {
                         color: Colors.white,
                       )),
                   onTap: () async {
-                    setState(() {
-                      isLoading = true;
-                    });
-                    await deleteTask(widget.taskModal.id.toString());
-                    setState(() {
-                      isLoading = false;
-                    });
-                    Navigator.of(context).pop();
-                    await EasyLoading.showSuccess("Xóa thành công");
+                    if (_userLoginPosition == "admin" ||
+                        _userLoginId == widget.taskModal.userId ||
+                        widget.taskModal.userId == null) {
+                      if (await confirm(
+                        context,
+                        title: const Text('Xác nhận'),
+                        content: Text('Xác nhận xóa task'),
+                        textOK: const Text('Xác nhận'),
+                        textCancel: const Text('Thoát'),
+                      )) {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await deleteTask(widget.taskModal.id.toString());
+                        setState(() {
+                          isLoading = false;
+                        });
+                        Navigator.of(context).pop();
+                        await EasyLoading.showSuccess("Xóa thành công");
+                      }
+                    } else {
+                      notAlowAction(context);
+                    }
                   },
                 )
               : Text("")
@@ -175,7 +192,9 @@ class _TaskDetailState extends State<TaskDetail> {
                               user.add(e);
                             }
                           }
-                          if (userLogin["id"] != widget.taskModal.userId) {
+                          if (userLogin["id"] != widget.taskModal.userId &&
+                                  widget.taskModal.userId != null ||
+                              userLogin["position"] == "admin") {
                             for (var e in userModal) {
                               _listSatff.add(
                                   OptionModal(value: e.id!, display: e.name!));
@@ -189,7 +208,7 @@ class _TaskDetailState extends State<TaskDetail> {
 
                           // UserModal userDefaults =
                           //     findUserById(userId, userModal);
-                          print(widget.taskModal.userId);
+                          print(userLogin["position"]);
                           return SelectOption(
                             list: _listSatff,
                             dropdownValue: widget.taskModal.userId != null
@@ -231,13 +250,16 @@ class _TaskDetailState extends State<TaskDetail> {
                               }
                             }
                           }
+                          if (userLogin["position"] == "admin") {
+                            for (var e in projectModal) {
+                              _listProject.add(
+                                  OptionModal(value: e.id!, display: e.name!));
+                            }
+                          }
                           for (var e in listTasks) {
                             _listProject.add(
                                 OptionModal(value: e.id!, display: e.name!));
                           }
-                          // UserModal userDefaults =
-                          //     findUserById(userId, userModal);
-
                           return SelectOption(
                             list: _listProject,
                             dropdownValue: widget.taskModal.projectId != null
@@ -328,55 +350,79 @@ class _TaskDetailState extends State<TaskDetail> {
                               child: ButtonWidget(
                                 title: "Xác nhận",
                                 ontap: () async {
-                                  if (widget.taskModal.createAt != null) {
-                                    setState(() {
-                                      isLoading = true;
-                                    });
-                                    await updateTask(
-                                        id: widget.taskModal.id.toString(),
-                                        name: nameController!.text,
-                                        description:
-                                            descriptionController!.text,
-                                        priority: priorityId,
-                                        projectId: projectId,
-                                        userId: userId,
-                                        status: statusId,
-                                        timeSuccess:
-                                            timeSuccessController!.text,
-                                        createAt: widget.taskModal.createAt ??
-                                            DateTime.now(),
-                                        updateAt: DateTime.now());
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                    Navigator.of(context).pop();
+                                  if (_userLoginPosition == "admin" ||
+                                      _userLoginId == widget.taskModal.userId ||
+                                      widget.taskModal.userId == null) {
+                                    if (widget.taskModal.createAt != null) {
+                                      if (await confirm(
+                                        context,
+                                        title: const Text('Xác nhận'),
+                                        content: Text('Xác nhận sửa task'),
+                                        textOK: const Text('Xác nhận'),
+                                        textCancel: const Text('Thoát'),
+                                      )) {
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        await updateTask(
+                                            id: widget.taskModal.id.toString(),
+                                            name: nameController!.text,
+                                            description:
+                                                descriptionController!.text,
+                                            priority: priorityId,
+                                            projectId: projectId,
+                                            userId: userId,
+                                            status: statusId,
+                                            timeSuccess:
+                                                timeSuccessController!.text,
+                                            createAt:
+                                                widget.taskModal.createAt ??
+                                                    DateTime.now(),
+                                            updateAt: DateTime.now());
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                        Navigator.of(context).pop();
 
-                                    await EasyLoading.showSuccess(
-                                        "Sửa thành công");
+                                        await EasyLoading.showSuccess(
+                                            "Sửa thành công");
+                                      }
+                                    } else {
+                                      if (await confirm(
+                                        context,
+                                        title: const Text('Xác nhận'),
+                                        content: Text('Xác nhận tạo task'),
+                                        textOK: const Text('Xác nhận'),
+                                        textCancel: const Text('Thoát'),
+                                      )) {
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        await createTask(
+                                            name: nameController!.text,
+                                            description:
+                                                descriptionController!.text,
+                                            priority: priorityId,
+                                            projectId: projectId,
+                                            userId: userId,
+                                            status: statusId,
+                                            timeSuccess:
+                                                timeSuccessController!.text,
+                                            createAt:
+                                                widget.taskModal.createAt ??
+                                                    DateTime.now(),
+                                            updateAt: DateTime.now());
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                        Navigator.of(context).pop();
+
+                                        await EasyLoading.showSuccess(
+                                            "Tạo thành công");
+                                      }
+                                    }
                                   } else {
-                                    setState(() {
-                                      isLoading = true;
-                                    });
-                                    await createTask(
-                                        name: nameController!.text,
-                                        description:
-                                            descriptionController!.text,
-                                        priority: priorityId,
-                                        projectId: projectId,
-                                        userId: userId,
-                                        status: statusId,
-                                        timeSuccess:
-                                            timeSuccessController!.text,
-                                        createAt: widget.taskModal.createAt ??
-                                            DateTime.now(),
-                                        updateAt: DateTime.now());
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                    Navigator.of(context).pop();
-
-                                    await EasyLoading.showSuccess(
-                                        "Tạo thành công");
+                                    notAlowAction(context);
                                   }
                                 },
                               )),

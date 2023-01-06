@@ -48,7 +48,7 @@ class _SearchInputState extends State<SearchInput> {
               padding: const EdgeInsets.all(8.0),
               child: Icon(
                 FontAwesomeIcons.magnifyingGlass,
-                color: Colors.white,
+                color: ColorPalette.textWhite,
                 size: 16,
               ),
             ),

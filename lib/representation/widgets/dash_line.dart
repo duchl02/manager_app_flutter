@@ -5,7 +5,7 @@ import '../../core/constants/dismension_constants.dart';
 
 
 class DashLineWidget extends StatelessWidget {
-  const DashLineWidget({Key? key, this.height = 1, this.color = ColorPalette.dividerColor}) : super(key: key);
+  const DashLineWidget({Key? key, this.height = 1, this.color = ColorPalette.secondColor}) : super(key: key);
 
   final double height;
   final Color color;

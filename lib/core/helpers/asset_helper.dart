@@ -42,6 +42,8 @@ mixin AssetHelper {
   static const String dubai = 'assets/images/dubai.png';
   static const String computerGuy = 'images/computerguy.png';
   static const String catCute = 'assets/images/catcute.jpg';
+  static const String flutterLogo = 'assets/images/flutter_logo.png';
+  static const String user = 'assets/images/user.png';
 
 
 }

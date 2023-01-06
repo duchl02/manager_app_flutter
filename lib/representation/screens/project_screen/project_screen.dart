@@ -8,10 +8,12 @@ import 'package:travel_app/representation/widgets/button_widget.dart';
 import 'package:travel_app/representation/widgets/list_project.dart';
 import 'package:travel_app/representation/widgets/search_input.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
+import 'package:travel_app/services/home_services.dart';
 import 'package:travel_app/services/project_services.dart';
 
 import '../../../Data/models/option_modal.dart';
 import '../../../Data/models/project_model.dart';
+import '../../../core/helpers/local_storage_helper.dart';
 import '../../../services/project_services.dart';
 
 class ProjectScreen extends StatefulWidget {
@@ -51,6 +53,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
 
   @override
   Widget build(BuildContext context) {
+dynamic _userLogin = LocalStorageHelper.getValue('userLogin')["position"];
     return Scaffold(
       appBar: AppBar(
         title: StreamBuilder(
@@ -75,17 +78,19 @@ class _ProjectScreenState extends State<ProjectScreen> {
         ),
         backgroundColor: ColorPalette.primaryColor,
         actions: [
-          InkWell(
-            child: Padding(
-                padding: EdgeInsets.only(right: 10),
-                child: Icon(
-                  FontAwesomeIcons.plus,
-                )),
-            onTap: () {
-              Navigator.of(context).pushNamed(ProjectDetail.routeName,
-                  arguments: projectModalEmty);
-            },
-          )
+          _userLogin == "admin"
+              ? InkWell(
+                  child: Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child: Icon(
+                        FontAwesomeIcons.plus,
+                      )),
+                  onTap: () {
+                    Navigator.of(context).pushNamed(ProjectDetail.routeName,
+                        arguments: projectModalEmty);
+                  },
+                )
+              : SizedBox()
         ],
       ),
       body: Padding(
