@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void redirectIntoScreen() async {
     final checkLogin = LocalStorageHelper.getValue('checkLogin') as bool?;
     await Future.delayed(const Duration(seconds: 1));
-    if (checkLogin != null && checkLogin) {
+    if (checkLogin != null && checkLogin == true) {
       // ignore: use_build_context_synchronously
       Navigator.pushReplacementNamed(context, MainApp.routeName);
     } else {
@@ -40,10 +40,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-        body: const Center(
-          child: Text('CHÀO MỪNG', style: TextStyleCustom.h2TextPrimary,),
+    return Scaffold(
+      body: const Center(
+        child: Text(
+          'CHÀO MỪNG',
+          style: TextStyleCustom.h2TextPrimary,
         ),
-      );
+      ),
+    );
   }
 }

@@ -90,83 +90,84 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(kDefaultPadding),
-        child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.center,
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            StreamBuilder(
-              stream: getAllUsers(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
-                if (snapshot.hasData) {
-                  final userModal = snapshot.data!;
-                  listUser = userModal;
-                  return Text('');
-                } else {
-                  return Text('');
-                }
-              },
-            ),
-            Container(
-              margin: EdgeInsets.only(bottom: 40, top: 80),
-              child: Column(children: [
-                ImageHelper.loadFromAsset(
-                  AssetHelper.flutterLogo, width: MediaQuery.of(context).size.width * 0.5
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 30),
-                  child: Text(
-                    "Chào mừng quay trở lại!",
-                    style: TextStyleCustom.h1Text,
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 10),
-                  child: Text(
-                    "Đăng nhập để bắt đầu",
-                    style: TextStyleCustom.h2Text,
-                  ),
-                )
-              ]),
-            ),
-            FormInputField(
-              label: "Tên User",
-              hintText: "Nhập tên user",
-              controller: userController,
-            ),
-            FormInputField(
-              obscureText: true,
-              label: "Mật khẩu",
-              hintText: "Nhập mật khẩu",
-              controller: passwordController,
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: kDefaultPadding),
-              child: ButtonWidget(
-                title: "Đăng nhập",
-                ontap: () async {
-                  checkLogin(userController.text, passwordController.text);
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(kDefaultPadding),
+          child: Column(
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              StreamBuilder(
+                stream: getAllUsers(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  if (snapshot.hasData) {
+                    final userModal = snapshot.data!;
+                    listUser = userModal;
+                    return Text('');
+                  } else {
+                    return Text('');
+                  }
                 },
               ),
-            ),
-            // Padding(
-            //   padding: EdgeInsets.all(kDefaultPadding),
-            //   child: Text("Tài khoản admin: admin/admin"),
-            // ),
-            // Padding(
-            //   padding: EdgeInsets.all(kDefaultPadding),
-            //   child: Text("Tài khoản user: user/user"),
-            // ),
+              Container(
+                margin: EdgeInsets.only(bottom: 40, top: 80),
+                child: Column(children: [
+                  ImageHelper.loadFromAsset(AssetHelper.flutterLogo,
+                      width: MediaQuery.of(context).size.width * 0.5),
+                  Container(
+                    margin: EdgeInsets.only(top: 30),
+                    child: Text(
+                      "Chào mừng quay trở lại!",
+                      style: TextStyleCustom.h1Text,
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Text(
+                      "Đăng nhập để bắt đầu",
+                      style: TextStyleCustom.h2Text,
+                    ),
+                  )
+                ]),
+              ),
+              FormInputField(
+                label: "Tên User",
+                hintText: "Nhập tên user",
+                controller: userController,
+              ),
+              FormInputField(
+                obscureText: true,
+                label: "Mật khẩu",
+                hintText: "Nhập mật khẩu",
+                controller: passwordController,
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: kDefaultPadding),
+                child: ButtonWidget(
+                  title: "Đăng nhập",
+                  ontap: () async {
+                    checkLogin(userController.text, passwordController.text);
+                  },
+                ),
+              ),
+              // Padding(
+              //   padding: EdgeInsets.all(kDefaultPadding),
+              //   child: Text("Tài khoản admin: admin/admin"),
+              // ),
+              // Padding(
+              //   padding: EdgeInsets.all(kDefaultPadding),
+              //   child: Text("Tài khoản user: user/user"),
+              // ),
 
-            // Positioned.fill(
-            //   child: ImageHelper.loadFromAsset(AssetHelper.computerGuy,
-            //       fit: BoxFit.fitWidth , width: double.infinity , height: 280),
-            // ),
-          ],
+              // Positioned.fill(
+              //   child: ImageHelper.loadFromAsset(AssetHelper.computerGuy,
+              //       fit: BoxFit.fitWidth , width: double.infinity , height: 280),
+              // ),
+            ],
+          ),
         ),
       ),
     );

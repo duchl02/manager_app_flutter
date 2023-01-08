@@ -61,24 +61,28 @@ class _MainAppState extends State<MainApp> {
             horizontal: kMediumPadding, vertical: kDefaultPadding),
         items: [
           SalomonBottomBarItem(
+              selectedColor: Colors.purple,
               icon: Icon(
                 FontAwesomeIcons.house,
                 size: kDefaultIconSize,
               ),
               title: Text("Trang chủ")),
           SalomonBottomBarItem(
+              selectedColor: Colors.pink,
               icon: Icon(
                 FontAwesomeIcons.list,
                 size: kDefaultIconSize,
               ),
               title: Text("Task")),
           SalomonBottomBarItem(
+              selectedColor: Colors.orange,
               icon: Icon(
                 FontAwesomeIcons.briefcase,
                 size: kDefaultIconSize,
               ),
               title: Text("Dự án")),
           SalomonBottomBarItem(
+              selectedColor: Colors.teal,
               icon: Icon(
                 FontAwesomeIcons.solidUser,
                 size: kDefaultIconSize,

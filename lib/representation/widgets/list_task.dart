@@ -20,15 +20,6 @@ class ListTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (taskModal.status == "S1") {
-      statusDisplay = "Coding";
-    } else if (taskModal.status == "S3") {
-      statusDisplay = "In Progress";
-    } else if (taskModal.status == "S2") {
-      statusDisplay = "HoldOn";
-    } else if (taskModal.status == "S4") {
-      statusDisplay = "Done";
-    }
     return InkWell(
       onTap: (() {
         Navigator.of(context)
@@ -80,7 +71,7 @@ class ListTask extends StatelessWidget {
             Row(
               children: [
                 Text("Trạng thái : ", style: TextStyleCustom.smallText),
-                Text(statusDisplay, style: TextStyleCustom.smallText),
+                Text(taskModal.status!, style: TextStyleCustom.smallText),
                 Spacer(),
                 // Text("Hoàn thành: "),
                 // Text("25/12/2022 "),

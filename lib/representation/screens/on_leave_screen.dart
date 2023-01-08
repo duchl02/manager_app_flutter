@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:travel_app/Data/models/user_model.dart';
@@ -45,168 +44,172 @@ class _OnLeaveScreenState extends State<OnLeaveScreen> {
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    FormInputField(
-                        controller: textEditingController,
-                        label: "Lý do",
-                        hintText: "Nhập lý do ghỉ phép"),
-                    SelectOption(
-                        label: "Loại lý do",
-                        list: _list,
-                        dropdownValue: reasonOnLeave ?? "",
-                        onChanged: ((p0) {
-                          reasonOnLeave = p0 as String;
-                        })),
-                    StreamBuilder(
-                      stream: getAllUsers(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return Text("${snapshot.error}");
-                        }
-                        if (snapshot.hasData) {
-                          final userModal = snapshot.data!;
-                          List<OptionModal> _listSatff = [];
-
-                          for (var e in userModal) {
-                            _listSatff.add(
-                                OptionModal(value: e.id!, display: e.name!));
+            : SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      FormInputField(
+                          controller: textEditingController,
+                          label: "Lý do",
+                          hintText: "Nhập lý do ghỉ phép"),
+                      SelectOption(
+                          label: "Loại lý do",
+                          list: _list,
+                          dropdownValue: reasonOnLeave ?? "",
+                          onChanged: ((p0) {
+                            reasonOnLeave = p0 as String;
+                          })),
+                      StreamBuilder(
+                        stream: getAllUsers(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Text("${snapshot.error}");
                           }
-                          return SelectOption(
-                            label: "Người duyệt (Quản lý của bạn)",
-                            list: _listSatff,
-                            dropdownValue: userId ?? "",
-                            onChanged: (p0) {
-                              userId = p0 as String;
-                            },
-                          );
-                        } else {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      },
-                    ),
-                    FormInputField(
-                        controller: dateRangeEditingController,
-                        label: "Thời gian",
-                        hintText: "Chọn thời gian nghỉ phép",
-                        onTap: () async {
-                          final result = await Navigator.of(context)
-                              .pushNamed(SelectRangeDateScreen.routeName);
-                          if (result is List<DateTime?>) {
-                            setState(() {
-                              dateRangeEditingController.text =
-                                  'Từ ${result[0]?.getStartDate} đến ${result[1]?.getEndDate}';
-                            });
-                          }
-                        }),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, bottom: 10),
-                      child: Row(
-                        children: [
-                          Flexible(
-                              flex: 1,
-                              child: ButtonWidget(
-                                title: "Hủy",
-                                ontap: (() {
-                                  Navigator.of(context).pop();
-                                }),
-                              )),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: StreamBuilder(
-                              stream: getAllUsers(),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasError) {
-                                  return Text("${snapshot.error}");
-                                }
-                                if (snapshot.hasData) {
-                                  final userModal = snapshot.data!;
-                                  var userLogin =
-                                      LocalStorageHelper.getValue('userLogin');
-                                  UserModal _user = UserModal();
-                                  for (var e in userModal) {
-                                    if (e.id == userLogin["id"]) {
-                                      _user = e;
-                                    }
-                                  }
-                                  String _emailToCc = "";
+                          if (snapshot.hasData) {
+                            final userModal = snapshot.data!;
+                            List<OptionModal> _listSatff = [];
 
-                                  for (var e in userModal) {
-                                    if (e.id == userId) {
-                                      _emailToCc = e.email!;
-                                    }
-                                  }
-                                  String _toEmail = _user.email!;
-                                  "vanducbaymatdep@gmail.com";
-                                  String htmlContent =
-                                      "<h1>Xin chào ${_user.name} </h1>\n<p>Hệ thống đã xác nhận bạn xin nghỉ phép ${dateRangeEditingController.text}.</p> \n <p> Lý do nghỉ: ${textEditingController.text} <p/> \n  <p> Loại lý do: ${reasonOnLeave} <p/> ";
-                                  return ButtonWidget(
-                                    title: "Xác nhận",
-                                    ontap: () async {
-                                      String username =
-                                          'duc1503honglinh@gmail.com';
-                                      String password = 'auduwuxauzyjorcd';
-
-                                      final smtpServer =
-                                          gmail(username, password);
-                                      final message = Message()
-                                        ..from = Address(
-                                            username, 'Hệ thống xác nhận')
-                                        ..recipients.add(_toEmail)
-                                        ..ccRecipients.addAll([_emailToCc])
-                                        ..bccRecipients.add(Address(_emailToCc))
-                                        ..subject = 'Thư xác nhận nghỉ phép'
-                                        // ..text =
-                                        //     'deo co cai gi cho ban xem dau.\nemail rac day'
-                                        ..html = htmlContent;
-
-                                      try {
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-                                        final sendReport =
-                                            await send(message, smtpServer);
-                                        print('Message sent: ' +
-                                            sendReport.toString());
-                                        setState(() {
-                                          isLoading = false;
-                                        });
-                                        if (mounted) {
-                                          MediaQuery.of(context).size;
-                                          Navigator.of(context).pop();
-                                        }
-
-                                        await EasyLoading.showSuccess(
-                                            "Hệ thống đã xác nhận. Xin hãy kiểm tra email của bạn");
-                                      } on MailerException catch (e) {
-                                        print(e);
-                                        for (var p in e.problems) {
-                                          print('Problem: ${p.code}: ${p.msg}');
-                                        }
-                                        setState(() {
-                                          isLoading = false;
-                                        });
-                                        await EasyLoading.showError(
-                                            "Hệ thống đã xảy ra lỗi. Xin hãy thử lại");
-                                      }
-                                    },
-                                  );
-                                } else {
-                                  return Center(
-                                      child: CircularProgressIndicator());
-                                }
+                            for (var e in userModal) {
+                              _listSatff.add(
+                                  OptionModal(value: e.id!, display: e.name!));
+                            }
+                            return SelectOption(
+                              label: "Người duyệt (Quản lý của bạn)",
+                              list: _listSatff,
+                              dropdownValue: userId ?? "",
+                              onChanged: (p0) {
+                                userId = p0 as String;
                               },
-                            ),
-                          ),
-                        ],
+                            );
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        },
                       ),
-                    )
-                  ],
+                      FormInputField(
+                          controller: dateRangeEditingController,
+                          label: "Thời gian",
+                          hintText: "Chọn thời gian nghỉ phép",
+                          onTap: () async {
+                            final result = await Navigator.of(context)
+                                .pushNamed(SelectRangeDateScreen.routeName);
+                            if (result is List<DateTime?>) {
+                              setState(() {
+                                dateRangeEditingController.text =
+                                    'Từ ${result[0]?.getStartDate} đến ${result[1]?.getEndDate}';
+                              });
+                            }
+                          }),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10, bottom: 10),
+                        child: Row(
+                          children: [
+                            Flexible(
+                                flex: 1,
+                                child: ButtonWidget(
+                                  title: "Hủy",
+                                  ontap: (() {
+                                    Navigator.of(context).pop();
+                                  }),
+                                )),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Flexible(
+                              flex: 1,
+                              child: StreamBuilder(
+                                stream: getAllUsers(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasError) {
+                                    return Text("${snapshot.error}");
+                                  }
+                                  if (snapshot.hasData) {
+                                    final userModal = snapshot.data!;
+                                    var userLogin = LocalStorageHelper.getValue(
+                                        'userLogin');
+                                    UserModal _user = UserModal();
+                                    for (var e in userModal) {
+                                      if (e.id == userLogin["id"]) {
+                                        _user = e;
+                                      }
+                                    }
+                                    String _emailToCc = "";
+
+                                    for (var e in userModal) {
+                                      if (e.id == userId) {
+                                        _emailToCc = e.email!;
+                                      }
+                                    }
+                                    String _toEmail = _user.email!;
+                                    "vanducbaymatdep@gmail.com";
+                                    String htmlContent =
+                                        "<h1>Xin chào ${_user.name} </h1>\n<p>Hệ thống đã xác nhận bạn xin nghỉ phép ${dateRangeEditingController.text}.</p> \n <p> Lý do nghỉ: ${textEditingController.text} <p/> \n  <p> Loại lý do: ${reasonOnLeave} <p/> ";
+                                    return ButtonWidget(
+                                      title: "Xác nhận",
+                                      ontap: () async {
+                                        String username =
+                                            'duc1503honglinh@gmail.com';
+                                        String password = 'auduwuxauzyjorcd';
+
+                                        final smtpServer =
+                                            gmail(username, password);
+                                        final message = Message()
+                                          ..from = Address(
+                                              username, 'Hệ thống xác nhận')
+                                          ..recipients.add(_toEmail)
+                                          ..ccRecipients.addAll([_emailToCc])
+                                          ..bccRecipients
+                                              .add(Address(_emailToCc))
+                                          ..subject = 'Thư xác nhận nghỉ phép'
+                                          // ..text =
+                                          //     'deo co cai gi cho ban xem dau.\nemail rac day'
+                                          ..html = htmlContent;
+
+                                        try {
+                                          setState(() {
+                                            isLoading = true;
+                                          });
+                                          final sendReport =
+                                              await send(message, smtpServer);
+                                          print('Message sent: ' +
+                                              sendReport.toString());
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+                                          if (mounted) {
+                                            MediaQuery.of(context).size;
+                                            Navigator.of(context).pop();
+                                          }
+
+                                          await EasyLoading.showSuccess(
+                                              "Hệ thống đã xác nhận. Xin hãy kiểm tra email của bạn");
+                                        } on MailerException catch (e) {
+                                          print(e);
+                                          for (var p in e.problems) {
+                                            print(
+                                                'Problem: ${p.code}: ${p.msg}');
+                                          }
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+                                          await EasyLoading.showError(
+                                              "Hệ thống đã xảy ra lỗi. Xin hãy thử lại");
+                                        }
+                                      },
+                                    );
+                                  } else {
+                                    return Center(
+                                        child: CircularProgressIndicator());
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ));
   }

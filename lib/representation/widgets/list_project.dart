@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/Data/models/project_model.dart';
 
 import '../../Data/models/project_model.dart';
+import '../../core/constants/color_constants.dart';
 import '../../core/constants/text_style.dart';
 import '../../core/extensions/date_time_format.dart';
 import '../screens/project_screen/project_detail.dart';
@@ -26,7 +27,7 @@ class ListProject extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(bottom: 6),
         decoration: BoxDecoration(
-          color: Colors.blue.shade100,
+          color: ColorPalette.secondColor.withOpacity(0.2),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
