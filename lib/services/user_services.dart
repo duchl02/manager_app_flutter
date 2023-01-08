@@ -7,8 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
+import 'package:travel_app/Data/models/project_model.dart';
 import 'package:travel_app/Data/models/user_model.dart';
 import 'package:travel_app/Data/models/user_model.dart';
+import 'package:travel_app/services/project_services.dart';
 import 'package:travel_app/services/task_services.dart';
 
 import '../Data/models/user_model.dart';
@@ -21,61 +23,45 @@ Stream<List<UserModal>> getAllUsers() {
   return data;
 }
 
-// CollectionReference _collectionRef =
-//     FirebaseFirestore.instance.collection("users");
-// List getdtaa() {
-//   StreamBuilder(
-//     stream: getAllTasks(),
-//     builder: (context, snapshot) {
-//       if (snapshot.hasError) {
-//         return Text("${snapshot.error}");
-//       }
-//       if (snapshot.hasData) {
-//         final taskModal = snapshot.data!;
-//         currentTaskData = taskModal;
-//         print("object--------------------------------");
-//         return taskModal ;
-//       } else {
-//         return Center(child: CircularProgressIndicator());
-//       }
-//     },
-//   );
-// }
-
 List<Object?> userData = [];
 List<UserModal> currentUserData = [];
 
-// Future<List<Object?>> getAllDataUser(
-// ) async {
-//   QuerySnapshot querySnapshot = await _collectionRef.get();
-//   userData = querySnapshot.docs.map((doc) => doc.data()).toList();
-//   print(userData);
-//   currentUserData = userData.toList();
-//   return userData;
-//   // print(data.toString());
-// }
-// List<UserModal> searchUser(name, category, list) {
-//   print(name);
-//   print(category);
-//   List<UserModal> data = list;
-//   List<UserModal> listSearch = [];
-//   data.forEach((element) {
-//     if (category == "Tên" && element.name.toString().contains(name)) {
-//       listSearch.add(element);
-//     }
-//     if ('Tên nhân viên' == category &&
-//         element.users.toString().contains(name)) {
-//       listSearch.add(element);
-//     }
-//     if ("Tên task" == category && element.tasks.toString().contains(name)) {
-//       listSearch.add(element);
-//     }
-//     if ("Tên ngắn" == category && element.shortName.toString().contains(name)) {
-//       listSearch.add(element);
-//     }
-//   });
-//   return listSearch;
-// }
+List<UserModal> searchUser(
+    name, category, list, List<ProjectModal> listProject) {
+  List<UserModal> data = list;
+  List<UserModal> listSearch = [];
+  // String _projectId = "";
+  // ProjectModal _project = ProjectModal();
+  // for (var e in listProject) {
+  //   if (e.name.toString().toLowerCase().contains(name)) {
+  //     _project = e;
+  //     print(e.name);
+  //   }
+  // }
+  data.forEach((element) {
+    // if (category == "project") {
+    //   for (var e in _project.users!) {
+    //     if (element.id == e) {
+    //       print("-----------------");
+    //       listSearch.add(element);
+    //     }
+    //   }
+    // }
+    if ('name' == category &&
+        element.name.toString().toLowerCase().contains(name)) {
+      listSearch.add(element);
+    }
+    if ("userName" == category &&
+        element.userName.toString().toLowerCase().contains(name)) {
+      listSearch.add(element);
+    }
+    if ("phoneNumber" == category &&
+        element.phoneNumber.toString().contains(name)) {
+      listSearch.add(element);
+    }
+  });
+  return listSearch;
+}
 
 UserModal findUserById(name, List<UserModal> list) {
   List<UserModal> data = list;
@@ -100,17 +86,6 @@ bool checkDate(DateTime date, UserModal modal) {
   }
   return check;
 }
-
-// UserModal searchUserById(name, list) {
-//   List<UserModal> data = list;
-//   UserModal user = [] as UserModal;
-//   data.forEach((element) {
-//     if (element.name.toString().contains(name)) {
-//       user = element;
-//     }
-//   });
-//   return user;
-// }
 
 Future createUser(
     {name,
@@ -208,7 +183,6 @@ Future updateUserCheckIn({id, checkIn, updateAt}) async {
     "checkIn": checkIn,
   });
 }
-
 
 Future deleteUser(id) async {
   print(id);

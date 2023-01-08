@@ -13,8 +13,10 @@ import 'package:travel_app/services/project_services.dart';
 
 import '../../../Data/models/option_modal.dart';
 import '../../../Data/models/project_model.dart';
+import '../../../Data/models/user_model.dart';
 import '../../../core/helpers/local_storage_helper.dart';
 import '../../../services/project_services.dart';
+import '../../../services/user_services.dart';
 
 class ProjectScreen extends StatefulWidget {
   const ProjectScreen({
@@ -35,25 +37,23 @@ class _ProjectScreenState extends State<ProjectScreen> {
   void initState() {
     super.initState();
     category = _list[0].value;
-    isSearch = false;
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
-    isSearch = false;
   }
 
   final ProjectModal projectModalEmty = ProjectModal();
   List<ProjectModal> list = [];
-  bool isSearch = false;
+  List<UserModal> _listUser = [];
+
   late String category;
   TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-dynamic _userLogin = LocalStorageHelper.getValue('userLogin')["position"];
+    dynamic _userLogin = LocalStorageHelper.getValue('userLogin')["position"];
     return Scaffold(
       appBar: AppBar(
         title: StreamBuilder(
@@ -69,7 +69,6 @@ dynamic _userLogin = LocalStorageHelper.getValue('userLogin')["position"];
               );
               return Text(
                 "Dự án (" + projectModal.length.toString() + ")",
-                // style: TextStyleCustom.h1Text,
               );
             } else {
               return Center(child: CircularProgressIndicator());
@@ -104,8 +103,20 @@ dynamic _userLogin = LocalStorageHelper.getValue('userLogin')["position"];
               });
             },
           ),
-          SizedBox(
-            height: 5,
+          StreamBuilder(
+            stream: getAllUsers(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              if (snapshot.hasData) {
+                _listUser = snapshot.data!;
+
+                return SizedBox();
+              } else {
+                return SizedBox();
+              }
+            },
           ),
           Row(children: [
             Expanded(
@@ -115,23 +126,12 @@ dynamic _userLogin = LocalStorageHelper.getValue('userLogin')["position"];
                 list: _list,
                 dropdownValue: category,
                 onChanged: ((p0) {
-                  category = p0.toString();
+                  setState(() {
+                    category = p0.toString();
+                  });
                 }),
               ),
             ),
-            SizedBox(
-              width: 10,
-            ),
-            Expanded(
-                flex: 2,
-                child: ButtonWidget(
-                  title: "Tìm kiếm",
-                  ontap: () {
-                    setState(() {
-                      isSearch = true;
-                    });
-                  },
-                ))
           ]),
           SizedBox(
             height: 10,
@@ -145,25 +145,15 @@ dynamic _userLogin = LocalStorageHelper.getValue('userLogin')["position"];
               }
               if (snapshot.hasData) {
                 final projectModal = snapshot.data!;
-                currentProjectData = searchProject(
-                    textEditingController.text, category, projectModal);
-                if (isSearch == false) {
-                  return ListView(
-                    children: projectModal
-                        .map(((e) => ListProject(
-                              projectModal: e,
-                            )))
-                        .toList(),
-                  );
-                } else {
-                  return ListView(
-                    children: currentProjectData
-                        .map(((e) => ListProject(
-                              projectModal: e,
-                            )))
-                        .toList(),
-                  );
-                }
+                currentProjectData = searchProject(textEditingController.text,
+                    category, projectModal, _listUser);
+                return ListView(
+                  children: currentProjectData
+                      .map(((e) => ListProject(
+                            projectModal: e,
+                          )))
+                      .toList(),
+                );
               } else {
                 return Center(child: CircularProgressIndicator());
               }
@@ -179,5 +169,4 @@ List<OptionModal> _list = [
   OptionModal(value: "name", display: "Tên"),
   OptionModal(value: "userName", display: "Tên nhân viên"),
   OptionModal(value: "shortName", display: "Tên ngắn"),
-  OptionModal(value: "task", display: "Tên task"),
 ];

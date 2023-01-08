@@ -15,7 +15,6 @@ class SelectDateScreen extends StatefulWidget {
 
   List<DateTime>? initialDates;
 
-
   @override
   State<SelectDateScreen> createState() => _SelectDateScreenState();
 }
@@ -38,7 +37,7 @@ class _SelectDateScreenState extends State<SelectDateScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorPalette.primaryColor,
-        title: Text("Danh sách ngày check in"),
+        title: Text("Danh sách ngày điểm danh"),
       ),
       body: Padding(
         padding: EdgeInsets.all(20),

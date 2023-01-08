@@ -412,14 +412,14 @@ class _TaskDetailState extends State<TaskDetail> {
 }
 
 List<OptionModal> _listPriority = [
-  OptionModal(value: "P1", display: "Không ưu tiên"),
-  OptionModal(value: "P2", display: "Ưu tiên vừa"),
-  OptionModal(value: "P3", display: "Ưu tiên"),
-  OptionModal(value: "P4", display: "Cấp bách"),
+  OptionModal(value: "Không ưu tiên", display: "Không ưu tiên"),
+  OptionModal(value: "Ưu tiên vừa", display: "Ưu tiên vừa"),
+  OptionModal(value: "Ưu tiên", display: "Ưu tiên"),
+  OptionModal(value: "Cấp bách", display: "Cấp bách"),
 ];
 List<OptionModal> _listStatus = [
-  OptionModal(value: "S1", display: "Coding"),
-  OptionModal(value: "S2", display: "HoldOn"),
-  OptionModal(value: "S3", display: "In progress"),
-  OptionModal(value: "S4", display: "Done"),
+  OptionModal(value: "Coding", display: "Coding"),
+  OptionModal(value: "HoldOn", display: "HoldOn"),
+  OptionModal(value: "In progress", display: "In progress"),
+  OptionModal(value: "Done", display: "Done"),
 ];

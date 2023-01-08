@@ -2,11 +2,13 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:travel_app/Data/models/project_model.dart';
 import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/representation/screens/users_screen/user_detail_screen.dart';
 import 'package:travel_app/representation/widgets/button_widget.dart';
 import 'package:travel_app/representation/widgets/search_input.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
+import 'package:travel_app/services/project_services.dart';
 import 'package:travel_app/services/user_services.dart';
 
 import '../../../Data/models/option_modal.dart';
@@ -34,18 +36,18 @@ class _UserScreenState extends State<UserScreen> {
   void initState() {
     super.initState();
     category = _list[0].value;
-    isSearch = false;
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    isSearch = false;
   }
 
   final UserModal userModalEmty = UserModal();
   List<UserModal> list = [];
+  List<ProjectModal> _listProject = [];
+
   bool isSearch = false;
   late String category;
   TextEditingController textEditingController = TextEditingController();
@@ -104,9 +106,6 @@ class _UserScreenState extends State<UserScreen> {
               });
             },
           ),
-          SizedBox(
-            height: 5,
-          ),
           Row(children: [
             Expanded(
               flex: 3,
@@ -119,19 +118,6 @@ class _UserScreenState extends State<UserScreen> {
                 }),
               ),
             ),
-            SizedBox(
-              width: 10,
-            ),
-            Expanded(
-                flex: 2,
-                child: ButtonWidget(
-                  title: "Tìm kiếm",
-                  ontap: () {
-                    setState(() {
-                      isSearch = true;
-                    });
-                  },
-                ))
           ]),
           SizedBox(
             height: 10,
@@ -145,30 +131,35 @@ class _UserScreenState extends State<UserScreen> {
               }
               if (snapshot.hasData) {
                 final userModal = snapshot.data!;
-                // currentUserData = searchUser(
-                //     textEditingController.text, category, userModal);
-                // if (isSearch == false) {
+                currentUserData = searchUser(textEditingController.text,
+                    category, userModal, _listProject);
                 return ListView(
-                  children: userModal
+                  children: currentUserData
                       .map(((e) => ListUser(
                             userModal: e,
                           )))
                       .toList(),
                 );
-                // } else {
-                //   return ListView(
-                //     children: currentUserData
-                //         .map(((e) => ListUser(
-                //               userModal: e,
-                //             )))
-                //         .toList(),
-                //   );
-                // }
               } else {
                 return Center(child: CircularProgressIndicator());
               }
             },
-          ))
+          )),
+          StreamBuilder(
+            stream: getAllProjects(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              if (snapshot.hasData) {
+                final userModal = snapshot.data!;
+                _listProject = userModal;
+                return SizedBox();
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          )
         ]),
       ),
     );
@@ -179,5 +170,5 @@ List<OptionModal> _list = [
   OptionModal(value: "name", display: "Tên"),
   OptionModal(value: "userName", display: "Tên user"),
   OptionModal(value: "phoneNumber", display: "Số điện thoại"),
-  OptionModal(value: "project", display: "Tên project"),
+  OptionModal(value: "project", display: "Tên dự án"),
 ];

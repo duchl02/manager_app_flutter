@@ -19,18 +19,7 @@ CollectionReference taskDb = FirebaseFirestore.instance.collection("tasks");
 
 List<Object?> taskData = [];
 List<TaskModal> currentTaskData = [];
-
-// Future<List<Object?>> getAllDataTask(
-// ) async {
-//   QuerySnapshot querySnapshot = await _collectionRef.get();
-//   taskData = querySnapshot.docs.map((doc) => doc.data()).toList();
-//   print(taskData);
-//   currentTaskData = taskData.toList();
-//   return taskData;
-//   // print(data.toString());
-// }
 List<TaskModal> searchTask(name, category, list, listUser, listProject) {
-  print("-----------------------------------------------");
   List<TaskModal> data = list;
   List<TaskModal> listSearch = [];
   data.forEach((element) {
@@ -39,19 +28,9 @@ List<TaskModal> searchTask(name, category, list, listUser, listProject) {
       listSearch.add(element);
     }
     if ('userName' == category) {
-      var listUserName = [];
-      for (var e in data) {
-        var userName = findUserById(e.userId, listUser).name ?? "##";
-        listUserName.add(userName);
-      }
-      for (var e in listUserName) {
-        if (e.toLowerCase().contains(name) && name != '') {
-          if (listSearch.contains(element)) {
-          } else {
-            print("0000000000000000000000");
-            listSearch.add(element);
-          }
-        }
+      String _userName = findUserById(element.userId, listUser).name ?? "##";
+      if (_userName.toLowerCase().contains(name)) {
+        listSearch.add(element);
       }
     }
     if ("status" == category &&
@@ -59,8 +38,9 @@ List<TaskModal> searchTask(name, category, list, listUser, listProject) {
       listSearch.add(element);
     }
     if ("project" == category) {
-      var projectName = findProjectById(name, listProject).name ?? "##";
-      if (element.priority.toString().toLowerCase().contains(projectName)) {
+      var projectName =
+          findProjectById(element.projectId, listProject).name ?? "##";
+      if (projectName.toLowerCase().contains(name)) {
         listSearch.add(element);
       }
     }

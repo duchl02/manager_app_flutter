@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/Data/models/project_model.dart';
 import 'package:travel_app/Data/models/project_model.dart';
 import 'package:travel_app/services/task_services.dart';
+import 'package:travel_app/services/user_services.dart';
 
 import '../representation/screens/users_screen/users_screen.dart';
 
@@ -16,29 +17,34 @@ Stream<List<ProjectModal>> getAllProjects() {
   return data;
 }
 
-
-
 List<Object?> projectData = [];
 List<ProjectModal> currentProjectData = [];
 
-
-List<ProjectModal> searchProject(name, category, list) {
-  print(name);
-  print(category);
+List<ProjectModal> searchProject(name, category, list, listUser) {
   List<ProjectModal> data = list;
   List<ProjectModal> listSearch = [];
   data.forEach((element) {
-    if (category == "Tên" && element.name.toString().contains(name)) {
+    if (category == "name" &&
+        element.name.toString().toLowerCase().contains(name)) {
       listSearch.add(element);
     }
-    if ('Tên nhân viên' == category &&
-        element.users.toString().contains(name)) {
-      listSearch.add(element);
+    if ('userName' == category) {
+      String _userName = '';
+      List _listNameUser = [];
+      for (var e in element.users!) {
+        _userName = findUserById(e, listUser).name ?? "##";
+
+        _listNameUser.add(_userName);
+      }
+      for (var e in _listNameUser) {
+        if (e.toLowerCase().contains(name)) {
+          listSearch.add(element);
+          break;
+        }
+      }
     }
-    if ("Tên task" == category && element.tasks.toString().contains(name)) {
-      listSearch.add(element);
-    }
-    if ("Tên ngắn" == category && element.shortName.toString().contains(name)) {
+    if ("shortName" == category &&
+        element.shortName.toString().toLowerCase().contains(name)) {
       listSearch.add(element);
     }
   });
