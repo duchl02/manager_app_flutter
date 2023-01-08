@@ -90,7 +90,6 @@ class _TaskScreenState extends State<TaskScreen> {
                   FontAwesomeIcons.plus,
                 )),
             onTap: () {
-              
               Navigator.of(context)
                   .pushNamed(TaskDetail.routeName, arguments: taskModalEmty);
             },
@@ -107,9 +106,6 @@ class _TaskScreenState extends State<TaskScreen> {
                 textEditingController.text = value;
               });
             },
-          ),
-          SizedBox(
-            height: 5,
           ),
           SelectOption(
             list: _list,

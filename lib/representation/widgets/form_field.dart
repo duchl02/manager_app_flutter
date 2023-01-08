@@ -12,7 +12,8 @@ class FormInputField extends StatelessWidget {
     this.onChanged,
     this.maxLines = 1,
     this.onTap,
-    this.validator, this.obscureText = false,
+    this.validator,
+    this.obscureText = false,
   }) : super(key: key);
 
   final String label;
@@ -28,12 +29,14 @@ class FormInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(top: 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(label,
-              style: TextStyleCustom.normalSizePrimary),
+          Text(label, style: TextStyleCustom.normalSizePrimary),
+          SizedBox(
+            height: 6,
+          ),
           TextFormField(
             maxLines: maxLines,
             style: TextStyleCustom.normalSizeBlack,

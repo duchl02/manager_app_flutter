@@ -7,7 +7,6 @@ import 'package:travel_app/core/helpers/asset_helper.dart';
 import 'package:travel_app/core/helpers/image_helper.dart';
 import 'package:travel_app/core/helpers/local_storage_helper.dart';
 import 'package:travel_app/representation/screens/form_login/login_screen.dart';
-import 'package:travel_app/representation/screens/intro_screen.dart';
 import 'package:travel_app/representation/screens/main_app.dart';
 
 class SplashScreen extends StatefulWidget {

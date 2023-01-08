@@ -125,7 +125,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
             )
           : SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -277,7 +277,8 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                       if (await confirm(
                                         context,
                                         title: const Text('Xác nhận'),
-                                        content: Text('Xác nhận thêm mới dự án'),
+                                        content:
+                                            Text('Xác nhận thêm mới dự án'),
                                         textOK: const Text('Xác nhận'),
                                         textCancel: const Text('Thoát'),
                                       )) {

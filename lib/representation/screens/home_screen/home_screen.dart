@@ -1,18 +1,14 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:confirm_dialog/confirm_dialog.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/core/constants/text_style.dart';
 import 'package:travel_app/core/extensions/date_time_format.dart';
 import 'package:travel_app/representation/screens/form_login/login_screen.dart';
+import 'package:travel_app/representation/screens/on_leave_screen.dart';
 import 'package:travel_app/representation/screens/users_screen/user_detail_screen.dart';
 
 import '../../../Data/models/task_model.dart';
@@ -21,7 +17,6 @@ import '../../../core/constants/dismension_constants.dart';
 import '../../../core/helpers/asset_helper.dart';
 import '../../../core/helpers/image_helper.dart';
 import '../../../core/helpers/local_storage_helper.dart';
-import '../../../services/project_services.dart';
 import '../../../services/task_services.dart';
 import '../../../services/user_services.dart';
 import '../../widgets/app_bar_container.dart';
@@ -125,18 +120,31 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.of(context)
                         .pushNamed(UserDetail.routeName, arguments: userModal);
                   },
-                  child: userModal.imageUser != null
-                      ? Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              image: DecorationImage(image: NetworkImage(userModal.imageUser!), fit: BoxFit.cover)),
-                          // child: Image.network(
-                          //   userModal.imageUser!,
-                          //   fit: BoxFit.contain,
-                          // ),
-                          )
-                      : ImageHelper.loadFromAsset(AssetHelper.user,
-                          radius: BorderRadius.circular(20)),
+                  child: StreamBuilder(
+                    stream: getAllUsers(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Text("${snapshot.error}");
+                      }
+                      if (snapshot.hasData) {
+                        final projectModal = snapshot.data!;
+                        userModal = findUserById(userLogin["id"], projectModal);
+                        return userModal.imageUser != null
+                            ? Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    image: DecorationImage(
+                                        image:
+                                            NetworkImage(userModal.imageUser!),
+                                        fit: BoxFit.cover)),
+                              )
+                            : ImageHelper.loadFromAsset(AssetHelper.user,
+                                radius: BorderRadius.circular(20));
+                      } else {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  ),
                 ),
               )
             ],
@@ -174,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         var user = findUserById(userLogin["id"], projectModal);
                         if (user != [] && checkDate(DateTime.now(), user)) {
                           var today = DateTime.now();
-                          var listDate = [];
+                          var listDate = user.checkIn ?? [];
                           listDate.add(today);
                           await updateUserCheckIn(
                               id: userLogin["id"].toString(),
@@ -233,18 +241,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: _buildItemCategory(Icon(FontAwesomeIcons.userLargeSlash),
                     () async {
-                  // chooseImage();
+                  Navigator.of(context).pushNamed(OnLeaveScreen.routeName);
                 }, 'Đăng ký nghỉ phép'),
               ),
-              // Expanded(
-              //   child: _buildItemCategory(Icon(FontAwesomeIcons.userLargeSlash),
-              //       () async {
-              //     String url = await uploadImage();
-
-              //     await updateUserImageUser(
-              //         id: userModal.id, imageUser: url);
-              //   }, 'Đăng ký nghỉ phép'),
-              // ),
             ],
           ),
           SizedBox(

@@ -137,26 +137,10 @@ class _TaskDetailState extends State<TaskDetail> {
             )
           : SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Text("Ngày tạo: "),
-                        Text(widget.taskModal.createAt != null
-                            ? formatDate(widget.taskModal.createAt)
-                            : "Chưa có")
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text("Ngày chỉnh sửa: "),
-                        Text(widget.taskModal.updateAt != null
-                            ? formatDate(widget.taskModal.updateAt)
-                            : "Chưa có")
-                      ],
-                    ),
                     FormInputField(
                       label: "Tiêu đề",
                       hintText: "Nhập tiêu đề",
@@ -166,14 +150,6 @@ class _TaskDetailState extends State<TaskDetail> {
                           nameController!.text = value;
                         });
                       },
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, bottom: 2),
-                      child: Text(
-                        "Người thực hiện",
-                        style: TextStyle(
-                            color: ColorPalette.primaryColor, fontSize: 18),
-                      ),
                     ),
                     StreamBuilder(
                       stream: getAllUsers(),
@@ -208,8 +184,8 @@ class _TaskDetailState extends State<TaskDetail> {
 
                           // UserModal userDefaults =
                           //     findUserById(userId, userModal);
-                          print(userLogin["position"]);
                           return SelectOption(
+                            label: "Người thực hiện",
                             list: _listSatff,
                             dropdownValue: widget.taskModal.userId != null
                                 ? widget.taskModal.userId.toString()
@@ -222,14 +198,6 @@ class _TaskDetailState extends State<TaskDetail> {
                           return Center(child: CircularProgressIndicator());
                         }
                       },
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, bottom: 2),
-                      child: Text(
-                        "Dự án",
-                        style: TextStyle(
-                            color: ColorPalette.primaryColor, fontSize: 18),
-                      ),
                     ),
                     StreamBuilder(
                       stream: getAllProjects(),
@@ -261,6 +229,7 @@ class _TaskDetailState extends State<TaskDetail> {
                                 OptionModal(value: e.id!, display: e.name!));
                           }
                           return SelectOption(
+                            label: "Dự án",
                             list: _listProject,
                             dropdownValue: widget.taskModal.projectId != null
                                 ? widget.taskModal.projectId.toString()
@@ -274,15 +243,8 @@ class _TaskDetailState extends State<TaskDetail> {
                         }
                       },
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, bottom: 2),
-                      child: Text(
-                        "Độ ưu tiên",
-                        style: TextStyle(
-                            color: ColorPalette.primaryColor, fontSize: 18),
-                      ),
-                    ),
                     SelectOption(
+                      label: "Độ ưu tiên",
                       list: _listPriority,
                       dropdownValue: widget.taskModal.priority != null
                           ? widget.taskModal.priority.toString()
@@ -291,15 +253,8 @@ class _TaskDetailState extends State<TaskDetail> {
                         priorityId = p0 as String;
                       },
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, bottom: 2),
-                      child: Text(
-                        "Trạng thái",
-                        style: TextStyle(
-                            color: ColorPalette.primaryColor, fontSize: 18),
-                      ),
-                    ),
                     SelectOption(
+                      label: "Trạng thái",
                       list: _listStatus,
                       dropdownValue: widget.taskModal.status != null
                           ? widget.taskModal.status.toString()
@@ -328,6 +283,25 @@ class _TaskDetailState extends State<TaskDetail> {
                           descriptionController!.text = value;
                         });
                       },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Text("Ngày tạo: "),
+                        Text(widget.taskModal.createAt != null
+                            ? formatDate(widget.taskModal.createAt)
+                            : "Chưa có")
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text("Ngày chỉnh sửa: "),
+                        Text(widget.taskModal.updateAt != null
+                            ? formatDate(widget.taskModal.updateAt)
+                            : "Chưa có")
+                      ],
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 10, bottom: 10),

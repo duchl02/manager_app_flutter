@@ -11,10 +11,12 @@ class SelectOption<T> extends StatefulWidget {
       required this.list,
       required this.dropdownValue,
       required this.onChanged,
-      this.searchOption});
+      this.searchOption,
+      this.label});
 
   List<OptionModal> list;
   double? searchOption;
+  String? label;
 
   @override
   State<SelectOption> createState() => _SelectOptionState();
@@ -26,37 +28,58 @@ class SelectOption<T> extends StatefulWidget {
 class _SelectOptionState extends State<SelectOption> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(widget.searchOption ?? 4),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.black, width: 2)),
-      child: DropdownButton<String>(
-        value: widget.dropdownValue.isNotEmpty ? widget.dropdownValue : null,
-        underline: SizedBox(),
-        isExpanded: true,
-        icon: const Icon(Icons.arrow_drop_down),
-        elevation: 16,
-        style: const TextStyle(color: ColorPalette.primaryColor),
-        onChanged: (String? value) {
-          widget.onChanged(value);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        widget.label != null
+            ? Column(children: [
+                SizedBox(height: 14),
+                Text(widget.label!, style: TextStyleCustom.normalSizePrimary)
+              ])
+            : SizedBox(),
+        SizedBox(
+          height: 6,
+        ),
+        Container(
+          padding: EdgeInsets.all(widget.searchOption ?? 4),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.black, width: 1)),
+          child: Column(
+            children: [
+              DropdownButton<String>(
+                value: widget.dropdownValue.isNotEmpty
+                    ? widget.dropdownValue
+                    : null,
+                underline: SizedBox(),
+                isExpanded: true,
+                icon: const Icon(Icons.arrow_drop_down),
+                elevation: 16,
+                style: const TextStyle(color: ColorPalette.primaryColor),
+                onChanged: (String? value) {
+                  widget.onChanged(value);
 
-          // This is called when the user selects an item.
-          setState(() {
-            widget.dropdownValue = value!;
-          });
-        },
-        // onChanged: widget.onChanged,
-        items: widget.list.map<DropdownMenuItem<String>>((OptionModal value) {
-          return DropdownMenuItem(
-            value: value.value,
-            child: Text(
-              value.display.toString(),
-              style: TextStyleCustom.normalText,
-            ),
-          );
-        }).toList(),
-      ),
+                  // This is called when the user selects an item.
+                  setState(() {
+                    widget.dropdownValue = value!;
+                  });
+                },
+                // onChanged: widget.onChanged,
+                items: widget.list
+                    .map<DropdownMenuItem<String>>((OptionModal value) {
+                  return DropdownMenuItem(
+                    value: value.value,
+                    child: Text(
+                      value.display.toString(),
+                      style: TextStyleCustom.normalText,
+                    ),
+                  );
+                }).toList(),
+              )
+            ],
+          ),
+        )
+      ],
     );
   }
 }

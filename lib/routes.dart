@@ -4,11 +4,12 @@ import 'package:travel_app/Data/models/task_model.dart';
 import 'package:travel_app/Data/models/user_model.dart';
 import 'package:travel_app/representation/screens/form_login/login_screen.dart';
 import 'package:travel_app/representation/screens/home_screen/home_screen.dart';
-import 'package:travel_app/representation/screens/intro_screen.dart';
 import 'package:travel_app/representation/screens/main_app.dart';
+import 'package:travel_app/representation/screens/on_leave_screen.dart';
 import 'package:travel_app/representation/screens/project_screen/project_detail.dart';
 import 'package:travel_app/representation/screens/project_screen/project_screen.dart';
 import 'package:travel_app/representation/screens/select_date_screen.dart';
+import 'package:travel_app/representation/screens/select_range_date_screen.dart';
 import 'package:travel_app/representation/screens/users_screen/user_detail_screen.dart';
 import 'package:travel_app/representation/screens/users_screen/users_screen.dart';
 import 'package:travel_app/representation/screens/task_screen/task_detail_screen.dart';
@@ -57,7 +58,8 @@ PageRoute? generateRoutes(RouteSettings settings) {
         ),
       );
     case SelectDateScreen.routeName:
-      late final List<DateTime> listDates = (settings.arguments as List<DateTime>);
+      late final List<DateTime> listDates =
+          (settings.arguments as List<DateTime>);
       return CupertinoPageRoute(
         settings: settings,
         builder: (context) => SelectDateScreen(
@@ -68,9 +70,6 @@ PageRoute? generateRoutes(RouteSettings settings) {
     case MainApp.routeName:
       return CupertinoPageRoute(
           builder: (context) => MainApp(), settings: settings);
-    case IntroScreen.routeName:
-      return CupertinoPageRoute(
-          builder: (context) => IntroScreen(), settings: settings);
 
     // case SelectDateScreen.routeName:
     //   return CupertinoPageRoute(
@@ -79,6 +78,12 @@ PageRoute? generateRoutes(RouteSettings settings) {
     case FormLoginScreen.routeName:
       return CupertinoPageRoute(
           builder: (context) => FormLoginScreen(), settings: settings);
+    case OnLeaveScreen.routeName:
+      return CupertinoPageRoute(
+          builder: (context) => OnLeaveScreen(), settings: settings);
+    case SelectRangeDateScreen.routeName:
+      return CupertinoPageRoute(
+          builder: (context) => SelectRangeDateScreen(), settings: settings);
     default:
       return null;
   }

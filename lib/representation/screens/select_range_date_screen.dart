@@ -5,22 +5,18 @@ import 'package:travel_app/representation/widgets/button_widget.dart';
 
 import '../../core/constants/color_constants.dart';
 
-class SelectDateScreen extends StatefulWidget {
-  SelectDateScreen({
+class SelectRangeDateScreen extends StatefulWidget {
+  SelectRangeDateScreen({
     super.key,
-    this.initialDates,
   });
 
-  static const String routeName = "/select_date_screen";
-
-  List<DateTime>? initialDates;
-
+  static const String routeName = "/select_range_date_screen";
 
   @override
-  State<SelectDateScreen> createState() => _SelectDateScreenState();
+  State<SelectRangeDateScreen> createState() => _SelectRangeDateScreenState();
 }
 
-class _SelectDateScreenState extends State<SelectDateScreen> {
+class _SelectRangeDateScreenState extends State<SelectRangeDateScreen> {
   DateTime? rangeStartDate;
 
   DateTime? rangeEndDate;
@@ -47,9 +43,8 @@ class _SelectDateScreenState extends State<SelectDateScreen> {
             height: kMediumPadding,
           ),
           SfDateRangePicker(
-            initialSelectedDates: widget.initialDates,
             view: DateRangePickerView.month,
-            selectionMode: DateRangePickerSelectionMode.multiple,
+            selectionMode: DateRangePickerSelectionMode.range,
 
             monthViewSettings:
                 DateRangePickerMonthViewSettings(firstDayOfWeek: 1),
@@ -58,13 +53,13 @@ class _SelectDateScreenState extends State<SelectDateScreen> {
             endRangeSelectionColor: ColorPalette.yellowColor,
             rangeSelectionColor: ColorPalette.yellowColor.withOpacity(0.25),
             todayHighlightColor: ColorPalette.yellowColor,
-            // toggleDaySelection: true,
-            // onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
-            //   if (args.value is PickerDateRange) {
-            //     rangeStartDate = args.value.startDate;
-            //     rangeEndDate = args.value.endDate;
-            //   }
-            // },
+            toggleDaySelection: true,
+            onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+              if (args.value is PickerDateRange) {
+                rangeStartDate = args.value.startDate;
+                rangeEndDate = args.value.endDate;
+              }
+            },
           ),
           Row(children: [
             Flexible(

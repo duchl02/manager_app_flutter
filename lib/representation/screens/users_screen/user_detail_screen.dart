@@ -305,15 +305,9 @@ class _UserDetailState extends State<UserDetail> {
                         });
                       },
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, bottom: 2),
-                      child: Text(
-                        "Vị trí",
-                        style: TextStyle(
-                            color: ColorPalette.primaryColor, fontSize: 18),
-                      ),
-                    ),
+                    
                     SelectOption(
+                      label: 'Vị trí',
                       list: _listPositions,
                       dropdownValue: widget.userModal.position != null
                           ? widget.userModal.position.toString()
