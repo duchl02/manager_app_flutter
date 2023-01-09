@@ -41,13 +41,14 @@ class _SelectOptionState extends State<SelectOption> {
           height: 6,
         ),
         Container(
-          padding: EdgeInsets.all(widget.searchOption ?? 4),
+          padding: EdgeInsets.only(right: 10, left: 10, top: 4, bottom:4),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: Colors.black, width: 1)),
           child: Column(
             children: [
               DropdownButton<String>(
+                
                 value: widget.dropdownValue.isNotEmpty
                     ? widget.dropdownValue
                     : null,

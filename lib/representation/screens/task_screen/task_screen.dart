@@ -163,7 +163,7 @@ class _TaskScreenState extends State<TaskScreen> {
                     category, taskModal, _listUser, _listProject);
 
                 return ListView(
-                  children: currentTaskData
+                  children: currentTaskData.reversed
                       .map(((e) => ListTask(
                             taskModal: e,
                           )))

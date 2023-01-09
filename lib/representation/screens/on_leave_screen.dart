@@ -1,5 +1,6 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:travel_app/Data/models/user_model.dart';
 import 'package:travel_app/representation/screens/select_range_date_screen.dart';
@@ -108,6 +109,8 @@ class _OnLeaveScreenState extends State<OnLeaveScreen> {
                             Flexible(
                                 flex: 1,
                                 child: ButtonWidget(
+                                  color:
+                                      ColorPalette.secondColor.withOpacity(0.2),
                                   title: "Hủy",
                                   ontap: (() {
                                     Navigator.of(context).pop();
@@ -148,54 +151,8 @@ class _OnLeaveScreenState extends State<OnLeaveScreen> {
                                     return ButtonWidget(
                                       title: "Xác nhận",
                                       ontap: () async {
-                                        String username =
-                                            'duc1503honglinh@gmail.com';
-                                        String password = 'auduwuxauzyjorcd';
-
-                                        final smtpServer =
-                                            gmail(username, password);
-                                        final message = Message()
-                                          ..from = Address(
-                                              username, 'Hệ thống xác nhận')
-                                          ..recipients.add(_toEmail)
-                                          ..ccRecipients.addAll([_emailToCc])
-                                          ..bccRecipients
-                                              .add(Address(_emailToCc))
-                                          ..subject = 'Thư xác nhận nghỉ phép'
-                                          // ..text =
-                                          //     'deo co cai gi cho ban xem dau.\nemail rac day'
-                                          ..html = htmlContent;
-
-                                        try {
-                                          setState(() {
-                                            isLoading = true;
-                                          });
-                                          final sendReport =
-                                              await send(message, smtpServer);
-                                          print('Message sent: ' +
-                                              sendReport.toString());
-                                          setState(() {
-                                            isLoading = false;
-                                          });
-                                          if (mounted) {
-                                            MediaQuery.of(context).size;
-                                            Navigator.of(context).pop();
-                                          }
-
-                                          await EasyLoading.showSuccess(
-                                              "Hệ thống đã xác nhận. Xin hãy kiểm tra email của bạn");
-                                        } on MailerException catch (e) {
-                                          print(e);
-                                          for (var p in e.problems) {
-                                            print(
-                                                'Problem: ${p.code}: ${p.msg}');
-                                          }
-                                          setState(() {
-                                            isLoading = false;
-                                          });
-                                          await EasyLoading.showError(
-                                              "Hệ thống đã xảy ra lỗi. Xin hãy thử lại");
-                                        }
+                                        submitBtn(
+                                            _toEmail, _emailToCc, htmlContent);
                                       },
                                     );
                                   } else {
@@ -212,6 +169,50 @@ class _OnLeaveScreenState extends State<OnLeaveScreen> {
                   ),
                 ),
               ));
+  }
+
+  void submitBtn(
+    toEmail,
+    emailToCc,
+    htmlContent,
+  ) async {
+    String username = 'vanducbaymatdep@gmail.com';
+    String password = 'ealkufrsjcnemekp';
+
+    final smtpServer = gmail(username, password);
+    final message = Message()
+      ..from = Address(username, 'Hệ thống xác nhận')
+      ..recipients.add(toEmail)
+      ..ccRecipients.addAll([emailToCc])
+      ..bccRecipients.add(Address(emailToCc))
+      ..subject = 'Thư xác nhận nghỉ phép'
+      ..html = htmlContent;
+
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
+      setState(() {
+        isLoading = false;
+      });
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+
+      await EasyLoading.showSuccess(
+          "Hệ thống đã xác nhận. Xin hãy kiểm tra email của bạn");
+    } on MailerException catch (e) {
+      print(e);
+      for (var p in e.problems) {
+        print('Problem: ${p.code}: ${p.msg}');
+      }
+      setState(() {
+        isLoading = false;
+      });
+      await EasyLoading.showError("Hệ thống đã xảy ra lỗi. Xin hãy thử lại");
+    }
   }
 }
 

@@ -129,22 +129,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Text("Ngày tạo: "),
-                        Text(widget.projectModal.createAt != null
-                            ? formatDate(widget.projectModal.createAt)
-                            : "Chưa có")
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text("Ngày chỉnh sửa: "),
-                        Text(widget.projectModal.updateAt != null
-                            ? formatDate(widget.projectModal.updateAt)
-                            : "Chưa có")
-                      ],
-                    ),
+                   
                     FormInputField(
                       label: "Tên dự án",
                       hintText: "Nhập tên dự án",
@@ -212,6 +197,27 @@ class _ProjectDetailState extends State<ProjectDetail> {
                         });
                       },
                     ),
+                    SizedBox(height: 6,),
+                     Row(
+                      children: [
+                        Text("Ngày tạo: ",
+                          style: TextStyle(color: ColorPalette.subTitleColor),),
+                        Text(widget.projectModal.createAt != null
+                            ? formatDate(widget.projectModal.createAt)
+                            : "Chưa có",
+                          style: TextStyle(color: ColorPalette.subTitleColor),)
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text("Ngày chỉnh sửa: ",
+                          style: TextStyle(color: ColorPalette.subTitleColor),),
+                        Text(widget.projectModal.updateAt != null
+                            ? formatDate(widget.projectModal.updateAt)
+                            : "Chưa có",
+                          style: TextStyle(color: ColorPalette.subTitleColor),)
+                      ],
+                    ),
                     Padding(
                       padding: EdgeInsets.only(top: 10, bottom: 10),
                       child: Row(
@@ -219,7 +225,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                           Flexible(
                               flex: 1,
                               child: ButtonWidget(
-                                color: Color.fromARGB(255, 255, 8, 0),
+                                color: ColorPalette.secondColor.withOpacity(0.2),
                                 title: "Hủy",
                                 ontap: (() {
                                   Navigator.of(context).pop();

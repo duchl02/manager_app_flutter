@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,13 +10,10 @@ import 'package:travel_app/Data/models/option_modal.dart';
 import 'package:travel_app/Data/models/user_model.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
 import 'package:travel_app/core/extensions/date_time_format.dart';
+import 'package:travel_app/representation/screens/priview_image_screen.dart';
 import 'package:travel_app/representation/widgets/button_widget.dart';
 import 'package:travel_app/representation/widgets/form_field.dart';
-import 'package:travel_app/representation/widgets/select_multi_custom.dart';
-import 'package:travel_app/services/project_services.dart';
 import 'package:travel_app/services/user_services.dart';
-import 'package:travel_app/services/task_services.dart';
-
 import '../../../core/constants/color_constants.dart';
 import '../../../core/helpers/asset_helper.dart';
 import '../../../core/helpers/local_storage_helper.dart';
@@ -172,52 +168,48 @@ class _UserDetailState extends State<UserDetail> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Center(
-                    //   child: Container(
-                    //     width: 100,
-                    //     height: 100,
-                    //     decoration: BoxDecoration(
-                    //         image: DecorationImage(
-                    //             image: AssetImage(imagePath),
-                    //             fit: BoxFit.cover)),
-                    //   ),
-                    // ),
                     Center(
                       child: InkWell(
-                        onTap: () {
-                          chooseImage();
+                        onTap: () async {
+                          if (await confirm(
+                            context,
+                            title: const Text('Xác nhận'),
+                            content: Text('Xác nhận hành động'),
+                            textCancel: const Text('Xem ảnh'),
+                            textOK: const Text('Tải ảnh lên'),
+                          )) {
+                            chooseImage();
+                          } else {
+                            Navigator.of(context).pushNamed(
+                                PreviewImageScreen.routeName,
+                                arguments: imagePath ??
+                                    "https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg");
+                          }
+                          ;
                         },
-                        child: Container(
-                          height: 160,
-                          width: 160,
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 3, color: Colors.black),
-                            shape: BoxShape.circle,
-                            image: file == null
-                                ? imagePath == null
-                                    ? DecorationImage(
-                                        image: AssetImage(AssetHelper.user),
-                                        fit: BoxFit.cover)
-                                    : DecorationImage(
-                                        image: NetworkImage(imagePath!),
-                                        fit: BoxFit.cover)
-                                : DecorationImage(
-                                    image: FileImage(file!), fit: BoxFit.cover),
-                          ),
-                          alignment: Alignment.center,
+                        child: Hero(
+                          tag: imagePath ??
+                              "https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
                           child: Container(
-                              height: 160,
-                              width: 160,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: Colors.blue,
-                              ),
-                              margin: EdgeInsets.only(
-                                  left: 110, top: 120, right: 10),
-                              child: Icon(
-                                Icons.edit,
-                                size: 20,
-                              )),
+                            height: 160,
+                            width: 160,
+                            decoration: BoxDecoration(
+                              border: Border.all(width: 3, color: Colors.black),
+                              shape: BoxShape.circle,
+                              image: file == null
+                                  ? imagePath == null
+                                      ? DecorationImage(
+                                          image: AssetImage(AssetHelper.user),
+                                          fit: BoxFit.cover)
+                                      : DecorationImage(
+                                          image: NetworkImage(imagePath!),
+                                          fit: BoxFit.cover)
+                                  : DecorationImage(
+                                      image: FileImage(file!),
+                                      fit: BoxFit.cover),
+                            ),
+                            alignment: Alignment.center,
+                          ),
                         ),
                       ),
                     ),
@@ -269,11 +261,6 @@ class _UserDetailState extends State<UserDetail> {
                               "${dateTime.day} - ${dateTime.month} - ${dateTime.year}";
                         });
                       },
-                      // onChanged: (value) {
-                      //   setState(() {
-                      //     birthdayController!.text = value;
-                      //   });
-                      // },
                     ),
                     FormInputField(
                       label: "Địa chỉ",
@@ -305,7 +292,7 @@ class _UserDetailState extends State<UserDetail> {
                         });
                       },
                     ),
-                    
+
                     SelectOption(
                       label: 'Vị trí',
                       list: _listPositions,
@@ -325,6 +312,9 @@ class _UserDetailState extends State<UserDetail> {
                           emailController!.text = value;
                         });
                       },
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     Row(
                       children: [
@@ -354,37 +344,7 @@ class _UserDetailState extends State<UserDetail> {
                         )
                       ],
                     ),
-                    // FormInputField(label: "Người thực hiện", hintText: "Nhập tiêu đề"),
-
-                    // StreamBuilder(
-                    //   stream: getAllProjects(),
-                    //   builder: (context, snapshot) {
-                    //     if (snapshot.hasError) {
-                    //       return Text("${snapshot.error}");
-                    //     }
-                    //     if (snapshot.hasData) {
-                    //       final projectModal = snapshot.data!;
-                    //       listProjectsDefault = [];
-                    //       for (var e in projectModal) {
-                    //         for (var e2 in listProjectsId) {
-                    //           if (e.id == e2) {
-                    //             listProjectsDefault.add(e);
-                    //           }
-                    //         }
-                    //       }
-                    //       return SelectMultiCustom(
-                    //         title: "Dự án",
-                    //         listValues: projectModal,
-                    //         defaultListValues: listProjectsDefault,
-                    //         onTap: (value) {
-                    //           listProject = value;
-                    //         },
-                    //       );
-                    //     } else {
-                    //       return Center(child: CircularProgressIndicator());
-                    //     }
-                    //   },
-                    // ),
+                  
 
                     Padding(
                       padding: EdgeInsets.only(top: 10, bottom: 10),
@@ -393,6 +353,8 @@ class _UserDetailState extends State<UserDetail> {
                           Flexible(
                               flex: 1,
                               child: ButtonWidget(
+                                color:
+                                    ColorPalette.secondColor.withOpacity(0.2),
                                 title: "Hủy",
                                 ontap: (() {
                                   Navigator.of(context).pop();

@@ -137,7 +137,7 @@ class _TaskDetailState extends State<TaskDetail> {
             )
           : SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -289,18 +289,30 @@ class _TaskDetailState extends State<TaskDetail> {
                     ),
                     Row(
                       children: [
-                        Text("Ngày tạo: "),
-                        Text(widget.taskModal.createAt != null
-                            ? formatDate(widget.taskModal.createAt)
-                            : "Chưa có")
+                        Text(
+                          "Ngày tạo: ",
+                          style: TextStyle(color: ColorPalette.subTitleColor),
+                        ),
+                        Text(
+                          widget.taskModal.createAt != null
+                              ? formatDate(widget.taskModal.createAt)
+                              : "Chưa có",
+                          style: TextStyle(color: ColorPalette.subTitleColor),
+                        )
                       ],
                     ),
                     Row(
                       children: [
-                        Text("Ngày chỉnh sửa: "),
-                        Text(widget.taskModal.updateAt != null
-                            ? formatDate(widget.taskModal.updateAt)
-                            : "Chưa có")
+                        Text(
+                          "Ngày chỉnh sửa: ",
+                          style: TextStyle(color: ColorPalette.subTitleColor),
+                        ),
+                        Text(
+                          widget.taskModal.updateAt != null
+                              ? formatDate(widget.taskModal.updateAt)
+                              : "Chưa có",
+                          style: TextStyle(color: ColorPalette.subTitleColor),
+                        )
                       ],
                     ),
                     Padding(
@@ -310,7 +322,8 @@ class _TaskDetailState extends State<TaskDetail> {
                           Flexible(
                               flex: 1,
                               child: ButtonWidget(
-                                color: Color.fromARGB(255, 255, 8, 0),
+                                color:
+                                    ColorPalette.secondColor.withOpacity(0.2),
                                 title: "Hủy",
                                 ontap: (() {
                                   Navigator.of(context).pop();

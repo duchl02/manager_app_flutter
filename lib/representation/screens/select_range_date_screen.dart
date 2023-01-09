@@ -34,7 +34,7 @@ class _SelectRangeDateScreenState extends State<SelectRangeDateScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorPalette.primaryColor,
-        title: Text("Danh sách ngày check in"),
+        title: Text("Chọn thời gian nghỉ"),
       ),
       body: Padding(
         padding: EdgeInsets.all(20),

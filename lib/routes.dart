@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:travel_app/Data/models/project_model.dart';
 import 'package:travel_app/Data/models/task_model.dart';
 import 'package:travel_app/Data/models/user_model.dart';
@@ -6,6 +7,7 @@ import 'package:travel_app/representation/screens/form_login/login_screen.dart';
 import 'package:travel_app/representation/screens/home_screen/home_screen.dart';
 import 'package:travel_app/representation/screens/main_app.dart';
 import 'package:travel_app/representation/screens/on_leave_screen.dart';
+import 'package:travel_app/representation/screens/priview_image_screen.dart';
 import 'package:travel_app/representation/screens/project_screen/project_detail.dart';
 import 'package:travel_app/representation/screens/project_screen/project_screen.dart';
 import 'package:travel_app/representation/screens/select_date_screen.dart';
@@ -70,11 +72,6 @@ PageRoute? generateRoutes(RouteSettings settings) {
     case MainApp.routeName:
       return CupertinoPageRoute(
           builder: (context) => MainApp(), settings: settings);
-
-    // case SelectDateScreen.routeName:
-    //   return CupertinoPageRoute(
-    //       builder: (context) => SelectDateScreen(), settings: settings);
-
     case FormLoginScreen.routeName:
       return CupertinoPageRoute(
           builder: (context) => FormLoginScreen(), settings: settings);
@@ -84,6 +81,12 @@ PageRoute? generateRoutes(RouteSettings settings) {
     case SelectRangeDateScreen.routeName:
       return CupertinoPageRoute(
           builder: (context) => SelectRangeDateScreen(), settings: settings);
+    case PreviewImageScreen.routeName:
+    late final String urlImage = (settings.arguments as String);
+      return MaterialPageRoute(
+          builder: (context) => PreviewImageScreen( 
+            img: urlImage,
+          ), settings: settings);
     default:
       return null;
   }

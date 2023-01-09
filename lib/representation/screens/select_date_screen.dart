@@ -70,6 +70,7 @@ class _SelectDateScreenState extends State<SelectDateScreen> {
               flex: 1,
               child: ButtonWidget(
                 title: "Hủy",
+                color: ColorPalette.secondColor.withOpacity(0.2),
                 ontap: () {
                   Navigator.of(context).pop([]);
                 },

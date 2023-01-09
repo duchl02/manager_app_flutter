@@ -16,7 +16,6 @@ class SelectMultiCustom extends StatefulWidget {
 }
 
 class _SelectMultiCustomState extends State<SelectMultiCustom> {
-  //List<Animal> _selectedAnimals = [];
   List _selectedValue1 = [];
   final _multiSelectKey = GlobalKey<FormFieldState>();
 

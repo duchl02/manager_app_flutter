@@ -283,7 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                   }
                   return ListView(
-                    children: listTasks
+                    children: listTasks.reversed
                         .map(((e) => ListTask(
                               taskModal: e,
                             )))

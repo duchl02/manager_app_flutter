@@ -27,7 +27,7 @@ class ListProject extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(bottom: 6),
         decoration: BoxDecoration(
-          color: ColorPalette.secondColor.withOpacity(0.2),
+          color: ColorPalette.secondColor.withOpacity(0.1),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(

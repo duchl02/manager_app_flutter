@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:travel_app/Data/models/user_model.dart';
 
@@ -25,50 +27,82 @@ class ListUser extends StatelessWidget {
             .pushNamed(UserDetail.routeName, arguments: userModal);
       }),
       child: Container(
-        margin: EdgeInsets.only(bottom: 6),
+        margin: EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
-          color: ColorPalette.secondColor.withOpacity(0.2),
+          color: ColorPalette.secondColor.withOpacity(0.1),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Padding(
-          padding: EdgeInsets.all(10),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Row(
-              children: [
-                Text(userModal.name!, style: TextStyleCustom.nomalTextPrimary),
-                Spacer(),
-              ],
-            ),
-            SizedBox(
-              height: 6,
-            ),
-            Row(
-              children: [
-                Text("Ngày sinh: "),
-                Text(userModal.birthday != null
-                    ? formatDate(userModal.birthday)
-                    : "null"),
-                Spacer(),
-                Text("SĐT: ", style: TextStyleCustom.smallText),
-                Text(userModal.phoneNumber ?? "null",
-                    style: TextStyleCustom.smallText),
-              ],
-            ),
-            SizedBox(
-              height: 6,
-            ),
-            Row(
-              children: [
-                Text("Địa chỉ: ", style: TextStyleCustom.smallText),
-                Text(userModal.address ?? "null",
-                    style: TextStyleCustom.smallText),
-                Spacer(),
-              ],
-            )
-          ]),
+        // child: Padding(
+        // padding: EdgeInsets.all(10),
+        child: ListTile(
+          leading: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                image: DecorationImage(
+                    image: NetworkImage(userModal.imageUser ??
+                        "https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg"),
+                    fit: BoxFit.cover)),
+          ),
+
+          // leading: Icon(Icons.arrow_forward),
+          title: Text(
+            userModal.name!,
+            style: TextStyle(color: ColorPalette.text1Color),
+          ),
+          subtitle: Row(
+            children: [
+              Text("Ngày sinh: "),
+              Text(userModal.birthday != null
+                  ? formatDate(userModal.birthday)
+                  : "null"),
+              Spacer(),
+              Text("SĐT: ", style: TextStyleCustom.smallText),
+              Text(userModal.phoneNumber ?? "null",
+                  style: TextStyleCustom.smallText),
+            ],
+          ),
         ),
+        // child: Row(children: [
+        //   Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        //     Row(
+        //       children: [
+        //         Text(userModal.name!,
+        //             style: TextStyleCustom.nomalTextPrimary),
+        //         Spacer(),
+        //       ],
+        //     ),
+        //     SizedBox(
+        //       height: 6,
+        //     ),
+        //     Row(
+        //       children: [
+        //         Text("Ngày sinh: "),
+        //         Text(userModal.birthday != null
+        //             ? formatDate(userModal.birthday)
+        //             : "null"),
+        //         Spacer(),
+        //         Text("SĐT: ", style: TextStyleCustom.smallText),
+        //         Text(userModal.phoneNumber ?? "null",
+        //             style: TextStyleCustom.smallText),
+        //       ],
+        //     ),
+        //     SizedBox(
+        //       height: 6,
+        //     ),
+        //     Row(
+        //       children: [
+        //         Text("Địa chỉ: ", style: TextStyleCustom.smallText),
+        //         Text(userModal.address ?? "null",
+        //             style: TextStyleCustom.smallText),
+        //         Spacer(),
+        //       ],
+        //     )
+        //   ]),
+        // ]),
       ),
+      // ),
     );
   }
 }
