@@ -9,6 +9,7 @@ import 'package:travel_app/core/constants/text_style.dart';
 import 'package:travel_app/core/extensions/date_time_format.dart';
 import 'package:travel_app/representation/screens/form_login/login_screen.dart';
 import 'package:travel_app/representation/screens/on_leave_screen.dart';
+import 'package:travel_app/representation/screens/task_screen/task_screen.dart';
 import 'package:travel_app/representation/screens/users_screen/user_detail_screen.dart';
 
 import '../../../Data/models/task_model.dart';
@@ -249,21 +250,26 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             height: 30,
           ),
-          Container(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
-                  "Danh sách task của bạn",
-                  style: TextStyleCustom.h2TextPrimary,
-                ),
-                Icon(
-                  FontAwesomeIcons.arrowRight,
-                  size: 16,
-                  color: ColorPalette.primaryColor,
-                )
-              ],
+          InkWell(
+            onTap: (() {
+              Navigator.of(context).pushNamed(TaskScreen.routeName, arguments: true);
+            }),
+            child: Container(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text(
+                    "Danh sách task của bạn",
+                    style: TextStyleCustom.h2TextPrimary,
+                  ),
+                  Icon(
+                    FontAwesomeIcons.arrowRight,
+                    size: 16,
+                    color: ColorPalette.primaryColor,
+                  )
+                ],
+              ),
             ),
           ),
           Expanded(

@@ -5,24 +5,25 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/Data/models/project_model.dart';
 import 'package:travel_app/Data/models/user_model.dart';
 import 'package:travel_app/core/constants/color_constants.dart';
-import 'package:travel_app/core/constants/text_style.dart';
 import 'package:travel_app/representation/screens/task_screen/task_detail_screen.dart';
-import 'package:travel_app/representation/widgets/button_widget.dart';
 import 'package:travel_app/representation/widgets/list_task.dart';
 import 'package:travel_app/representation/widgets/search_input.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
-import 'package:travel_app/services/home_services.dart';
 import 'package:travel_app/services/project_services.dart';
 import 'package:travel_app/services/user_services.dart';
 
 import '../../../Data/models/option_modal.dart';
 import '../../../Data/models/task_model.dart';
+import '../../../core/helpers/local_storage_helper.dart';
 import '../../../services/task_services.dart';
 
 class TaskScreen extends StatefulWidget {
-  const TaskScreen({
+  TaskScreen({
     super.key,
+    this.checkIsUser = false,
   });
+
+  var checkIsUser;
 
   static const routeName = '/task_screen';
 
@@ -38,14 +39,11 @@ class _TaskScreenState extends State<TaskScreen> {
   void initState() {
     super.initState();
     category = _list[0].value;
-    isSearch = false;
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
-    isSearch = false;
   }
 
   final TaskModal taskModalEmty = TaskModal();
@@ -59,6 +57,7 @@ class _TaskScreenState extends State<TaskScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var userLoginId = LocalStorageHelper.getValue('userLogin')["id"];
     return Scaffold(
       appBar: AppBar(
         title: StreamBuilder(
@@ -73,8 +72,7 @@ class _TaskScreenState extends State<TaskScreen> {
                 (e) {},
               );
               return Text(
-                "Task (" + taskModal.length.toString() + ")",
-                // style: TextStyleCustom.h1Text,
+                "Task (${taskModal.length})",
               );
             } else {
               return Center(child: CircularProgressIndicator());
@@ -159,8 +157,15 @@ class _TaskScreenState extends State<TaskScreen> {
               }
               if (snapshot.hasData) {
                 final taskModal = snapshot.data!;
-                currentTaskData = searchTask(textEditingController.text,
-                    category, taskModal, _listUser, _listProject);
+
+                if (widget.checkIsUser) {
+                  currentTaskData = taskModal
+                      .where((element) => element.userId == userLoginId)
+                      .toList();
+                } else {
+                  currentTaskData = searchTask(textEditingController.text,
+                      category, taskModal, _listUser, _listProject);
+                }
 
                 return ListView(
                   children: currentTaskData.reversed

@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:travel_app/Data/models/task_model.dart';
-import 'package:travel_app/Data/models/user_model.dart';
 
 class ProjectModal {
   ProjectModal({

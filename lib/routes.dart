@@ -25,11 +25,21 @@ PageRoute? generateRoutes(RouteSettings settings) {
       return CupertinoPageRoute(
           builder: (context) => UserScreen(), settings: settings);
     case ProjectScreen.routeName:
+      late final bool checkUser = (settings.arguments as bool);
+
       return CupertinoPageRoute(
-          builder: (context) => ProjectScreen(), settings: settings);
+          builder: (context) => ProjectScreen(
+                checkIsUser: checkUser,
+              ),
+          settings: settings);
     case TaskScreen.routeName:
+      late final bool checkUser = (settings.arguments as bool);
+
       return CupertinoPageRoute(
-          builder: (context) => TaskScreen(), settings: settings);
+          builder: (context) => TaskScreen(
+                checkIsUser: checkUser,
+              ),
+          settings: settings);
     case HomeScreen.routeName:
       return CupertinoPageRoute(
           builder: (context) => HomeScreen(), settings: settings);
@@ -82,11 +92,12 @@ PageRoute? generateRoutes(RouteSettings settings) {
       return CupertinoPageRoute(
           builder: (context) => SelectRangeDateScreen(), settings: settings);
     case PreviewImageScreen.routeName:
-    late final String urlImage = (settings.arguments as String);
+      late final String urlImage = (settings.arguments as String);
       return MaterialPageRoute(
-          builder: (context) => PreviewImageScreen( 
-            img: urlImage,
-          ), settings: settings);
+          builder: (context) => PreviewImageScreen(
+                img: urlImage,
+              ),
+          settings: settings);
     default:
       return null;
   }

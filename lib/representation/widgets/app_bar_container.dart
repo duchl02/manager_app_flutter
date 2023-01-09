@@ -8,14 +8,18 @@ import 'package:travel_app/core/constants/text_style.dart';
 import 'package:travel_app/core/helpers/asset_helper.dart';
 import 'package:travel_app/core/helpers/image_helper.dart';
 import 'package:travel_app/representation/screens/project_screen/project_detail.dart';
+import 'package:travel_app/representation/screens/project_screen/project_screen.dart';
 import 'package:travel_app/services/project_services.dart';
 import 'package:travel_app/services/task_services.dart';
 import 'package:travel_app/services/user_services.dart';
 
+import '../../Data/models/user_model.dart';
 import '../../core/helpers/local_storage_helper.dart';
+import '../screens/select_date_screen.dart';
+import '../screens/task_screen/task_screen.dart';
 
 class AppBarContainerWidget extends StatelessWidget {
-  const AppBarContainerWidget(
+  AppBarContainerWidget(
       {super.key,
       required this.child,
       this.title,
@@ -34,9 +38,12 @@ class AppBarContainerWidget extends StatelessWidget {
   final bool? isHomePage;
   final String? description;
   final String? titleCount;
+  UserModal userModal = new UserModal();
 
   @override
   Widget build(BuildContext context) {
+    var userLogin = LocalStorageHelper.getValue('userLogin');
+
     return Scaffold(
       body: Stack(
         children: [
@@ -155,18 +162,29 @@ class AppBarContainerWidget extends StatelessWidget {
                             return Text("${snapshot.error}");
                           }
                           if (snapshot.hasData) {
-                            final userModal = snapshot.data!;
-                            var userLogin =
-                                LocalStorageHelper.getValue('userLogin');
-                            var listDay;
-                            for (var e in userModal) {
-                              if (e.id == userLogin["id"]) {
-                                listDay = e.checkIn;
+                            final projectModal = snapshot.data!;
+                            userModal =
+                                findUserById(userLogin["id"], projectModal);
+                            var user = userModal;
+
+                            List<DateTime> listDate = [];
+
+                            if (user.checkIn != null) {
+                              for (var e in user.checkIn!) {
+                                listDate.add(e.toDate());
                               }
                             }
-                            return Text(
-                              listDay.length.toString(),
-                              style: TextStyleCustom.h1Text,
+                            print(listDate);
+                            return InkWell(
+                              onTap: (() {
+                                Navigator.of(context).pushNamed(
+                                    SelectDateScreen.routeName,
+                                    arguments: listDate);
+                              }),
+                              child: Text(
+                                listDate.length.toString(),
+                                style: TextStyleCustom.h1Text,
+                              ),
                             );
                           } else {
                             return Center(child: CircularProgressIndicator());
@@ -180,38 +198,44 @@ class AppBarContainerWidget extends StatelessWidget {
                     ],
                   )),
                   Expanded(
-                      child: Column(
-                    children: [
-                      StreamBuilder(
-                        stream: getAllTasks(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasError) {
-                            return Text("${snapshot.error}");
-                          }
-                          if (snapshot.hasData) {
-                            final taskModal = snapshot.data!;
-                            var userLogin =
-                                LocalStorageHelper.getValue('userLogin');
-                            List<TaskModal> listTasks = [];
-                            for (var e in taskModal) {
-                              if (e.userId == userLogin["id"]) {
-                                listTasks.add(e);
-                              }
+                      child: InkWell(
+                    onTap: (() {
+                      Navigator.of(context)
+                          .pushNamed(TaskScreen.routeName, arguments: true);
+                    }),
+                    child: Column(
+                      children: [
+                        StreamBuilder(
+                          stream: getAllTasks(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Text("${snapshot.error}");
                             }
-                            return Text(
-                              listTasks.length.toString(),
-                              style: TextStyleCustom.h1Text,
-                            );
-                          } else {
-                            return Center(child: CircularProgressIndicator());
-                          }
-                        },
-                      ),
-                      Text(
-                        "Task",
-                        style: TextStyleCustom.nomalTextWhile,
-                      ),
-                    ],
+                            if (snapshot.hasData) {
+                              final taskModal = snapshot.data!;
+                              var userLogin =
+                                  LocalStorageHelper.getValue('userLogin');
+                              List<TaskModal> listTasks = [];
+                              for (var e in taskModal) {
+                                if (e.userId == userLogin["id"]) {
+                                  listTasks.add(e);
+                                }
+                              }
+                              return Text(
+                                listTasks.length.toString(),
+                                style: TextStyleCustom.h1Text,
+                              );
+                            } else {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                          },
+                        ),
+                        Text(
+                          "Task",
+                          style: TextStyleCustom.nomalTextWhile,
+                        ),
+                      ],
+                    ),
                   )),
                   Expanded(
                       child: Column(
@@ -234,9 +258,16 @@ class AppBarContainerWidget extends StatelessWidget {
                                 }
                               }
                             }
-                            return Text(
-                              listTasks.length.toString(),
-                              style: TextStyleCustom.h1Text,
+                            return InkWell(
+                              onTap: (() {
+                                Navigator.of(context).pushNamed(
+                                    ProjectScreen.routeName,
+                                    arguments: true);
+                              }),
+                              child: Text(
+                                listTasks.length.toString(),
+                                style: TextStyleCustom.h1Text,
+                              ),
                             );
                           } else {
                             return Center(child: CircularProgressIndicator());

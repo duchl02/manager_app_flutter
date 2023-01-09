@@ -7,7 +7,7 @@ class PreviewImageScreen extends StatefulWidget {
   PreviewImageScreen({super.key, this.img});
   var img;
 
-  static const String routeName = "preview_image_screen";
+  static const String routeName = "/preview_image_screen";
 
   @override
   State<PreviewImageScreen> createState() => _PreviewImageScreenState();

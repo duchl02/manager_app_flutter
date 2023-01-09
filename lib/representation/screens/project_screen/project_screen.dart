@@ -4,24 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/representation/screens/project_screen/project_detail.dart';
-import 'package:travel_app/representation/widgets/button_widget.dart';
 import 'package:travel_app/representation/widgets/list_project.dart';
 import 'package:travel_app/representation/widgets/search_input.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
-import 'package:travel_app/services/home_services.dart';
 import 'package:travel_app/services/project_services.dart';
 
 import '../../../Data/models/option_modal.dart';
 import '../../../Data/models/project_model.dart';
 import '../../../Data/models/user_model.dart';
 import '../../../core/helpers/local_storage_helper.dart';
-import '../../../services/project_services.dart';
 import '../../../services/user_services.dart';
 
 class ProjectScreen extends StatefulWidget {
-  const ProjectScreen({
+  ProjectScreen({
     super.key,
+    this.checkIsUser = false,
   });
+  var checkIsUser;
 
   static const routeName = '/project_screen';
 
@@ -53,7 +52,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
 
   @override
   Widget build(BuildContext context) {
-    dynamic _userLogin = LocalStorageHelper.getValue('userLogin')["position"];
+    dynamic _userLogin = LocalStorageHelper.getValue('userLogin')["id"];
     return Scaffold(
       appBar: AppBar(
         title: StreamBuilder(
@@ -145,8 +144,21 @@ class _ProjectScreenState extends State<ProjectScreen> {
               }
               if (snapshot.hasData) {
                 final projectModal = snapshot.data!;
-                currentProjectData = searchProject(textEditingController.text,
-                    category, projectModal, _listUser);
+                if (widget.checkIsUser) {
+                  currentProjectData = [];
+                  for (var e in projectModal) {
+                    for (var e2 in e.users!) {
+                      if (e2 == _userLogin &&
+                          currentProjectData.contains(e) == false) {
+                        currentProjectData.add(e);
+                      }
+                    }
+                  }
+                } else {
+                  currentProjectData = searchProject(textEditingController.text,
+                      category, projectModal, _listUser);
+                }
+
                 return ListView(
                   children: currentProjectData
                       .map(((e) => ListProject(
