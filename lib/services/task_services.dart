@@ -58,7 +58,7 @@ Future createTask(
     timeSuccess,
     createAt,
     updateAt}) async {
-  final docTask = FirebaseFirestore.instance.collection("tasks").doc();
+  final docTask = FirebaseFirestore.instance.collection("tasks");
 
   final taskModal = TaskModal(
       id: docTask.id,
@@ -74,7 +74,7 @@ Future createTask(
 
   final json = taskModal.toJson();
 
-  await docTask.set(json);
+  await docTask.add(json);
 }
 
 Future updateTask(

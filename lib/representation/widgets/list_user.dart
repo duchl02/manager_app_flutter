@@ -64,43 +64,6 @@ class ListUser extends StatelessWidget {
             ],
           ),
         ),
-        // child: Row(children: [
-        //   Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        //     Row(
-        //       children: [
-        //         Text(userModal.name!,
-        //             style: TextStyleCustom.nomalTextPrimary),
-        //         Spacer(),
-        //       ],
-        //     ),
-        //     SizedBox(
-        //       height: 6,
-        //     ),
-        //     Row(
-        //       children: [
-        //         Text("Ngày sinh: "),
-        //         Text(userModal.birthday != null
-        //             ? formatDate(userModal.birthday)
-        //             : "null"),
-        //         Spacer(),
-        //         Text("SĐT: ", style: TextStyleCustom.smallText),
-        //         Text(userModal.phoneNumber ?? "null",
-        //             style: TextStyleCustom.smallText),
-        //       ],
-        //     ),
-        //     SizedBox(
-        //       height: 6,
-        //     ),
-        //     Row(
-        //       children: [
-        //         Text("Địa chỉ: ", style: TextStyleCustom.smallText),
-        //         Text(userModal.address ?? "null",
-        //             style: TextStyleCustom.smallText),
-        //         Spacer(),
-        //       ],
-        //     )
-        //   ]),
-        // ]),
       ),
       // ),
     );

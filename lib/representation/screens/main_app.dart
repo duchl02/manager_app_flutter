@@ -7,6 +7,7 @@ import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
 import 'package:travel_app/representation/screens/form_login/login_screen.dart';
 import 'package:travel_app/representation/screens/home_screen/home_screen.dart';
+import 'package:travel_app/representation/screens/message_screen/message_screen.dart';
 import 'package:travel_app/representation/screens/project_screen/project_screen.dart';
 import 'package:travel_app/representation/widgets/select_multi_custom.dart';
 import 'package:travel_app/representation/screens/users_screen/users_screen.dart';
@@ -24,6 +25,7 @@ class _MainAppState extends State<MainApp> {
   final _pageCotroller = PageController();
   final _pages = [
     HomeScreen(),
+    MessageScreen(),
     TaskScreen(),
     ProjectScreen(),
     UserScreen(),
@@ -68,6 +70,13 @@ class _MainAppState extends State<MainApp> {
               ),
               title: Text("Trang chủ")),
           SalomonBottomBarItem(
+              selectedColor: Colors.blue.shade500,
+              icon: Icon(
+                FontAwesomeIcons.solidMessage,
+                size: kDefaultIconSize,
+              ),
+              title: Text("Tin nhắn")),
+          SalomonBottomBarItem(
               selectedColor: Colors.pink,
               icon: Icon(
                 FontAwesomeIcons.list,
@@ -87,7 +96,7 @@ class _MainAppState extends State<MainApp> {
                 FontAwesomeIcons.solidUser,
                 size: kDefaultIconSize,
               ),
-              title: Text("Nhân viên"))
+              title: Text("Nhân viên")),
         ]);
   }
 }

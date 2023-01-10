@@ -198,44 +198,45 @@ class AppBarContainerWidget extends StatelessWidget {
                     ],
                   )),
                   Expanded(
-                      child: InkWell(
-                    onTap: (() {
-                      Navigator.of(context)
-                          .pushNamed(TaskScreen.routeName, arguments: true);
-                    }),
-                    child: Column(
-                      children: [
-                        StreamBuilder(
-                          stream: getAllTasks(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasError) {
-                              return Text("${snapshot.error}");
-                            }
-                            if (snapshot.hasData) {
-                              final taskModal = snapshot.data!;
-                              var userLogin =
-                                  LocalStorageHelper.getValue('userLogin');
-                              List<TaskModal> listTasks = [];
-                              for (var e in taskModal) {
-                                if (e.userId == userLogin["id"]) {
-                                  listTasks.add(e);
-                                }
+                      child: Column(
+                    children: [
+                      StreamBuilder(
+                        stream: getAllTasks(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Text("${snapshot.error}");
+                          }
+                          if (snapshot.hasData) {
+                            final taskModal = snapshot.data!;
+                            var userLogin =
+                                LocalStorageHelper.getValue('userLogin');
+                            List<TaskModal> listTasks = [];
+                            for (var e in taskModal) {
+                              if (e.userId == userLogin["id"]) {
+                                listTasks.add(e);
                               }
-                              return Text(
+                            }
+                            return InkWell(
+                              onTap: (() {
+                                Navigator.of(context).pushNamed(
+                                    TaskScreen.routeName,
+                                    arguments: true);
+                              }),
+                              child: Text(
                                 listTasks.length.toString(),
                                 style: TextStyleCustom.h1Text,
-                              );
-                            } else {
-                              return Center(child: CircularProgressIndicator());
-                            }
-                          },
-                        ),
-                        Text(
-                          "Task",
-                          style: TextStyleCustom.nomalTextWhile,
-                        ),
-                      ],
-                    ),
+                              ),
+                            );
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        },
+                      ),
+                      Text(
+                        "Task",
+                        style: TextStyleCustom.nomalTextWhile,
+                      ),
+                    ],
                   )),
                   Expanded(
                       child: Column(

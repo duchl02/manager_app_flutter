@@ -6,6 +6,8 @@ import 'package:travel_app/Data/models/user_model.dart';
 import 'package:travel_app/representation/screens/form_login/login_screen.dart';
 import 'package:travel_app/representation/screens/home_screen/home_screen.dart';
 import 'package:travel_app/representation/screens/main_app.dart';
+import 'package:travel_app/representation/screens/message_screen/message_chat_screen.dart';
+import 'package:travel_app/representation/screens/message_screen/message_screen.dart';
 import 'package:travel_app/representation/screens/on_leave_screen.dart';
 import 'package:travel_app/representation/screens/priview_image_screen.dart';
 import 'package:travel_app/representation/screens/project_screen/project_detail.dart';
@@ -24,6 +26,13 @@ PageRoute? generateRoutes(RouteSettings settings) {
     case UserScreen.routeName:
       return CupertinoPageRoute(
           builder: (context) => UserScreen(), settings: settings);
+    case MessageScreen.routeName:
+      return CupertinoPageRoute(
+          builder: (context) => MessageScreen(), settings: settings);
+      //         case MessageChatScreen.routeName:
+      // return CupertinoPageRoute(
+      //     builder: (context) => MessageChatScreen(), settings: settings);
+
     case ProjectScreen.routeName:
       late final bool checkUser = (settings.arguments as bool);
 
@@ -66,6 +75,14 @@ PageRoute? generateRoutes(RouteSettings settings) {
       return CupertinoPageRoute(
         settings: settings,
         builder: (context) => UserDetail(
+          userModal: userModal,
+        ),
+      );
+    case MessageChatScreen.routeName:
+      late final UserModal userModal = (settings.arguments as UserModal);
+      return CupertinoPageRoute(
+        settings: settings,
+        builder: (context) => MessageChatScreen(
           userModal: userModal,
         ),
       );
