@@ -57,9 +57,9 @@ class _MessageScreenState extends State<MessageScreen> {
                     final userModal = snapshot.data!;
                     currentUserData = searchUser(
                         textEditingController.text, "name", userModal, []);
-                    for (var i = 0; i < 10; i++) {
-                      currentUserData.add(userModal[0]);
-                    }
+                    // for (var i = 0; i < 10; i++) {
+                    //   currentUserData.add(userModal[0]);
+                    // }
                     return ListView(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
@@ -85,9 +85,9 @@ class _MessageScreenState extends State<MessageScreen> {
                   if (snapshot.hasData) {
                     final _userModal = snapshot.data!;
                     List<UserModal> _currentData = _userModal;
-                    for (var i = 0; i < 10; i++) {
-                      _currentData.add(_userModal[0]);
-                    }
+                    // for (var i = 0; i < 10; i++) {
+                    //   _currentData.add(_userModal[0]);
+                    // }
                     return ListView(
                       children: _currentData
                           .map(((e) => listRoom(
@@ -134,11 +134,12 @@ class _MessageScreenState extends State<MessageScreen> {
       ),
     );
   }
-}
-
-Widget listRoom({required UserModal userModal}) {
+  Widget listRoom({required UserModal userModal}) {
   return InkWell(
-    onTap: (() {}),
+    onTap: (() {
+        Navigator.of(context)
+            .pushNamed(MessageChatScreen.routeName, arguments: userModal);
+      }),
     child: Padding(
       padding: EdgeInsets.all(6),
       child: Container(
@@ -179,4 +180,5 @@ Widget listRoom({required UserModal userModal}) {
       ),
     ),
   );
+}
 }

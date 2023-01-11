@@ -157,18 +157,28 @@ class _TaskScreenState extends State<TaskScreen> {
               }
               if (snapshot.hasData) {
                 final taskModal = snapshot.data!;
+                taskModal.sort((a, b) {
+                  var adate = a.createAt;
+                  var bdate = b.createAt;
+                  return -adate!.compareTo(bdate!);
+                });
 
                 if (widget.checkIsUser) {
-                  currentTaskData = taskModal
+                  currentTaskData = taskModal.reversed
                       .where((element) => element.userId == userLoginId)
                       .toList();
                 } else {
                   currentTaskData = searchTask(textEditingController.text,
                       category, taskModal, _listUser, _listProject);
                 }
+                currentTaskData.sort((a, b) {
+                  var adate = a.createAt;
+                  var bdate = b.createAt;
+                  return -adate!.compareTo(bdate!);
+                });
 
                 return ListView(
-                  children: currentTaskData.reversed
+                  children: currentTaskData
                       .map(((e) => ListTask(
                             taskModal: e,
                           )))

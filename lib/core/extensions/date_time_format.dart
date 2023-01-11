@@ -6,7 +6,7 @@ String formatDate(DateTime? date) {
   return formatted;
 }
 String formatDateAndTime(DateTime? date) {
-  final DateFormat formatter = DateFormat('dd/MM/yyyy HH:MM');
+  final DateFormat formatter = DateFormat('dd/MM/yyyy hh:mm');
   final String formatted = formatter.format(date!);
   return formatted;
 }

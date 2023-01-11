@@ -221,11 +221,13 @@ class _TaskDetailState extends State<TaskDetail> {
                               _listProject.add(
                                   OptionModal(value: e.id!, display: e.name!));
                             }
+                          } else {
+                            for (var e in listTasks) {
+                              _listProject.add(
+                                  OptionModal(value: e.id!, display: e.name!));
+                            }
                           }
-                          for (var e in listTasks) {
-                            _listProject.add(
-                                OptionModal(value: e.id!, display: e.name!));
-                          }
+
                           return SelectOption(
                             label: "Dự án",
                             list: _listProject,

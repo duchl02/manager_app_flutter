@@ -288,8 +288,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       listTasks.add(e);
                     }
                   }
+                  listTasks.sort((a, b) {
+                  var adate = a.createAt;
+                  var bdate = b.createAt;
+                  return -adate!.compareTo(bdate!);
+                });
+
                   return ListView(
-                    children: listTasks.reversed
+                    children: listTasks
                         .map(((e) => ListTask(
                               taskModal: e,
                             )))

@@ -1,3 +1,8 @@
+import 'dart:convert';
+import 'dart:ffi';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/Data/models/message_modal.dart';
@@ -5,11 +10,22 @@ import 'package:travel_app/Data/models/user_model.dart';
 import 'package:travel_app/core/extensions/date_time_format.dart';
 import 'package:travel_app/services/message_services.dart';
 import 'package:travel_app/services/user_services.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import '../../../core/constants/color_constants.dart';
 import '../../../core/constants/dismension_constants.dart';
 import '../../../core/constants/text_style.dart';
 import '../../../core/helpers/local_storage_helper.dart';
+import 'package:http/http.dart' as http;
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  print("Handling a background message: ${message.messageId}");
+}
 
 class MessageChatScreen extends StatefulWidget {
   const MessageChatScreen({super.key, required this.userModal});
@@ -25,33 +41,169 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
   TextEditingController textEditingController = TextEditingController();
   final _focusNode = FocusNode();
   final now = DateTime.now();
+  final ScrollController _listViewController = ScrollController();
+  List<MessageModal> _listMessage2 = [];
+  var userLogin;
+  List<MessageModal> _listMessage1 = [];
+  List<MessageModal> _listAllMessage = [];
+  bool checkSend1 = true;
+  bool checkSend2 = true;
+  @override
+  void initState() {
+    // TODO: implement initState
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print(checkSend1);
+      print(checkSend2);
+      setState(() {
+        checkSend1;
+        checkSend2;
+      });
+    });
+    userLogin = LocalStorageHelper.getValue('userLogin');
+    getToken();
+    super.initState();
+  }
+
+  Future sendMessage(String text, _userSend, _userLogin) async {
+    final refMessage = FirebaseFirestore.instance
+        .collection("chats/$_userSend-$_userLogin/messages");
+    final newMessage = MessageModal(
+        createAt: DateTime.now(), sendBy: userLogin["id"], message: text);
+    await refMessage.add(newMessage.toJson());
+  }
+
+  String? mtoken = " ";
+
+  void getToken() async {
+    await FirebaseMessaging.instance.getToken().then((token) {
+      setState(() {
+        mtoken = token;
+      });
+      setToken(token!);
+    });
+  }
+
+  void setToken(String token) async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userLogin["id"])
+        .update({'token': token});
+  }
+
+  void sendPushMessage(String body, String title, String token) async {
+    try {
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization':
+              'key=AAAAreVXGPI:APA91bFAi8gc6rVmaZpDi16mrJR0I3DrS4IBDLRUWzVgLnUbrIAgWN9Bx0FvR9YqraC8wnkBIjjSzjWfIb7c7NMu4CHmoPlgdmz_MlP9xpCQomP_S7VPsSoPEWfE6pt1ijgVITCz_Q1t',
+        },
+        body: jsonEncode(
+          <String, dynamic>{
+            'priority': 'high',
+            'data': <String, dynamic>{
+              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+              'status': 'done',
+              'body': body,
+              'title': title,
+            },
+            'notification': <String, dynamic>{
+              'body': body,
+              'title': title,
+              'android_channel_id': "dbfood"
+            },
+            "to": token,
+          },
+        ),
+      );
+      print('done');
+    } catch (e) {
+      print("error push notification");
+    }
+  }
+
+  void requestPermission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    var userLogin = LocalStorageHelper.getValue('userLogin');
-
-    List<MessageModal> _listMessages = [
-      MessageModal(
-          createAt: DateTime.now(),
-          sendBy: widget.userModal.id!,
-          message: "hello world"),
-    ];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorPalette.primaryColor,
         title: Text(widget.userModal.name ?? "null"),
         // actions: const [Icon(FontAwesomeIcons.phone)],
       ),
-      body: SingleChildScrollView(
-        primary: false,
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 60, left: 10, right: 10),
         child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Column(
-                children: [
-                  SizedBox(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            checkSend1
+                ? Expanded(
+                    child: StreamBuilder(
+                      stream:
+                          getAllMessages(widget.userModal.id, userLogin["id"]),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Text("${snapshot.error}");
+                        }
+                        if (snapshot.hasData) {
+                          _listMessage2 = snapshot.data!;
+                          if (_listMessage2.isEmpty == false) {
+                            checkSend1 = true;
+                            _listMessage2.sort((a, b) {
+                              var adate = a.createAt;
+                              var bdate = b.createAt;
+                              return -adate.compareTo(bdate);
+                            });
+                          }
+                          {
+                            checkSend1 = false;
+                          }
+
+                          return ListView(
+                              shrinkWrap: true,
+                              physics: ClampingScrollPhysics(),
+                              reverse: true,
+                              children: [
+                                Column(
+                                  children: _listMessage2.reversed
+                                      .map(((e) => _messageBuilder(e)))
+                                      .toList(),
+                                ),
+                              ]);
+                        } else {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                      },
+                    ),
+                  )
+                : SizedBox(),
+            checkSend2
+                ? Expanded(
                     child: StreamBuilder(
                       stream:
                           getAllMessages(userLogin["id"], widget.userModal.id),
@@ -60,39 +212,40 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
                           return Text("${snapshot.error}");
                         }
                         if (snapshot.hasData) {
-                          final _listUser = snapshot.data!;
+                          _listMessage1 = snapshot.data!;
+                          if (_listMessage1.isEmpty == false) {
+                            checkSend1 = false;
 
+                            _listMessage1.sort((a, b) {
+                              var adate = a.createAt;
+                              var bdate = b.createAt;
+                              return -adate.compareTo(bdate);
+                            });
+                          } else {
+                            checkSend2 = true;
+                          }
                           return ListView(
                               shrinkWrap: true,
                               physics: ClampingScrollPhysics(),
+                              reverse: true,
                               children: [
                                 Column(
-                                  children: _listUser
+                                  children: _listMessage1.reversed
                                       .map(((e) => _messageBuilder(e)))
                                       .toList(),
                                 ),
                               ]);
                         } else {
-                          return SizedBox();
+                          return Center(child: CircularProgressIndicator());
                         }
                       },
                     ),
-                    // child: ListView(
-                    //     shrinkWrap: true,
-                    //     physics: ClampingScrollPhysics(),
-                    //     children: [
-                    //       Column(
-                    //         children: _listMessages
-                    //             .map(((e) => _messageBuilder(e)))
-                    //             .toList(),
-                    //       ),
-                    //     ]),
-                  ),
-                ],
-              ),
-            ]),
+                  )
+                : SizedBox()
+          ],
+        ),
       ),
-      bottomNavigationBar: Container(
+      bottomSheet: Container(
         child: TextField(
           focusNode: _focusNode,
           controller: textEditingController,
@@ -102,10 +255,21 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
             hintText: 'Tin nhắn',
             suffixIcon: InkWell(
               onTap: () {
-                textEditingController.text.isEmpty
-                    ? null
-                    : MessageServices.sendMessage(textEditingController.text,
-                        userLogin["id"], widget.userModal.id);
+                if (_listMessage1.isEmpty && _listMessage2.isEmpty) {
+                  print("1");
+                  sendMessage(textEditingController.text, userLogin["id"],
+                      widget.userModal.id);
+                } else if (_listMessage1.isEmpty == false &&
+                    _listMessage2.isEmpty) {
+                  print("2");
+                  sendMessage(textEditingController.text, widget.userModal.id,
+                      userLogin["id"]);
+                } else if (_listMessage1.isEmpty &&
+                    _listMessage2.isEmpty == false) {
+                  print("3");
+                  sendMessage(textEditingController.text, userLogin["id"],
+                      widget.userModal.id);
+                }
                 textEditingController.clear();
               },
               child: Icon(
@@ -165,20 +329,29 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
                   SizedBox(
                     width: 6,
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: check
-                            ? ColorPalette.text1Color.withOpacity(0.2)
-                            : ColorPalette.secondColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                        )),
-                    child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text(messageModal.message)),
+                  Flexible(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: check
+                              ? ColorPalette.text1Color.withOpacity(0.2)
+                              : ColorPalette.secondColor.withOpacity(0.1),
+                          borderRadius: check
+                              ? BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  //  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                )
+                              : BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  // bottomLeft: Radius.circular(10),
+                                )),
+                      child: Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Text(messageModal.message)),
+                    ),
                   )
                 ],
               ),
@@ -197,4 +370,23 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
       ),
     );
   }
+
+  // setMessage(List<MessageModal> listMessage1, List<MessageModal> listMessage2) {
+  //   _listAllMessage = [];
+  //   for (var e in listMessage1) {
+  //     _listAllMessage.add(e);
+  //   }
+  //   for (var e in listMessage2) {
+  //     _listAllMessage.add(e);
+  //   }
+  //   _listAllMessage.sort((a, b) {
+  //     var adate = a.createAt;
+  //     var bdate = b.createAt;
+  //     return -adate.compareTo(bdate);
+  //   });
+  //   // WidgetsBinding.instance.addPostFrameCallback((_) {
+  //   //   setState(() {});
+  //   //   // Add Your Code here.
+  //   // });
+  // }
 }
