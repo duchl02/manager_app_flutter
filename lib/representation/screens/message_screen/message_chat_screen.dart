@@ -51,14 +51,7 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      print(checkSend1);
-      print(checkSend2);
-      setState(() {
-        checkSend1;
-        checkSend2;
-      });
-    });
+
     userLogin = LocalStorageHelper.getValue('userLogin');
     getToken();
     super.initState();
@@ -161,87 +154,78 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            checkSend1
-                ? Expanded(
-                    child: StreamBuilder(
-                      stream:
-                          getAllMessages(widget.userModal.id, userLogin["id"]),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return Text("${snapshot.error}");
-                        }
-                        if (snapshot.hasData) {
-                          _listMessage2 = snapshot.data!;
-                          if (_listMessage2.isEmpty == false) {
-                            checkSend1 = true;
-                            _listMessage2.sort((a, b) {
-                              var adate = a.createAt;
-                              var bdate = b.createAt;
-                              return -adate.compareTo(bdate);
-                            });
-                          }
-                          {
-                            checkSend1 = false;
-                          }
+            StreamBuilder(
+              stream: getAllMessages(widget.userModal.id, userLogin["id"]),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                if (snapshot.hasData) {
+                  _listMessage2 = snapshot.data!;
+                  if (_listMessage2.isEmpty == false) {
+                    _listMessage2.sort((a, b) {
+                      var adate = a.createAt;
+                      var bdate = b.createAt;
+                      return -adate.compareTo(bdate);
+                    });
 
-                          return ListView(
-                              shrinkWrap: true,
-                              physics: ClampingScrollPhysics(),
-                              reverse: true,
-                              children: [
-                                Column(
-                                  children: _listMessage2.reversed
-                                      .map(((e) => _messageBuilder(e)))
-                                      .toList(),
-                                ),
-                              ]);
-                        } else {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      },
-                    ),
-                  )
-                : SizedBox(),
-            checkSend2
-                ? Expanded(
-                    child: StreamBuilder(
-                      stream:
-                          getAllMessages(userLogin["id"], widget.userModal.id),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return Text("${snapshot.error}");
-                        }
-                        if (snapshot.hasData) {
-                          _listMessage1 = snapshot.data!;
-                          if (_listMessage1.isEmpty == false) {
-                            checkSend1 = false;
-
-                            _listMessage1.sort((a, b) {
-                              var adate = a.createAt;
-                              var bdate = b.createAt;
-                              return -adate.compareTo(bdate);
-                            });
-                          } else {
-                            checkSend2 = true;
-                          }
-                          return ListView(
-                              shrinkWrap: true,
-                              physics: ClampingScrollPhysics(),
-                              reverse: true,
-                              children: [
-                                Column(
-                                  children: _listMessage1.reversed
-                                      .map(((e) => _messageBuilder(e)))
-                                      .toList(),
-                                ),
-                              ]);
-                        } else {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      },
-                    ),
-                  )
-                : SizedBox()
+                    return Expanded(
+                      child: ListView(
+                          shrinkWrap: true,
+                          physics: ClampingScrollPhysics(),
+                          reverse: true,
+                          children: [
+                            Column(
+                              children: _listMessage2.reversed
+                                  .map(((e) => _messageBuilder(e)))
+                                  .toList(),
+                            ),
+                          ]),
+                    );
+                  } else {
+                    return SizedBox();
+                  }
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+            StreamBuilder(
+              stream: getAllMessages(userLogin["id"], widget.userModal.id),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                if (snapshot.hasData) {
+                  _listMessage1 = snapshot.data!;
+                  if (_listMessage1.isEmpty == false) {
+                    checkSend1 = false;
+                    _listMessage1.sort((a, b) {
+                      var adate = a.createAt;
+                      var bdate = b.createAt;
+                      return -adate.compareTo(bdate);
+                    });
+                    return Expanded(
+                      child: ListView(
+                          shrinkWrap: true,
+                          physics: ClampingScrollPhysics(),
+                          reverse: true,
+                          children: [
+                            Column(
+                              children: _listMessage1.reversed
+                                  .map(((e) => _messageBuilder(e)))
+                                  .toList(),
+                            ),
+                          ]),
+                    );
+                  } else {
+                    return SizedBox();
+                  }
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              },
+            )
           ],
         ),
       ),

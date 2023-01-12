@@ -11,13 +11,19 @@ class TextStyleCustom {
   static const TextStyle nomalTextWhile =
       TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14);
   static const TextStyle h1Text =
-      TextStyle(color: ColorPalette.text1Color, fontWeight: FontWeight.bold, fontSize: 26);
+      TextStyle(color: Color.fromARGB(255, 23, 230, 68), fontWeight: FontWeight.bold, fontSize: 26); 
+       static const TextStyle h1TextWhile =
+      TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontWeight: FontWeight.bold, fontSize: 26);
   static const TextStyle h2Text =
       TextStyle(color: ColorPalette.text1Color, fontWeight: FontWeight.bold, fontSize: 20);
   static const TextStyle h2TextPrimary = TextStyle(
       color: ColorPalette.text1Color,
       fontWeight: FontWeight.bold,
       fontSize: 20);
+        static const TextStyle h3TextPrimary = TextStyle(
+      color: ColorPalette.text1Color,
+      fontWeight: FontWeight.bold,
+      fontSize: 18);
   static TextStyle smallText = TextStyle(
     color: Colors.blueGrey.shade900,
   ); static TextStyle normalText = TextStyle(

@@ -52,9 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Xin Chào",
+                  Text("Xin Chào,",
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                   SizedBox(
                     height: kMinPadding,
                   ),
@@ -76,7 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                         return Text(userName,
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16));
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ));
                       } else {
                         return Center(child: CircularProgressIndicator());
                       }
@@ -170,7 +172,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
                   if (snapshot.hasData) {
                     final projectModal = snapshot.data!;
-                    return _buildItemCategory(Icon(FontAwesomeIcons.plus),
+                    return _buildItemCategory(
+                        Icon(FontAwesomeIcons.plus, color: Colors.white),
                         () async {
                       if (await confirm(
                         context,
@@ -196,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                       }
                       return print('pressedCancel');
-                    }, 'Điểm danh');
+                    }, 'Điểm danh', Colors.teal);
                   } else {
                     return Center(child: CircularProgressIndicator());
                   }
@@ -222,28 +225,35 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                     }
                     print(listDate);
-                    return _buildItemCategory(Icon(FontAwesomeIcons.calendar),
-                        () {
+                    return _buildItemCategory(
+                        Icon(
+                          FontAwesomeIcons.calendar,
+                          color: Colors.white,
+                        ), () {
                       Navigator.of(context).pushNamed(
                           SelectDateScreen.routeName,
                           arguments: listDate);
-                    }, 'Lịch làm việc');
+                    }, 'Lịch làm việc', Colors.purple);
                   } else {
                     return Center(child: CircularProgressIndicator());
                   }
                 },
               )),
               Expanded(
-                child: _buildItemCategory(Icon(FontAwesomeIcons.list), () {
+                child: _buildItemCategory(
+                    Icon(FontAwesomeIcons.list, color: Colors.white), () {
                   Navigator.of(context).pushNamed(TaskDetail.routeName,
                       arguments: taskModalEmty);
-                }, 'Thêm task'),
+                }, 'Thêm task', Colors.orange),
               ),
               Expanded(
-                child: _buildItemCategory(Icon(FontAwesomeIcons.userLargeSlash),
-                    () async {
+                child: _buildItemCategory(
+                    Icon(
+                      FontAwesomeIcons.userLargeSlash,
+                      color: Colors.white,
+                    ), () async {
                   Navigator.of(context).pushNamed(OnLeaveScreen.routeName);
-                }, 'Đăng ký nghỉ phép'),
+                }, 'Đăng ký nghỉ phép', Colors.pink),
               ),
             ],
           ),
@@ -252,7 +262,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           InkWell(
             onTap: (() {
-              Navigator.of(context).pushNamed(TaskScreen.routeName, arguments: true);
+              Navigator.of(context)
+                  .pushNamed(TaskScreen.routeName, arguments: true);
             }),
             child: Container(
               child: Row(
@@ -260,8 +271,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
                   Text(
-                    "Danh sách task của bạn",
-                    style: TextStyleCustom.h2TextPrimary,
+                    "Công việc trong tháng này của bạn",
+                    style: TextStyleCustom.h3TextPrimary,
                   ),
                   Icon(
                     FontAwesomeIcons.arrowRight,
@@ -273,44 +284,40 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Expanded(
-            child: StreamBuilder(
-              stream: getAllTasks(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
-                if (snapshot.hasData) {
-                  final taskModal = snapshot.data!;
-                  var userLogin = LocalStorageHelper.getValue('userLogin');
-                  List<TaskModal> listTasks = [];
-                  for (var e in taskModal) {
-                    if (e.userId == userLogin["id"]) {
-                      listTasks.add(e);
-                    }
-                  }
-                  listTasks.sort((a, b) {
-                  var adate = a.createAt;
-                  var bdate = b.createAt;
-                  return -adate!.compareTo(bdate!);
-                });
-
-                  return ListView(
-                    children: listTasks
-                        .map(((e) => ListTask(
-                              taskModal: e,
-                            )))
-                        .toList(),
-                  );
-                } else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              },
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(children: [
+                      _buildItem6("22", "Hoàn thành"),
+                      SizedBox(
+                        height: kDefaultPadding,
+                      ),
+                      _buildItem4("22", "Hoàn thành"),
+                    ]),
+                  ),
+                  SizedBox(
+                    width: kDefaultPadding,
+                  ),
+                  Expanded(
+                    child: Column(children: [
+                      _buildItem4("22", "Hoàn thành"),
+                      SizedBox(
+                        height: kDefaultPadding,
+                      ),
+                      _buildItem6("22", "Hoàn thành"),
+                    ]),
+                  ),
+                ],
+              ),
             ),
           ),
         ]));
   }
 
-  Widget _buildItemCategory(Icon icon, Function() onTap, String title) {
+  Widget _buildItemCategory(
+      Icon icon, Function() onTap, String title, Color color) {
     return InkWell(
       onTap: onTap,
       child: Column(
@@ -319,7 +326,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding:
                 EdgeInsets.symmetric(vertical: kMediumPadding, horizontal: 24),
             decoration: BoxDecoration(
-                color: ColorPalette.secondColor.withOpacity(0.2),
+                color: color.withOpacity(0.4),
                 borderRadius: BorderRadius.circular(kItemPadding)),
             child: icon,
           ),
@@ -334,5 +341,54 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  _buildItem4(String number, String title) {
+    return Flexible(
+        flex: 4,
+        child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+                color: Colors.pink.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(20)),
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text(
+                number,
+                style: TextStyleCustom.h1TextWhile,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                title,
+                style: TextStyleCustom.nomalTextWhile,
+              )
+            ])));
+  }
+
+  _buildItem6(String number, String title) {
+    return Flexible(
+        flex: 6,
+        child: Container(
+            width: double.infinity,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: Colors.pink.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(20)),
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text(
+                number,
+                style: TextStyleCustom.h1TextWhile,
+              ),
+              SizedBox(
+                height: 6,
+              ),
+              Text(
+                title,
+                style: TextStyleCustom.nomalTextWhile,
+              )
+            ])));
   }
 }

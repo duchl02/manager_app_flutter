@@ -191,6 +191,9 @@ class AppBarContainerWidget extends StatelessWidget {
                           }
                         },
                       ),
+                      SizedBox(
+                        height: 4,
+                      ),
                       Text(
                         "Điểm danh",
                         style: TextStyleCustom.nomalTextWhile,
@@ -231,6 +234,9 @@ class AppBarContainerWidget extends StatelessWidget {
                             return Center(child: CircularProgressIndicator());
                           }
                         },
+                      ),
+                      SizedBox(
+                        height: 4,
                       ),
                       Text(
                         "Task",
@@ -275,6 +281,9 @@ class AppBarContainerWidget extends StatelessWidget {
                           }
                         },
                       ),
+                      SizedBox(
+                        height: 4,
+                      ),
                       Text(
                         "Dự án",
                         style: TextStyleCustom.nomalTextWhile,
@@ -315,6 +324,9 @@ class AppBarContainerWidget extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             }
           },
+        ),
+        SizedBox(
+          height: 4,
         ),
         Text(
           name,

@@ -431,8 +431,8 @@ List<OptionModal> _listPriority = [
   OptionModal(value: "Cấp bách", display: "Cấp bách"),
 ];
 List<OptionModal> _listStatus = [
-  OptionModal(value: "Coding", display: "Coding"),
-  OptionModal(value: "HoldOn", display: "HoldOn"),
-  OptionModal(value: "In progress", display: "In progress"),
-  OptionModal(value: "Done", display: "Done"),
+  OptionModal(value: "Coding", display: "Đang code"),
+  OptionModal(value: "HoldOn", display: "Tạm hoãn"),
+  OptionModal(value: "In progress", display: "Chờ duyệt "),
+  OptionModal(value: "Done", display: "Hoàn thành"),
 ];
