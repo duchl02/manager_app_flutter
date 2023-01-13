@@ -79,7 +79,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: ColorPalette.primaryColor,
+        // backgroundColor: ColorPalette.primaryColor,
         title: Text(widget.projectModal.createAt != null
             ? "Chỉnh sửa dự án"
             : "Thêm mới dự án"),
@@ -201,21 +201,25 @@ class _ProjectDetailState extends State<ProjectDetail> {
                      Row(
                       children: [
                         Text("Ngày tạo: ",
-                          style: TextStyle(color: ColorPalette.subTitleColor),),
+                          // style: TextStyle(color: ColorPalette.subTitleColor)
+                          ),
                         Text(widget.projectModal.createAt != null
                             ? formatDate(widget.projectModal.createAt)
                             : "Chưa có",
-                          style: TextStyle(color: ColorPalette.subTitleColor),)
+                          // style: TextStyle(color: ColorPalette.subTitleColor),
+                          )
                       ],
                     ),
                     Row(
                       children: [
                         Text("Ngày chỉnh sửa: ",
-                          style: TextStyle(color: ColorPalette.subTitleColor),),
+                          // style: TextStyle(color: ColorPalette.subTitleColor),
+                          ),
                         Text(widget.projectModal.updateAt != null
                             ? formatDate(widget.projectModal.updateAt)
                             : "Chưa có",
-                          style: TextStyle(color: ColorPalette.subTitleColor),)
+                          // style: TextStyle(color: ColorPalette.subTitleColor),
+                          )
                       ],
                     ),
                     Padding(
@@ -225,7 +229,8 @@ class _ProjectDetailState extends State<ProjectDetail> {
                           Flexible(
                               flex: 1,
                               child: ButtonWidget(
-                                color: ColorPalette.secondColor.withOpacity(0.2),
+                                isCancel: true,
+                                // color: ColorPalette.secondColor.withOpacity(0.2),
                                 title: "Hủy",
                                 ontap: (() {
                                   Navigator.of(context).pop();
@@ -237,6 +242,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                           Flexible(
                               flex: 1,
                               child: ButtonWidget(
+                                isCancel: false,
                                 title: "Xác nhận",
                                 ontap: () async {
                                   if (_userLoginPosition == "admin") {

@@ -89,6 +89,7 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -121,14 +122,14 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
                     margin: EdgeInsets.only(top: 30),
                     child: Text(
                       "Chào mừng quay trở lại!",
-                      style: TextStyleCustom.h1Text,
+                      style: theme.textTheme.headline6,
                     ),
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 10),
                     child: Text(
                       "Đăng nhập để bắt đầu",
-                      style: TextStyleCustom.h2Text,
+                      style: theme.textTheme.headline6,
                     ),
                   )
                 ]),
@@ -147,6 +148,7 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
               Padding(
                 padding: EdgeInsets.only(top: kDefaultPadding),
                 child: ButtonWidget(
+                  isCancel: false,
                   title: "Đăng nhập",
                   ontap: () async {
                     checkLogin(userController.text, passwordController.text);

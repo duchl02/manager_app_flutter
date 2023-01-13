@@ -3,6 +3,7 @@ import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:path/path.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/core/constants/text_style.dart';
@@ -42,8 +43,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     var userLogin = LocalStorageHelper.getValue('userLogin');
-    print(userLogin);
+
     return AppBarContainerWidget(
         title: Padding(
           padding: EdgeInsets.symmetric(horizontal: kMinPadding),
@@ -155,239 +157,243 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         titleString: "home",
         isHomePage: true,
-        child: Column(children: [
-          SizedBox(
-            height: kDefaultPadding * 3,
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                  child: StreamBuilder(
-                stream: getAllUsers(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
-                  if (snapshot.hasData) {
-                    final projectModal = snapshot.data!;
-                    return _buildItemCategory(
-                        Icon(FontAwesomeIcons.plus, color: Colors.white),
-                        () async {
-                      if (await confirm(
-                        context,
-                        title: const Text('Điểm danh'),
-                        content: Text('Xác nhận điểm danh ngày hôm nay: ' +
-                            "${formatDate(DateTime.now())}"),
-                        textOK: const Text('Xác nhận'),
-                        textCancel: const Text('Thoát'),
-                      )) {
-                        var user = findUserById(userLogin["id"], projectModal);
-                        if (user != [] && checkDate(DateTime.now(), user)) {
-                          var today = DateTime.now();
-                          var listDate = user.checkIn ?? [];
-                          listDate.add(today);
-                          await updateUserCheckIn(
-                              id: userLogin["id"].toString(),
-                              checkIn: listDate,
-                              updateAt: DateTime.now());
-                          await EasyLoading.showSuccess("Điểm danh thành công");
-                        } else {
-                          await EasyLoading.showError(
-                              "Bạn đã điểm danh ngày hôm nay");
+        child: Expanded(
+          child: Column(children: [
+            SizedBox(
+              height: kDefaultPadding * 3,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                    child: StreamBuilder(
+                  stream: getAllUsers(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
+                    }
+                    if (snapshot.hasData) {
+                      final projectModal = snapshot.data!;
+                      return _buildItemCategory(
+                          Icon(FontAwesomeIcons.plus, color: Colors.white),
+                          () async {
+                        if (await confirm(
+                          context,
+                          title: const Text('Điểm danh'),
+                          content: Text('Xác nhận điểm danh ngày hôm nay: ' +
+                              "${formatDate(DateTime.now())}"),
+                          textOK: const Text('Xác nhận'),
+                          textCancel: const Text('Thoát'),
+                        )) {
+                          var user =
+                              findUserById(userLogin["id"], projectModal);
+                          if (user != [] && checkDate(DateTime.now(), user)) {
+                            var today = DateTime.now();
+                            var listDate = user.checkIn ?? [];
+                            listDate.add(today);
+                            await updateUserCheckIn(
+                                id: userLogin["id"].toString(),
+                                checkIn: listDate,
+                                updateAt: DateTime.now());
+                            await EasyLoading.showSuccess(
+                                "Điểm danh thành công");
+                          } else {
+                            await EasyLoading.showError(
+                                "Bạn đã điểm danh ngày hôm nay");
+                          }
+                        }
+                        return print('pressedCancel');
+                      }, 'Điểm danh', theme);
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
+                )),
+                Expanded(
+                    child: StreamBuilder(
+                  stream: getAllUsers(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
+                    }
+                    if (snapshot.hasData) {
+                      final projectModal = snapshot.data!;
+                      userModal = findUserById(userLogin["id"], projectModal);
+                      var user = userModal;
+
+                      List<DateTime> listDate = [];
+
+                      if (user.checkIn != null) {
+                        for (var e in user.checkIn!) {
+                          listDate.add(e.toDate());
                         }
                       }
-                      return print('pressedCancel');
-                    }, 'Điểm danh', Colors.teal);
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                },
-              )),
-              Expanded(
-                  child: StreamBuilder(
-                stream: getAllUsers(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
-                  if (snapshot.hasData) {
-                    final projectModal = snapshot.data!;
-                    userModal = findUserById(userLogin["id"], projectModal);
-                    var user = userModal;
-
-                    List<DateTime> listDate = [];
-
-                    if (user.checkIn != null) {
-                      for (var e in user.checkIn!) {
-                        listDate.add(e.toDate());
-                      }
+                      return _buildItemCategory(
+                          Icon(
+                            FontAwesomeIcons.calendar,
+                            color: Colors.white,
+                          ), () {
+                        Navigator.of(context).pushNamed(
+                            SelectDateScreen.routeName,
+                            arguments: listDate);
+                      }, 'Lịch làm việc', theme);
+                    } else {
+                      return Center(child: CircularProgressIndicator());
                     }
-                    print(listDate);
-                    return _buildItemCategory(
-                        Icon(
-                          FontAwesomeIcons.calendar,
-                          color: Colors.white,
-                        ), () {
-                      Navigator.of(context).pushNamed(
-                          SelectDateScreen.routeName,
-                          arguments: listDate);
-                    }, 'Lịch làm việc', Colors.purple);
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                },
-              )),
-              Expanded(
-                child: _buildItemCategory(
-                    Icon(FontAwesomeIcons.list, color: Colors.white), () {
-                  Navigator.of(context).pushNamed(TaskDetail.routeName,
-                      arguments: taskModalEmty);
-                }, 'Thêm task', Colors.orange),
-              ),
-              Expanded(
-                child: _buildItemCategory(
+                  },
+                )),
+                Expanded(
+                  child: _buildItemCategory(
+                      Icon(FontAwesomeIcons.list, color: Colors.white), () {
+                    Navigator.of(context).pushNamed(TaskDetail.routeName,
+                        arguments: taskModalEmty);
+                  }, 'Thêm task', theme),
+                ),
+                Expanded(
+                  child: _buildItemCategory(
+                      Icon(
+                        FontAwesomeIcons.userLargeSlash,
+                        color: Colors.white,
+                      ), () async {
+                    Navigator.of(context).pushNamed(OnLeaveScreen.routeName);
+                  }, 'Đăng ký nghỉ phép', theme),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            InkWell(
+              onTap: (() {
+                Navigator.of(context)
+                    .pushNamed(TaskScreen.routeName, arguments: true);
+              }),
+              child: Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Công việc trong tháng này của bạn",
+                        style: theme.textTheme.headline6),
                     Icon(
-                      FontAwesomeIcons.userLargeSlash,
-                      color: Colors.white,
-                    ), () async {
-                  Navigator.of(context).pushNamed(OnLeaveScreen.routeName);
-                }, 'Đăng ký nghỉ phép', Colors.pink),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          InkWell(
-            onTap: (() {
-              Navigator.of(context)
-                  .pushNamed(TaskScreen.routeName, arguments: true);
-            }),
-            child: Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
-                    "Công việc trong tháng này của bạn",
-                    style: TextStyleCustom.h3TextPrimary,
-                  ),
-                  Icon(
-                    FontAwesomeIcons.arrowRight,
-                    size: 16,
-                    color: ColorPalette.primaryColor,
-                  )
-                ],
+                      FontAwesomeIcons.arrowRight,
+                      size: 16,
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(children: [
-                      _buildItem6("22", "Hoàn thành"),
-                      SizedBox(
-                        height: kDefaultPadding,
-                      ),
-                      _buildItem4("22", "Hoàn thành"),
-                    ]),
-                  ),
-                  SizedBox(
-                    width: kDefaultPadding,
-                  ),
-                  Expanded(
-                    child: Column(children: [
-                      _buildItem4("22", "Hoàn thành"),
-                      SizedBox(
-                        height: kDefaultPadding,
-                      ),
-                      _buildItem6("22", "Hoàn thành"),
-                    ]),
-                  ),
-                ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(children: [
+                        _buildItem6("22", "Hoàn thành", theme),
+                        SizedBox(
+                          height: kDefaultPadding,
+                        ),
+                        _buildItem4("22", "Hoàn thành", theme),
+                      ]),
+                    ),
+                    SizedBox(
+                      width: kDefaultPadding,
+                    ),
+                    Expanded(
+                      child: Column(children: [
+                        _buildItem4("22", "Hoàn thành", theme),
+                        SizedBox(
+                          height: kDefaultPadding,
+                        ),
+                        _buildItem6("22", "Hoàn thành", theme),
+                      ]),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ]));
+          ]),
+        ));
   }
 
   Widget _buildItemCategory(
-      Icon icon, Function() onTap, String title, Color color) {
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Container(
-            padding:
-                EdgeInsets.symmetric(vertical: kMediumPadding, horizontal: 24),
-            decoration: BoxDecoration(
-                color: color.withOpacity(0.4),
-                borderRadius: BorderRadius.circular(kItemPadding)),
-            child: icon,
-          ),
-          SizedBox(
-            height: kItemPadding,
-          ),
-          Text(
-            title,
-            style: TextStyleCustom.nomalTextPrimary,
-            textAlign: TextAlign.center,
-          )
-        ],
+      Icon icon, Function() onTap, String title, ThemeData theme) {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(
+                  vertical: kMediumPadding, horizontal: 24),
+              decoration: BoxDecoration(
+                  color: theme.primaryColor.withOpacity(0.8),
+                  borderRadius: BorderRadius.circular(kItemPadding)),
+              child: icon,
+            ),
+            SizedBox(
+              height: kItemPadding,
+            ),
+            Text(
+              title,
+              style: theme.textTheme.subtitle2!
+                  .copyWith(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            )
+          ],
+        ),
       ),
     );
   }
 
-  _buildItem4(String number, String title) {
+  _buildItem4(String number, String title, ThemeData theme) {
     return Flexible(
         flex: 4,
         child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
-                color: Colors.pink.withOpacity(0.2),
+                color: theme.primaryColor.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(20)),
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text(
                 number,
-                style: TextStyleCustom.h1TextWhile,
+                style: theme.textTheme.headline5,
               ),
               SizedBox(
-                height: 10,
+                height: 2,
               ),
               Text(
                 title,
-                style: TextStyleCustom.nomalTextWhile,
+                // style: theme.textTheme.headline3,
               )
             ])));
   }
 
-  _buildItem6(String number, String title) {
+  _buildItem6(String number, String title, ThemeData theme) {
     return Flexible(
         flex: 6,
         child: Container(
             width: double.infinity,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: Colors.pink.withOpacity(0.2),
+                color: theme.primaryColor.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(20)),
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text(
                 number,
-                style: TextStyleCustom.h1TextWhile,
+                style: theme.textTheme.headline5,
               ),
               SizedBox(
-                height: 6,
+                height: 2,
               ),
               Text(
                 title,
-                style: TextStyleCustom.nomalTextWhile,
+                // style: theme.textTheme.headline3,
               )
             ])));
   }

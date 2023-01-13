@@ -48,12 +48,12 @@ class _SearchInputState extends State<SearchInput> {
               padding: const EdgeInsets.all(8.0),
               child: Icon(
                 FontAwesomeIcons.magnifyingGlass,
-                color: ColorPalette.textWhite,
+                // color: ColorPalette.textWhite,
                 size: 16,
               ),
             ),
             filled: true,
-            fillColor: ColorPalette.subTitleColor,
+            // fillColor: ColorPalette.subTitleColor,
             border: OutlineInputBorder(
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.all(
@@ -65,7 +65,7 @@ class _SearchInputState extends State<SearchInput> {
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: kItemPadding),
           ),
-          style: TextStyleCustom.normalSize,
+          // style: TextStyleCustom.normalSize,
           onChanged: widget.onChanged,
           onSubmitted: (String submitValue) {},
         ),

@@ -87,7 +87,7 @@ class _TaskDetailState extends State<TaskDetail> {
     dynamic _userLoginId = LocalStorageHelper.getValue('userLogin')["id"];
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: ColorPalette.primaryColor,
+        // backgroundColor: ColorPalette.primaryColor,
         title: Text(widget.taskModal.createAt != null
             ? "Chỉnh sửa task"
             : "Thêm mới task"),
@@ -271,7 +271,10 @@ class _TaskDetailState extends State<TaskDetail> {
                         setState(() {
                           timeSuccessController!.text = value;
                         });
+                        
                       },
+                      inputType: TextInputType.number,
+
                     ),
                     FormInputField(
                       label: "Mô tả",
@@ -291,13 +294,13 @@ class _TaskDetailState extends State<TaskDetail> {
                       children: [
                         Text(
                           "Ngày tạo: ",
-                          style: TextStyle(color: ColorPalette.subTitleColor),
+                          // style: TextStyle(color: ColorPalette.subTitleColor),
                         ),
                         Text(
                           widget.taskModal.createAt != null
                               ? formatDate(widget.taskModal.createAt)
                               : "Chưa có",
-                          style: TextStyle(color: ColorPalette.subTitleColor),
+                          // style: TextStyle(color: ColorPalette.subTitleColor),
                         )
                       ],
                     ),
@@ -305,13 +308,13 @@ class _TaskDetailState extends State<TaskDetail> {
                       children: [
                         Text(
                           "Ngày chỉnh sửa: ",
-                          style: TextStyle(color: ColorPalette.subTitleColor),
+                          // style: TextStyle(color: ColorPalette.subTitleColor),
                         ),
                         Text(
                           widget.taskModal.updateAt != null
                               ? formatDate(widget.taskModal.updateAt)
                               : "Chưa có",
-                          style: TextStyle(color: ColorPalette.subTitleColor),
+                          // style: TextStyle(color: ColorPalette.subTitleColor),
                         )
                       ],
                     ),
@@ -322,8 +325,9 @@ class _TaskDetailState extends State<TaskDetail> {
                           Flexible(
                               flex: 1,
                               child: ButtonWidget(
-                                color:
-                                    ColorPalette.secondColor.withOpacity(0.2),
+                                isCancel: true,
+                                // color:
+                                    // ColorPalette.secondColor.withOpacity(0.2),
                                 title: "Hủy",
                                 ontap: (() {
                                   Navigator.of(context).pop();
@@ -335,6 +339,7 @@ class _TaskDetailState extends State<TaskDetail> {
                           Flexible(
                               flex: 1,
                               child: ButtonWidget(
+                                isCancel: false,
                                 title: "Xác nhận",
                                 ontap: () async {
                                   if (_userLoginPosition == "admin" ||

@@ -28,13 +28,14 @@ class SelectOption<T> extends StatefulWidget {
 class _SelectOptionState extends State<SelectOption> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         widget.label != null
             ? Column(children: [
                 SizedBox(height: 14),
-                Text(widget.label!, style: TextStyleCustom.normalSizePrimary)
+                Text(widget.label!, style: theme.textTheme.titleMedium)
               ])
             : SizedBox(),
         SizedBox(
@@ -56,7 +57,7 @@ class _SelectOptionState extends State<SelectOption> {
                 isExpanded: true,
                 icon: const Icon(Icons.arrow_drop_down),
                 elevation: 16,
-                style: const TextStyle(color: ColorPalette.primaryColor),
+                // style: const TextStyle(color: ColorPalette.primaryColor),
                 onChanged: (String? value) {
                   widget.onChanged(value);
 
@@ -72,7 +73,7 @@ class _SelectOptionState extends State<SelectOption> {
                     value: value.value,
                     child: Text(
                       value.display.toString(),
-                      style: TextStyleCustom.normalText,
+                      // style: TextStyleCustom.normalText,
                     ),
                   );
                 }).toList(),

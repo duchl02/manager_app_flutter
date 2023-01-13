@@ -43,18 +43,23 @@ class AppBarContainerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var userLogin = LocalStorageHelper.getValue('userLogin');
-
+    final theme = Theme.of(context);
     return Scaffold(
       body: Stack(
         children: [
-          SizedBox(
+          Container(
+            decoration: BoxDecoration(
+                // gradient: Gradients.defaultGradientBackground,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(35),
+                    bottomRight: Radius.circular(35))),
             height: isHomePage! ? 187 : 120,
             child: AppBar(
               centerTitle: true,
               automaticallyImplyLeading: false,
               elevation: 0,
               toolbarHeight: 100,
-              backgroundColor: ColorPalette.backgroundScaffoldColor,
+              // backgroundColor: ColorPalette.backgroundScaffoldColor,
               title: title ??
                   Row(
                     children: [
@@ -116,7 +121,7 @@ class AppBarContainerWidget extends StatelessWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                        gradient: Gradients.defaultGradientBackground,
+                        // gradient: Gradients.defaultGradientBackground,
                         borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(35),
                             bottomRight: Radius.circular(35))),
@@ -174,29 +179,34 @@ class AppBarContainerWidget extends StatelessWidget {
                                 listDate.add(e.toDate());
                               }
                             }
-                            print(listDate);
                             return InkWell(
                               onTap: (() {
                                 Navigator.of(context).pushNamed(
                                     SelectDateScreen.routeName,
                                     arguments: listDate);
                               }),
-                              child: Text(
-                                listDate.length.toString(),
-                                style: TextStyleCustom.h1Text,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    listDate.length.toString(),
+                                    style: theme.textTheme.headline5!
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                  SizedBox(
+                                    height: 4,
+                                  ),
+                                  Text(
+                                    "Điểm danh",
+                                    style: theme.textTheme.subtitle1!
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                ],
                               ),
                             );
                           } else {
                             return Center(child: CircularProgressIndicator());
                           }
                         },
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        "Điểm danh",
-                        style: TextStyleCustom.nomalTextWhile,
                       ),
                     ],
                   )),
@@ -225,22 +235,28 @@ class AppBarContainerWidget extends StatelessWidget {
                                     TaskScreen.routeName,
                                     arguments: true);
                               }),
-                              child: Text(
-                                listTasks.length.toString(),
-                                style: TextStyleCustom.h1Text,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    listTasks.length.toString(),
+                                    style: theme.textTheme.headline5!
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                  SizedBox(
+                                    height: 4,
+                                  ),
+                                  Text(
+                                    "Task",
+                                    style: theme.textTheme.subtitle1!
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                ],
                               ),
                             );
                           } else {
                             return Center(child: CircularProgressIndicator());
                           }
                         },
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        "Task",
-                        style: TextStyleCustom.nomalTextWhile,
                       ),
                     ],
                   )),
@@ -271,22 +287,28 @@ class AppBarContainerWidget extends StatelessWidget {
                                     ProjectScreen.routeName,
                                     arguments: true);
                               }),
-                              child: Text(
-                                listTasks.length.toString(),
-                                style: TextStyleCustom.h1Text,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    listTasks.length.toString(),
+                                    style: theme.textTheme.headline5!
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                  SizedBox(
+                                    height: 4,
+                                  ),
+                                  Text(
+                                    "Dự án",
+                                    style: theme.textTheme.subtitle1!
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                ],
                               ),
                             );
                           } else {
                             return Center(child: CircularProgressIndicator());
                           }
                         },
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        "Dự án",
-                        style: TextStyleCustom.nomalTextWhile,
                       ),
                     ],
                   )),
@@ -318,7 +340,7 @@ class AppBarContainerWidget extends StatelessWidget {
               // }
               return Text(
                 taskModal.length.toString(),
-                style: TextStyleCustom.h1Text,
+                // style: TextStyleCustom.h1Text,
               );
             } else {
               return Center(child: CircularProgressIndicator());
@@ -330,7 +352,7 @@ class AppBarContainerWidget extends StatelessWidget {
         ),
         Text(
           name,
-          style: TextStyleCustom.nomalTextWhile,
+          // style: TextStyleCustom.nomalTextWhile,
         ),
       ],
     ));

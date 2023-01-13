@@ -40,11 +40,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      body: const Center(
+      body:  Center(
         child: Text(
           'CHÀO MỪNG',
-          style: TextStyleCustom.h2TextPrimary,
+          style: theme.textTheme.headline4 ,
         ),
       ),
     );

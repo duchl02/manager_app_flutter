@@ -57,41 +57,41 @@ class _MainAppState extends State<MainApp> {
                 duration: Duration(milliseconds: 200), curve: Curves.linear);
           });
         },
-        selectedItemColor: ColorPalette.primaryColor,
-        unselectedItemColor: ColorPalette.primaryColor.withOpacity(0.4),
+        // selectedItemColor: ColorPalette.primaryColor,
+        // unselectedItemColor: ColorPalette.primaryColor.withOpacity(0.4),
         margin: EdgeInsets.symmetric(
             horizontal: kMediumPadding, vertical: kDefaultPadding),
         items: [
           SalomonBottomBarItem(
-              selectedColor: Colors.purple,
+              // selectedColor: ColorPalette.primaryColor,
               icon: Icon(
                 FontAwesomeIcons.house,
                 size: kDefaultIconSize,
               ),
               title: Text("Trang chủ")),
           SalomonBottomBarItem(
-              selectedColor: Colors.blue.shade500,
+              // selectedColor: Colors.blue.shade500,
               icon: Icon(
                 FontAwesomeIcons.solidMessage,
                 size: kDefaultIconSize,
               ),
               title: Text("Tin nhắn")),
           SalomonBottomBarItem(
-              selectedColor: Colors.pink,
+              // selectedColor: ColorPalette.secondColor,
               icon: Icon(
                 FontAwesomeIcons.list,
                 size: kDefaultIconSize,
               ),
               title: Text("Task")),
           SalomonBottomBarItem(
-              selectedColor: Colors.orange,
+              // selectedColor: ColorPalette.subTitleColor,
               icon: Icon(
                 FontAwesomeIcons.briefcase,
                 size: kDefaultIconSize,
               ),
               title: Text("Dự án")),
           SalomonBottomBarItem(
-              selectedColor: Colors.teal,
+              // selectedColor: ColorPalette.text1Color.withOpacity(0.6),
               icon: Icon(
                 FontAwesomeIcons.solidUser,
                 size: kDefaultIconSize,

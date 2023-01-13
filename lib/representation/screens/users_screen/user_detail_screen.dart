@@ -118,7 +118,7 @@ class _UserDetailState extends State<UserDetail> {
     dynamic _userLoginId = LocalStorageHelper.getValue('userLogin')["id"];
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: ColorPalette.primaryColor,
+        // backgroundColor: ColorPalette.primaryColor,
         title: Text(widget.userModal.createAt != null
             ? "Chỉnh sửa nhân viên"
             : "Thêm mới nhân viên"),
@@ -320,13 +320,13 @@ class _UserDetailState extends State<UserDetail> {
                       children: [
                         Text(
                           "Ngày tạo: ",
-                          style: TextStyle(color: ColorPalette.subTitleColor),
+                          // style: TextStyle(color: ColorPalette.subTitleColor),
                         ),
                         Text(
                           widget.userModal.createAt != null
                               ? formatDate(widget.userModal.createAt)
                               : "Chưa có",
-                          style: TextStyle(color: ColorPalette.subTitleColor),
+                          // style: TextStyle(color: ColorPalette.subTitleColor),
                         )
                       ],
                     ),
@@ -334,13 +334,13 @@ class _UserDetailState extends State<UserDetail> {
                       children: [
                         Text(
                           "Ngày chỉnh sửa: ",
-                          style: TextStyle(color: ColorPalette.subTitleColor),
+                          // style: TextStyle(color: ColorPalette.subTitleColor),
                         ),
                         Text(
                           widget.userModal.updateAt != null
                               ? formatDate(widget.userModal.updateAt)
                               : "Chưa có",
-                          style: TextStyle(color: ColorPalette.subTitleColor),
+                          // style: TextStyle(color: ColorPalette.subTitleColor),
                         )
                       ],
                     ),
@@ -353,8 +353,9 @@ class _UserDetailState extends State<UserDetail> {
                           Flexible(
                               flex: 1,
                               child: ButtonWidget(
-                                color:
-                                    ColorPalette.secondColor.withOpacity(0.2),
+                                isCancel: true,
+                                // color:
+                                    // ColorPalette.secondColor.withOpacity(0.2),
                                 title: "Hủy",
                                 ontap: (() {
                                   Navigator.of(context).pop();
@@ -366,6 +367,7 @@ class _UserDetailState extends State<UserDetail> {
                           Flexible(
                               flex: 1,
                               child: ButtonWidget(
+                                isCancel:false,
                                 title: "Xác nhận",
                                 ontap: () async {
                                   if (_userLoginPosition == "admin" ||

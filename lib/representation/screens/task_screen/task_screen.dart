@@ -79,7 +79,7 @@ class _TaskScreenState extends State<TaskScreen> {
             }
           },
         ),
-        backgroundColor: ColorPalette.primaryColor,
+        // backgroundColor: ColorPalette.primaryColor,
         actions: [
           InkWell(
             child: Padding(

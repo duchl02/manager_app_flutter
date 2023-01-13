@@ -52,7 +52,10 @@ class _ProjectScreenState extends State<ProjectScreen> {
 
   @override
   Widget build(BuildContext context) {
+    
     dynamic _userLogin = LocalStorageHelper.getValue('userLogin')["id"];
+    dynamic _userRule = LocalStorageHelper.getValue('userLogin')["position"];
+
     return Scaffold(
       appBar: AppBar(
         title: StreamBuilder(
@@ -74,9 +77,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
             }
           },
         ),
-        backgroundColor: ColorPalette.primaryColor,
+        // backgroundColor: ColorPalette.primaryColor,
         actions: [
-          _userLogin == "admin"
+          _userRule == "admin"
               ? InkWell(
                   child: Padding(
                       padding: EdgeInsets.only(right: 10),

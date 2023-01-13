@@ -21,6 +21,8 @@ class ListUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return InkWell(
       onTap: (() {
         Navigator.of(context)
@@ -29,7 +31,7 @@ class ListUser extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
-          color: ColorPalette.secondColor.withOpacity(0.1),
+          color: theme.primaryColor.withOpacity(0.2),
           borderRadius: BorderRadius.circular(10),
         ),
         // child: Padding(
@@ -49,7 +51,7 @@ class ListUser extends StatelessWidget {
           // leading: Icon(Icons.arrow_forward),
           title: Text(
             userModal.name!,
-            style: TextStyle(color: ColorPalette.text1Color),
+            // style: TextStyle(color: ColorPalette.text1Color),
           ),
           subtitle: Row(
             children: [
@@ -58,9 +60,12 @@ class ListUser extends StatelessWidget {
                   ? formatDate(userModal.birthday)
                   : "null"),
               Spacer(),
-              Text("SĐT: ", style: TextStyleCustom.smallText),
+              Text("SĐT: ", 
+              // style: TextStyleCustom.smallText
+              ),
               Text(userModal.phoneNumber ?? "null",
-                  style: TextStyleCustom.smallText),
+                  // style: TextStyleCustom.smallText
+                  ),
             ],
           ),
         ),

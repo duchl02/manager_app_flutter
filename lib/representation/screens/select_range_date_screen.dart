@@ -33,7 +33,7 @@ class _SelectRangeDateScreenState extends State<SelectRangeDateScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: ColorPalette.primaryColor,
+        // backgroundColor: ColorPalette.primaryColor,
         title: Text("Chọn thời gian nghỉ"),
       ),
       body: Padding(
@@ -48,11 +48,11 @@ class _SelectRangeDateScreenState extends State<SelectRangeDateScreen> {
 
             monthViewSettings:
                 DateRangePickerMonthViewSettings(firstDayOfWeek: 1),
-            selectionColor: ColorPalette.yellowColor,
-            startRangeSelectionColor: ColorPalette.yellowColor,
-            endRangeSelectionColor: ColorPalette.yellowColor,
-            rangeSelectionColor: ColorPalette.yellowColor.withOpacity(0.25),
-            todayHighlightColor: ColorPalette.yellowColor,
+            // selectionColor: ColorPalette.yellowColor,
+            // startRangeSelectionColor: ColorPalette.yellowColor,
+            // endRangeSelectionColor: ColorPalette.yellowColor,
+            // rangeSelectionColor: ColorPalette.yellowColor.withOpacity(0.25),
+            // todayHighlightColor: ColorPalette.yellowColor,
             toggleDaySelection: true,
             onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
               if (args.value is PickerDateRange) {
@@ -65,6 +65,7 @@ class _SelectRangeDateScreenState extends State<SelectRangeDateScreen> {
             Flexible(
               flex: 1,
               child: ButtonWidget(
+                isCancel: false,
                 title: "Hủy",
                 ontap: () {
                   Navigator.of(context).pop([]);
@@ -77,6 +78,7 @@ class _SelectRangeDateScreenState extends State<SelectRangeDateScreen> {
             Flexible(
               flex: 1,
               child: ButtonWidget(
+                isCancel: true,
                 title: "Xác nhận",
                 ontap: () {
                   // print(rangeEndDate);

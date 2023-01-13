@@ -14,6 +14,7 @@ class FormInputField extends StatelessWidget {
     this.onTap,
     this.validator,
     this.obscureText = false,
+    this.inputType = TextInputType.none
   }) : super(key: key);
 
   final String label;
@@ -25,39 +26,41 @@ class FormInputField extends StatelessWidget {
   final void Function()? onTap;
   final String? Function(String?)? validator;
   final bool obscureText;
-
+  final TextInputType? inputType;
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Padding(
       padding: EdgeInsets.only(top: 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(label, style: TextStyleCustom.normalSizePrimary),
+          Text(label, style: theme.textTheme.subtitle1),
           SizedBox(
             height: 6,
           ),
           TextFormField(
             maxLines: maxLines,
-            style: TextStyleCustom.normalSizeBlack,
+            // style: TextStyleCustom.normalSizeBlack,
             controller: controller,
             focusNode: focusNode,
+            keyboardType: inputType,
             obscureText: obscureText,
             onTap: onTap,
             readOnly: onTap != null,
             validator: validator,
             decoration: InputDecoration(
               hintText: hintText,
-              fillColor: ColorPalette.secondColor,
-              hintStyle:
-                  TextStyle(color: ColorPalette.primaryColor.withOpacity(0.5)),
+              // fillColor: ColorPalette.secondColor,
+              hintStyle: TextStyle(),
               suffixIcon: onTap != null
-                  ? const Icon(Icons.keyboard_arrow_down,
-                      color: ColorPalette.secondColor)
+                  ? const Icon(
+                      Icons.keyboard_arrow_down,
+                    )
                   : null,
-              focusedBorder: const OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: ColorPalette.text1Color, width: 2.0),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: theme.primaryColor, width: 2.0),
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.black, width: 1.0),

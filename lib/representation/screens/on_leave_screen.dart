@@ -6,7 +6,7 @@ import 'package:travel_app/Data/models/user_model.dart';
 import 'package:travel_app/representation/screens/select_range_date_screen.dart';
 import 'package:travel_app/representation/widgets/form_field.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
-
+import 'package:validated/validated.dart' as validate;
 import '../../Data/models/option_modal.dart';
 import '../../core/constants/color_constants.dart';
 import '../../core/helpers/local_storage_helper.dart';
@@ -32,6 +32,19 @@ class _OnLeaveScreenState extends State<OnLeaveScreen> {
   String? reasonOnLeave;
   String? userId;
   bool isLoading = false;
+  final _formKey = GlobalKey<FormState>();
+
+  var _toEmail;
+
+  var _emailToCc;
+
+  var htmlContent;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +52,7 @@ class _OnLeaveScreenState extends State<OnLeaveScreen> {
           title: Text(
             "Đăng ký nghỉ phép",
           ),
-          backgroundColor: ColorPalette.primaryColor,
+          // backgroundColor: ColorPalette.primaryColor,
         ),
         body: isLoading
             ? Center(
@@ -48,80 +61,103 @@ class _OnLeaveScreenState extends State<OnLeaveScreen> {
             : SingleChildScrollView(
                 child: Padding(
                   padding: EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      FormInputField(
-                          controller: textEditingController,
-                          label: "Lý do",
-                          hintText: "Nhập lý do ghỉ phép"),
-                      SelectOption(
-                          label: "Loại lý do",
-                          list: _list,
-                          dropdownValue: reasonOnLeave ?? "",
-                          onChanged: ((p0) {
-                            reasonOnLeave = p0 as String;
-                          })),
-                      StreamBuilder(
-                        stream: getAllUsers(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasError) {
-                            return Text("${snapshot.error}");
-                          }
-                          if (snapshot.hasData) {
-                            final userModal = snapshot.data!;
-                            List<OptionModal> _listSatff = [];
+                  child: Form(
+                    key: _formKey,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: Column(
+                      children: [
+                        FormInputField(
+                            controller: textEditingController,
+                            validator: ((p0) {
+                              if (p0 != null && p0.length < 1) {
+                                return "Trường này không được để trống";
+                              } else {
+                                return null;
+                              }
+                            }),
+                            label: "Lý do",
+                            hintText: "Nhập lý do ghỉ phép"),
+                        SelectOption(
+                            label: "Loại lý do",
+                            list: _list,
+                            dropdownValue: reasonOnLeave ?? "",
+                            onChanged: ((p0) {
+                              reasonOnLeave = p0 as String;
+                            })),
+                        StreamBuilder(
+                          stream: getAllUsers(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Text("${snapshot.error}");
+                            }
+                            if (snapshot.hasData) {
+                              final userModal = snapshot.data!;
+                              List<OptionModal> _listSatff = [];
 
-                            for (var e in userModal) {
-                              _listSatff.add(
-                                  OptionModal(value: e.id!, display: e.name!));
+                              for (var e in userModal) {
+                                _listSatff.add(OptionModal(
+                                    value: e.id!, display: e.name!));
+                              }
+                              return SelectOption(
+                                label: "Người duyệt (Quản lý của bạn)",
+                                list: _listSatff,
+                                dropdownValue: userId ?? "",
+                                onChanged: (p0) {
+                                  userId = p0 as String;
+                                },
+                              );
+                            } else {
+                              return Center(child: CircularProgressIndicator());
                             }
-                            return SelectOption(
-                              label: "Người duyệt (Quản lý của bạn)",
-                              list: _listSatff,
-                              dropdownValue: userId ?? "",
-                              onChanged: (p0) {
-                                userId = p0 as String;
-                              },
-                            );
-                          } else {
-                            return Center(child: CircularProgressIndicator());
-                          }
-                        },
-                      ),
-                      FormInputField(
-                          controller: dateRangeEditingController,
-                          label: "Thời gian",
-                          hintText: "Chọn thời gian nghỉ phép",
-                          onTap: () async {
-                            final result = await Navigator.of(context)
-                                .pushNamed(SelectRangeDateScreen.routeName);
-                            if (result is List<DateTime?>) {
-                              setState(() {
-                                dateRangeEditingController.text =
-                                    'Từ ${result[0]?.getStartDate} đến ${result[1]?.getEndDate}';
-                              });
-                            }
-                          }),
-                      Padding(
-                        padding: EdgeInsets.only(top: 10, bottom: 10),
-                        child: Row(
-                          children: [
-                            Flexible(
-                                flex: 1,
-                                child: ButtonWidget(
-                                  color:
-                                      ColorPalette.secondColor.withOpacity(0.2),
-                                  title: "Hủy",
-                                  ontap: (() {
-                                    Navigator.of(context).pop();
-                                  }),
-                                )),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Flexible(
-                              flex: 1,
-                              child: StreamBuilder(
+                          },
+                        ),
+                        FormInputField(
+                            controller: dateRangeEditingController,
+                            label: "Thời gian",
+                            hintText: "Chọn thời gian nghỉ phép",
+                            onTap: () async {
+                              final result = await Navigator.of(context)
+                                  .pushNamed(SelectRangeDateScreen.routeName);
+                              if (result is List<DateTime?>) {
+                                setState(() {
+                                  dateRangeEditingController.text =
+                                      'Từ ${result[0]?.getStartDate} đến ${result[1]?.getEndDate}';
+                                });
+                              }
+                            }),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10, bottom: 10),
+                          child: Row(
+                            children: [
+                              Flexible(
+                                  flex: 1,
+                                  child: ButtonWidget(
+                                    isCancel: true,
+                                    // color: ColorPalette.secondColor
+                                    //     .withOpacity(0.2),
+                                    title: "Hủy",
+                                    ontap: (() {
+                                      Navigator.of(context).pop();
+                                    }),
+                                  )),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                  flex: 1,
+                                  child: ButtonWidget(
+                                    isCancel: false,
+                                    title: "Xác nhận",
+                                    ontap: () async {
+                                      final isValidForm =
+                                          _formKey.currentState!.validate();
+                                      if (isValidForm) {
+                                        // submitBtn(
+                                        //     _toEmail, _emailToCc, htmlContent);
+                                      }
+                                    },
+                                  )),
+                              StreamBuilder(
                                 stream: getAllUsers(),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasError) {
@@ -137,35 +173,28 @@ class _OnLeaveScreenState extends State<OnLeaveScreen> {
                                         _user = e;
                                       }
                                     }
-                                    String _emailToCc = "";
 
                                     for (var e in userModal) {
                                       if (e.id == userId) {
                                         _emailToCc = e.email!;
                                       }
                                     }
-                                    String _toEmail = _user.email!;
+                                    _toEmail = _user.email!;
                                     "vanducbaymatdep@gmail.com";
-                                    String htmlContent =
+                                    htmlContent =
                                         "<h1>Xin chào ${_user.name} </h1>\n<p>Hệ thống đã xác nhận bạn xin nghỉ phép ${dateRangeEditingController.text}.</p> \n <p> Lý do nghỉ: ${textEditingController.text} <p/> \n  <p> Loại lý do: ${reasonOnLeave} <p/> ";
-                                    return ButtonWidget(
-                                      title: "Xác nhận",
-                                      ontap: () async {
-                                        submitBtn(
-                                            _toEmail, _emailToCc, htmlContent);
-                                      },
-                                    );
+                                    return SizedBox();
                                   } else {
                                     return Center(
                                         child: CircularProgressIndicator());
                                   }
                                 },
                               ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ));

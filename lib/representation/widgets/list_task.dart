@@ -21,6 +21,8 @@ class ListTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return InkWell(
       onTap: (() {
         Navigator.of(context)
@@ -29,7 +31,7 @@ class ListTask extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
-          color: ColorPalette.secondColor.withOpacity(0.1),
+          color: theme.primaryColor.withOpacity(0.2),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
@@ -46,7 +48,7 @@ class ListTask extends StatelessWidget {
                 return ListTile(
                   title: Text(
                     taskModal.name ?? "null",
-                    style: TextStyle(color: ColorPalette.text1Color),
+                    // style: TextStyle(color: ColorPalette.text1Color),
                   ),
                   leading: Container(
                     width: 40,

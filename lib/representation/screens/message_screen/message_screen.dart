@@ -24,9 +24,11 @@ class _MessageScreenState extends State<MessageScreen> {
   TextEditingController textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: ColorPalette.primaryColor,
+        // backgroundColor: ColorPalette.primaryColor,
         title: Text("Tin nhắn"),
       ),
       body: Padding(
@@ -91,7 +93,7 @@ class _MessageScreenState extends State<MessageScreen> {
                     return ListView(
                       children: _currentData
                           .map(((e) => listRoom(
-                                userModal: e,
+                                userModal: e, theme: theme
                               )))
                           .toList(),
                     );
@@ -134,7 +136,7 @@ class _MessageScreenState extends State<MessageScreen> {
       ),
     );
   }
-  Widget listRoom({required UserModal userModal}) {
+  Widget listRoom({required UserModal userModal, required ThemeData theme}) {
   return InkWell(
     onTap: (() {
         Navigator.of(context)
@@ -144,7 +146,7 @@ class _MessageScreenState extends State<MessageScreen> {
       padding: EdgeInsets.all(6),
       child: Container(
         decoration: BoxDecoration(
-          color: ColorPalette.secondColor.withOpacity(0.1),
+          color: theme.primaryColor.withOpacity(0.2) ,
           borderRadius: BorderRadius.circular(10),
         ),
         // child: Padding(
@@ -164,7 +166,7 @@ class _MessageScreenState extends State<MessageScreen> {
           // leading: Icon(Icons.arrow_forward),
           title: Text(
             userModal.name!,
-            style: TextStyle(color: ColorPalette.text1Color),
+            // style: TextStyle(color: ColorPalette.text1Color),
           ),
           subtitle: Row(
             children: [

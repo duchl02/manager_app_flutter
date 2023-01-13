@@ -78,7 +78,7 @@ class _UserScreenState extends State<UserScreen> {
             }
           },
         ),
-        backgroundColor: ColorPalette.primaryColor,
+        // backgroundColor: ColorPalette.primaryColor,
         actions: [
           _userLoginPosition == "admin"
               ? InkWell(

@@ -46,15 +46,20 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
   var userLogin;
   List<MessageModal> _listMessage1 = [];
   List<MessageModal> _listAllMessage = [];
-  bool checkSend1 = true;
-  bool checkSend2 = true;
   @override
   void initState() {
     // TODO: implement initState
 
     userLogin = LocalStorageHelper.getValue('userLogin');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        
+      });
+    });
     getToken();
     super.initState();
+    sendPushMessage("xinh cao day asessage", "hell",
+        'coxtiWkCSbetyd0u6tjKT1:APA91bFcLgkDeM2YvA8xv5QJoZVKusPTvrqImlWYP1wk-e5KO3snYJVM8nOx35BxOMqvrGrftoC39koDhS88Iah-5H8HKzzAEuSPzZo0B9sTWUfdbnLeKVX0IahxbN2L-zr_UtHptcyn');
   }
 
   Future sendMessage(String text, _userSend, _userLogin) async {
@@ -141,9 +146,11 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: ColorPalette.primaryColor,
+        // backgroundColor: ColorPalette.primaryColor,
         title: Text(widget.userModal.name ?? "null"),
         // actions: const [Icon(FontAwesomeIcons.phone)],
       ),
@@ -177,7 +184,7 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
                           children: [
                             Column(
                               children: _listMessage2.reversed
-                                  .map(((e) => _messageBuilder(e)))
+                                  .map(((e) => _messageBuilder(e, theme)))
                                   .toList(),
                             ),
                           ]),
@@ -199,7 +206,6 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
                 if (snapshot.hasData) {
                   _listMessage1 = snapshot.data!;
                   if (_listMessage1.isEmpty == false) {
-                    checkSend1 = false;
                     _listMessage1.sort((a, b) {
                       var adate = a.createAt;
                       var bdate = b.createAt;
@@ -213,7 +219,7 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
                           children: [
                             Column(
                               children: _listMessage1.reversed
-                                  .map(((e) => _messageBuilder(e)))
+                                  .map(((e) => _messageBuilder(e, theme)))
                                   .toList(),
                             ),
                           ]),
@@ -263,14 +269,14 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
               ),
             ),
             filled: true,
-            fillColor: ColorPalette.subTitleColor.withOpacity(0.2),
+            // fillColor: ColorPalette.subTitleColor.withOpacity(0.2),
             border: OutlineInputBorder(
               borderSide: BorderSide.none,
             ),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: kItemPadding),
           ),
-          style: TextStyleCustom.normalSizeBlack,
+          // style: TextStyleCustom.normalSizeBlack,
           // onChanged: widget.onChanged,
           onSubmitted: (String submitValue) {},
         ),
@@ -278,7 +284,7 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
     );
   }
 
-  Widget _messageBuilder(MessageModal messageModal) {
+  Widget _messageBuilder(MessageModal messageModal, ThemeData theme) {
     bool check = false;
     var userLogin = LocalStorageHelper.getValue('userLogin');
 
@@ -317,8 +323,8 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                           color: check
-                              ? ColorPalette.text1Color.withOpacity(0.2)
-                              : ColorPalette.secondColor.withOpacity(0.1),
+                              ? theme.primaryColor.withOpacity(0.2)
+                              : theme.disabledColor.withOpacity(0.1),
                           borderRadius: check
                               ? BorderRadius.only(
                                   topLeft: Radius.circular(10),
@@ -345,8 +351,8 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
                   check ? EdgeInsets.only(left: 6) : EdgeInsets.only(left: 46),
               child: Text(
                 formatDateAndTime(messageModal.createAt),
-                style:
-                    TextStyle(color: ColorPalette.secondColor.withOpacity(0.7)),
+                // style:
+                // TextStyle(color: ColorPalette.secondColor.withOpacity(0.7)),
               ),
             )
           ],
@@ -354,23 +360,4 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
       ),
     );
   }
-
-  // setMessage(List<MessageModal> listMessage1, List<MessageModal> listMessage2) {
-  //   _listAllMessage = [];
-  //   for (var e in listMessage1) {
-  //     _listAllMessage.add(e);
-  //   }
-  //   for (var e in listMessage2) {
-  //     _listAllMessage.add(e);
-  //   }
-  //   _listAllMessage.sort((a, b) {
-  //     var adate = a.createAt;
-  //     var bdate = b.createAt;
-  //     return -adate.compareTo(bdate);
-  //   });
-  //   // WidgetsBinding.instance.addPostFrameCallback((_) {
-  //   //   setState(() {});
-  //   //   // Add Your Code here.
-  //   // });
-  // }
 }

@@ -36,7 +36,7 @@ class _SelectDateScreenState extends State<SelectDateScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: ColorPalette.primaryColor,
+        // backgroundColor: ColorPalette.primaryColor,
         title: Text("Danh sách ngày điểm danh"),
       ),
       body: Padding(
@@ -52,11 +52,11 @@ class _SelectDateScreenState extends State<SelectDateScreen> {
 
             monthViewSettings:
                 DateRangePickerMonthViewSettings(firstDayOfWeek: 1),
-            selectionColor: ColorPalette.yellowColor,
-            startRangeSelectionColor: ColorPalette.yellowColor,
-            endRangeSelectionColor: ColorPalette.yellowColor,
-            rangeSelectionColor: ColorPalette.yellowColor.withOpacity(0.25),
-            todayHighlightColor: ColorPalette.yellowColor,
+            // selectionColor: ColorPalette.yellowColor,
+            // startRangeSelectionColor: ColorPalette.yellowColor,
+            // endRangeSelectionColor: ColorPalette.yellowColor,
+            // rangeSelectionColor: ColorPalette.yellowColor.withOpacity(0.25),
+            // todayHighlightColor: ColorPalette.yellowColor,
             // toggleDaySelection: true,
             // onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
             //   if (args.value is PickerDateRange) {
@@ -69,8 +69,9 @@ class _SelectDateScreenState extends State<SelectDateScreen> {
             Flexible(
               flex: 1,
               child: ButtonWidget(
+                isCancel: true,
                 title: "Hủy",
-                color: ColorPalette.secondColor.withOpacity(0.2),
+                // color: ColorPalette.secondColor.withOpacity(0.2),
                 ontap: () {
                   Navigator.of(context).pop([]);
                 },
@@ -82,6 +83,7 @@ class _SelectDateScreenState extends State<SelectDateScreen> {
             Flexible(
               flex: 1,
               child: ButtonWidget(
+                isCancel: false,
                 title: "Xác nhận",
                 ontap: () {
                   // print(rangeEndDate);
