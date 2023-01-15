@@ -31,7 +31,7 @@ class ListUser extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
-          color: theme.primaryColor.withOpacity(0.2),
+          // color: theme.primaryColor.withOpacity(0.2),
           borderRadius: BorderRadius.circular(10),
         ),
         // child: Padding(

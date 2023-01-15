@@ -29,7 +29,7 @@ class ListProject extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(bottom: 6),
         decoration: BoxDecoration(
-          color: theme.primaryColor.withOpacity(0.2),
+          // color: theme.primaryColor.withOpacity(0.2),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
@@ -38,7 +38,9 @@ class ListProject extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(
               children: [
-                Text(projectModal.name!,),
+                Text(
+                  projectModal.name!,
+                ),
                 Spacer(),
               ],
             ),
@@ -50,12 +52,15 @@ class ListProject extends StatelessWidget {
                 Text("Tên ngắn gọn: "),
                 Text(projectModal.shortName ?? "null"),
                 Spacer(),
-                Text("Ngày tạo: ", ),
                 Text(
-                    projectModal.createAt != null
-                        ? formatDate(projectModal.createAt)
-                        : "null",),
-                    // style: TextStyleCustom.smallText
+                  "Ngày tạo: ",
+                ),
+                Text(
+                  projectModal.createAt != null
+                      ? formatDate(projectModal.createAt)
+                      : "null",
+                ),
+                // style: TextStyleCustom.smallText
                 // Text("Độ ưu tiên: ", style: TextStyleCustom.smallText),
                 // Text(projectModal.priority ?? "null",
                 //     style: TextStyleCustom.smallText),
@@ -68,13 +73,15 @@ class ListProject extends StatelessWidget {
             ),
             Row(
               children: [
-                Text("Mô tả : ", ),
-                Text(projectModal.description ?? "null",
-                    ),
+                Text(
+                  "Mô tả : ",
+                ),
+                Text(
+                  projectModal.description ?? "null",
+                ),
                 Spacer(),
                 // Text("Hoàn thành: "),
                 // Text("25/12/2022 "),
-                
               ],
             )
           ]),

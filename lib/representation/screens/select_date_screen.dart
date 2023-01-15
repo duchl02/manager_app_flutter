@@ -69,20 +69,6 @@ class _SelectDateScreenState extends State<SelectDateScreen> {
             Flexible(
               flex: 1,
               child: ButtonWidget(
-                isCancel: true,
-                title: "Hủy",
-                // color: ColorPalette.secondColor.withOpacity(0.2),
-                ontap: () {
-                  Navigator.of(context).pop([]);
-                },
-              ),
-            ),
-            SizedBox(
-              width: kDefaultPadding,
-            ),
-            Flexible(
-              flex: 1,
-              child: ButtonWidget(
                 isCancel: false,
                 title: "Xác nhận",
                 ontap: () {

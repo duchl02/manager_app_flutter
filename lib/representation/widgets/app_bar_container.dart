@@ -171,12 +171,17 @@ class AppBarContainerWidget extends StatelessWidget {
                             userModal =
                                 findUserById(userLogin["id"], projectModal);
                             var user = userModal;
+                            var time = DateTime.now();
 
                             List<DateTime> listDate = [];
 
                             if (user.checkIn != null) {
                               for (var e in user.checkIn!) {
-                                listDate.add(e.toDate());
+                                if (e.toDate().isAfter(
+                                        DateTime(time.year, time.month)) ==
+                                    true) {
+                                  listDate.add(e.toDate());
+                                }
                               }
                             }
                             return InkWell(
@@ -224,8 +229,13 @@ class AppBarContainerWidget extends StatelessWidget {
                             var userLogin =
                                 LocalStorageHelper.getValue('userLogin');
                             List<TaskModal> listTasks = [];
+                            var time = DateTime.now();
+
                             for (var e in taskModal) {
-                              if (e.userId == userLogin["id"]) {
+                              if (e.userId == userLogin["id"] &&
+                                  e.createAt!.isAfter(
+                                          DateTime(time.year, time.month)) ==
+                                      true) {
                                 listTasks.add(e);
                               }
                             }
@@ -246,7 +256,7 @@ class AppBarContainerWidget extends StatelessWidget {
                                     height: 4,
                                   ),
                                   Text(
-                                    "Task",
+                                    "Công việc",
                                     style: theme.textTheme.subtitle1!
                                         .copyWith(color: Colors.white),
                                   ),

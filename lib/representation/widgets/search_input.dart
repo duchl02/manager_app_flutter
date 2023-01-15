@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../core/constants/color_constants.dart';
 import '../../core/constants/dismension_constants.dart';
-import '../../core/constants/text_style.dart';
 
 class SearchInput extends StatefulWidget {
   const SearchInput({super.key, this.controller, this.onChanged});

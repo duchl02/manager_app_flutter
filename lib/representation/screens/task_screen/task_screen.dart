@@ -50,6 +50,7 @@ class _TaskScreenState extends State<TaskScreen> {
   List<TaskModal> list = [];
   List<UserModal> _listUser = [];
   List<ProjectModal> _listProject = [];
+  List<TaskModal> listMyTask = [];
 
   bool isSearch = false;
   late String category;
@@ -72,7 +73,9 @@ class _TaskScreenState extends State<TaskScreen> {
                 (e) {},
               );
               return Text(
-                "Task (${taskModal.length})",
+                widget.checkIsUser
+                    ? "Công việc trong tháng này (${listMyTask.length})"
+                    : " Tất cả công việc (${taskModal.length})",
               );
             } else {
               return Center(child: CircularProgressIndicator());
@@ -157,6 +160,8 @@ class _TaskScreenState extends State<TaskScreen> {
               }
               if (snapshot.hasData) {
                 final taskModal = snapshot.data!;
+                var time = DateTime.now();
+
                 taskModal.sort((a, b) {
                   var adate = a.createAt;
                   var bdate = b.createAt;
@@ -165,18 +170,25 @@ class _TaskScreenState extends State<TaskScreen> {
 
                 if (widget.checkIsUser) {
                   currentTaskData = taskModal.reversed
-                      .where((element) => element.userId == userLoginId)
+                      .where((element) =>
+                          element.userId == userLoginId &&
+                          element.createAt!
+                                  .isAfter(DateTime(time.year, time.month)) ==
+                              true)
                       .toList();
+                  currentTaskData = searchTask(textEditingController.text,
+                      category, currentTaskData, _listUser, _listProject);
                 } else {
                   currentTaskData = searchTask(textEditingController.text,
                       category, taskModal, _listUser, _listProject);
                 }
+
                 currentTaskData.sort((a, b) {
                   var adate = a.createAt;
                   var bdate = b.createAt;
                   return -adate!.compareTo(bdate!);
                 });
-
+                listMyTask = currentTaskData;
                 return ListView(
                   children: currentTaskData
                       .map(((e) => ListTask(
@@ -196,7 +208,7 @@ class _TaskScreenState extends State<TaskScreen> {
 }
 
 List<OptionModal> _list = [
-  OptionModal(value: "name", display: "Tên task"),
+  OptionModal(value: "name", display: "Tên công việc"),
   OptionModal(value: "userName", display: "Tên nhân viên"),
   OptionModal(value: "project", display: "Dự án"),
   OptionModal(value: "status", display: "Trạng thái"),

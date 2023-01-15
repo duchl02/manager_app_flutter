@@ -3,19 +3,19 @@ import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/core/constants/text_style.dart';
 
 class FormInputField extends StatelessWidget {
-  const FormInputField({
-    Key? key,
-    required this.label,
-    required this.hintText,
-    this.controller,
-    this.focusNode,
-    this.onChanged,
-    this.maxLines = 1,
-    this.onTap,
-    this.validator,
-    this.obscureText = false,
-    this.inputType = TextInputType.none
-  }) : super(key: key);
+  const FormInputField(
+      {Key? key,
+      required this.label,
+      required this.hintText,
+      this.controller,
+      this.focusNode,
+      this.onChanged,
+      this.maxLines = 1,
+      this.onTap,
+      this.validator,
+      this.obscureText = false,
+      this.inputType = TextInputType.text})
+      : super(key: key);
 
   final String label;
   final String hintText;
@@ -32,14 +32,10 @@ class FormInputField extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: EdgeInsets.only(top: 14),
+      padding: EdgeInsets.only(bottom: 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(label, style: theme.textTheme.subtitle1),
-          SizedBox(
-            height: 6,
-          ),
           TextFormField(
             maxLines: maxLines,
             // style: TextStyleCustom.normalSizeBlack,
@@ -51,9 +47,9 @@ class FormInputField extends StatelessWidget {
             readOnly: onTap != null,
             validator: validator,
             decoration: InputDecoration(
-              hintText: hintText,
+              labelText: hintText,
               // fillColor: ColorPalette.secondColor,
-              hintStyle: TextStyle(),
+              // labelStyle: theme.textTheme.subtitle1,
               suffixIcon: onTap != null
                   ? const Icon(
                       Icons.keyboard_arrow_down,

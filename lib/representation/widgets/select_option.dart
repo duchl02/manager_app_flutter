@@ -12,11 +12,13 @@ class SelectOption<T> extends StatefulWidget {
       required this.dropdownValue,
       required this.onChanged,
       this.searchOption,
-      this.label});
+      this.label,
+      this.validator});
 
   List<OptionModal> list;
   double? searchOption;
   String? label;
+  final String? Function(String?)? validator;
 
   @override
   State<SelectOption> createState() => _SelectOptionState();
@@ -32,55 +34,65 @@ class _SelectOptionState extends State<SelectOption> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        widget.label != null
-            ? Column(children: [
-                SizedBox(height: 14),
-                Text(widget.label!, style: theme.textTheme.titleMedium)
-              ])
-            : SizedBox(),
-        SizedBox(
-          height: 6,
-        ),
-        Container(
-          padding: EdgeInsets.only(right: 10, left: 10, top: 4, bottom:4),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.black, width: 1)),
-          child: Column(
-            children: [
-              DropdownButton<String>(
-                
-                value: widget.dropdownValue.isNotEmpty
-                    ? widget.dropdownValue
-                    : null,
-                underline: SizedBox(),
-                isExpanded: true,
-                icon: const Icon(Icons.arrow_drop_down),
-                elevation: 16,
-                // style: const TextStyle(color: ColorPalette.primaryColor),
-                onChanged: (String? value) {
-                  widget.onChanged(value);
+        Column(
+          children: [
+            DropdownButtonFormField<String>(
+              value:
+                  widget.dropdownValue.isNotEmpty ? widget.dropdownValue : null,
+              // underline: SizedBox(),
+              isExpanded: true,
+              // hint: Text("hello"),
+              icon: const Icon(Icons.arrow_drop_down),
+              elevation: 16,
+              validator: widget.validator,
+              decoration: InputDecoration(
+                labelText: widget.label,
+                // fillColor: ColorPalette.secondColor,
+                // labelStyle: theme.textTheme.subtitle1,
 
-                  // This is called when the user selects an item.
-                  setState(() {
-                    widget.dropdownValue = value!;
-                  });
-                },
-                // onChanged: widget.onChanged,
-                items: widget.list
-                    .map<DropdownMenuItem<String>>((OptionModal value) {
-                  return DropdownMenuItem(
-                    value: value.value,
-                    child: Text(
-                      value.display.toString(),
-                      // style: TextStyleCustom.normalText,
-                    ),
-                  );
-                }).toList(),
-              )
-            ],
-          ),
-        )
+                focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: theme.primaryColor, width: 2.0),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black, width: 1.0),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                focusedErrorBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                errorBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+              ),
+              // decoration: InputDecoration(
+              //     labelText: widget.label, border: InputBorder.none),
+              // style: const TextStyle(color: ColorPalette.primaryColor),
+              onChanged: (String? value) {
+                widget.onChanged(value);
+
+                // This is called when the user selects an item.
+                setState(() {
+                  widget.dropdownValue = value!;
+                });
+              },
+              // onChanged: widget.onChanged,
+              items: widget.list
+                  .map<DropdownMenuItem<String>>((OptionModal value) {
+                return DropdownMenuItem(
+                  value: value.value,
+                  child: Text(
+                    value.display.toString(),
+                    style: theme.textTheme.subtitle1!
+                        .copyWith(color: Colors.black),
+                  ),
+                );
+              }).toList(),
+            )
+          ],
+        ),
+        SizedBox(
+          height: 14,
+        ),
       ],
     );
   }

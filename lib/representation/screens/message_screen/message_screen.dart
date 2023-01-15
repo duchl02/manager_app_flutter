@@ -77,6 +77,9 @@ class _MessageScreenState extends State<MessageScreen> {
                 },
               ),
             ),
+            SizedBox(
+              height: 20,
+            ),
             Expanded(
               child: StreamBuilder(
                 stream: getAllUsers(),
@@ -92,9 +95,7 @@ class _MessageScreenState extends State<MessageScreen> {
                     // }
                     return ListView(
                       children: _currentData
-                          .map(((e) => listRoom(
-                                userModal: e, theme: theme
-                              )))
+                          .map(((e) => listRoom(userModal: e, theme: theme)))
                           .toList(),
                     );
                   } else {
@@ -136,17 +137,16 @@ class _MessageScreenState extends State<MessageScreen> {
       ),
     );
   }
+
   Widget listRoom({required UserModal userModal, required ThemeData theme}) {
-  return InkWell(
-    onTap: (() {
+    return InkWell(
+      onTap: (() {
         Navigator.of(context)
             .pushNamed(MessageChatScreen.routeName, arguments: userModal);
       }),
-    child: Padding(
-      padding: EdgeInsets.all(6),
       child: Container(
         decoration: BoxDecoration(
-          color: theme.primaryColor.withOpacity(0.2) ,
+          // color: theme.primaryColor.withOpacity(0.2) ,
           borderRadius: BorderRadius.circular(10),
         ),
         // child: Padding(
@@ -175,12 +175,10 @@ class _MessageScreenState extends State<MessageScreen> {
                   ? formatDate(userModal.birthday)
                   : "null"),
               Spacer(),
-             
             ],
           ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

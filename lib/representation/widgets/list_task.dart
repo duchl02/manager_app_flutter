@@ -29,9 +29,9 @@ class ListTask extends StatelessWidget {
             .pushNamed(TaskDetail.routeName, arguments: taskModal);
       }),
       child: Container(
-        margin: EdgeInsets.only(bottom: 10),
+        // margin: EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
-          color: theme.primaryColor.withOpacity(0.2),
+          // color: theme.primaryColor.withOpacity(0.2),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(

@@ -81,7 +81,7 @@ class _SelectRangeDateScreenState extends State<SelectRangeDateScreen> {
                 isCancel: true,
                 title: "Xác nhận",
                 ontap: () {
-                  // print(rangeEndDate);
+                  rangeEndDate ??= rangeStartDate;
                   Navigator.of(context).pop([rangeStartDate, rangeEndDate]);
                 },
               ),

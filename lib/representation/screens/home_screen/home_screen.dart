@@ -3,15 +3,12 @@ import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:path/path.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import 'package:travel_app/core/constants/color_constants.dart';
-import 'package:travel_app/core/constants/text_style.dart';
 import 'package:travel_app/core/extensions/date_time_format.dart';
 import 'package:travel_app/representation/screens/form_login/login_screen.dart';
 import 'package:travel_app/representation/screens/on_leave_screen.dart';
 import 'package:travel_app/representation/screens/task_screen/task_screen.dart';
 import 'package:travel_app/representation/screens/users_screen/user_detail_screen.dart';
+import 'package:travel_app/services/task_services.dart';
 
 import '../../../Data/models/task_model.dart';
 import '../../../Data/models/user_model.dart';
@@ -19,10 +16,8 @@ import '../../../core/constants/dismension_constants.dart';
 import '../../../core/helpers/asset_helper.dart';
 import '../../../core/helpers/image_helper.dart';
 import '../../../core/helpers/local_storage_helper.dart';
-import '../../../services/task_services.dart';
 import '../../../services/user_services.dart';
 import '../../widgets/app_bar_container.dart';
-import '../../widgets/list_task.dart';
 import '../select_date_screen.dart';
 import '../task_screen/task_detail_screen.dart';
 
@@ -248,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Icon(FontAwesomeIcons.list, color: Colors.white), () {
                     Navigator.of(context).pushNamed(TaskDetail.routeName,
                         arguments: taskModalEmty);
-                  }, 'Thêm task', theme),
+                  }, 'Thêm công việc', theme),
                 ),
                 Expanded(
                   child: _buildItemCategory(
@@ -287,30 +282,85 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(top: 16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(children: [
-                        _buildItem6("22", "Hoàn thành", theme),
-                        SizedBox(
-                          height: kDefaultPadding,
+                child: StreamBuilder(
+                  stream: getAllTasks(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
+                    }
+                    if (snapshot.hasData) {
+                      final taskModal = snapshot.data!;
+                      var time = DateTime.now();
+
+                      var userLogin = LocalStorageHelper.getValue('userLogin');
+                      List<TaskModal> listTask = [];
+                      for (var e in taskModal) {
+                        if (e.userId == userLogin["id"] &&
+                            e.createAt!
+                                    .isAfter(DateTime(time.year, time.month)) ==
+                                true) {
+                          listTask.add(e);
+                        }
+                      }
+
+                      List success = [];
+                      List codding = [];
+                      List onHold = [];
+                      List review = [];
+                      for (var e in listTask) {
+                        if (e.status == "Done") {
+                          success.add(e.status);
+                        }
+                        if (e.status == "Coding") {
+                          codding.add(e.status);
+                        }
+                        if (e.status == "HoldOn") {
+                          onHold.add(e.status);
+                        }
+                        if (e.status == "Review") {
+                          review.add(e.status);
+                        }
+                      }
+
+                      return InkWell(
+                        onTap: (() {
+                          Navigator.of(context)
+                              .pushNamed(TaskScreen.routeName, arguments: true);
+                        }),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(children: [
+                                _buildItem6(success.length.toString(),
+                                    "Hoàn thành", theme, Colors.orange),
+                                SizedBox(
+                                  height: kDefaultPadding,
+                                ),
+                                _buildItem4(codding.length.toString(),
+                                    "Đang code", theme, Colors.purple),
+                              ]),
+                            ),
+                            SizedBox(
+                              width: kDefaultPadding,
+                            ),
+                            Expanded(
+                              child: Column(children: [
+                                _buildItem4(onHold.length.toString(),
+                                    "Tạm hoãn", theme, Colors.yellow),
+                                SizedBox(
+                                  height: kDefaultPadding,
+                                ),
+                                _buildItem6(review.length.toString(),
+                                    "Chờ duyệt", theme, Colors.brown),
+                              ]),
+                            ),
+                          ],
                         ),
-                        _buildItem4("22", "Hoàn thành", theme),
-                      ]),
-                    ),
-                    SizedBox(
-                      width: kDefaultPadding,
-                    ),
-                    Expanded(
-                      child: Column(children: [
-                        _buildItem4("22", "Hoàn thành", theme),
-                        SizedBox(
-                          height: kDefaultPadding,
-                        ),
-                        _buildItem6("22", "Hoàn thành", theme),
-                      ]),
-                    ),
-                  ],
+                      );
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
                 ),
               ),
             ),
@@ -349,13 +399,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  _buildItem4(String number, String title, ThemeData theme) {
+  _buildItem4(String number, String title, ThemeData theme, Color color) {
     return Flexible(
         flex: 4,
         child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
-                color: theme.primaryColor.withOpacity(0.2),
+                color: color.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(20)),
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -373,14 +423,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ])));
   }
 
-  _buildItem6(String number, String title, ThemeData theme) {
+  _buildItem6(String number, String title, ThemeData theme, Color color) {
     return Flexible(
         flex: 6,
         child: Container(
             width: double.infinity,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: theme.primaryColor.withOpacity(0.2),
+                color: color.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(20)),
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [

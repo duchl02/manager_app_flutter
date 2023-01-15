@@ -32,6 +32,8 @@ class UserDetail extends StatefulWidget {
 }
 
 class _UserDetailState extends State<UserDetail> {
+  final _formKey = GlobalKey<FormState>();
+
   bool isLoading = false;
   TextEditingController? nameController = TextEditingController();
   TextEditingController? userNameController = TextEditingController();
@@ -163,323 +165,404 @@ class _UserDetailState extends State<UserDetail> {
               child: CircularProgressIndicator(),
             )
           : SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: InkWell(
-                        onTap: () async {
-                          if (await confirm(
-                            context,
-                            title: const Text('Xác nhận'),
-                            content: Text('Xác nhận hành động'),
-                            textCancel: const Text('Xem ảnh'),
-                            textOK: const Text('Tải ảnh lên'),
-                          )) {
-                            chooseImage();
-                          } else {
-                            Navigator.of(context).pushNamed(
-                                PreviewImageScreen.routeName,
-                                arguments: imagePath ??
-                                    "https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg");
-                          }
-                          ;
-                        },
-                        child: Hero(
-                          tag: imagePath ??
-                              "https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
-                          child: Container(
-                            height: 160,
-                            width: 160,
-                            decoration: BoxDecoration(
-                              border: Border.all(width: 3, color: Colors.black),
-                              shape: BoxShape.circle,
-                              image: file == null
-                                  ? imagePath == null
-                                      ? DecorationImage(
-                                          image: AssetImage(AssetHelper.user),
-                                          fit: BoxFit.cover)
-                                      : DecorationImage(
-                                          image: NetworkImage(imagePath!),
-                                          fit: BoxFit.cover)
-                                  : DecorationImage(
-                                      image: FileImage(file!),
-                                      fit: BoxFit.cover),
+              child: Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: InkWell(
+                          onTap: () async {
+                            if (await confirm(
+                              context,
+                              title: const Text('Xác nhận'),
+                              content: Text('Xác nhận hành động'),
+                              textCancel: const Text('Xem ảnh'),
+                              textOK: const Text('Tải ảnh lên'),
+                            )) {
+                              chooseImage();
+                            } else {
+                              Navigator.of(context).pushNamed(
+                                  PreviewImageScreen.routeName,
+                                  arguments: imagePath ??
+                                      "https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg");
+                            }
+                            ;
+                          },
+                          child: Hero(
+                            tag: imagePath ??
+                                "https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+                            child: Container(
+                              height: 160,
+                              width: 160,
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(width: 3, color: Colors.black),
+                                shape: BoxShape.circle,
+                                image: file == null
+                                    ? imagePath == null
+                                        ? DecorationImage(
+                                            image: AssetImage(AssetHelper.user),
+                                            fit: BoxFit.cover)
+                                        : DecorationImage(
+                                            image: NetworkImage(imagePath!),
+                                            fit: BoxFit.cover)
+                                    : DecorationImage(
+                                        image: FileImage(file!),
+                                        fit: BoxFit.cover),
+                              ),
+                              alignment: Alignment.center,
                             ),
-                            alignment: Alignment.center,
                           ),
                         ),
                       ),
-                    ),
-
-                    FormInputField(
-                      label: "Họ và tên",
-                      hintText: "Nhập họ và tên",
-                      controller: nameController,
-                      onChanged: (value) {
-                        setState(() {
-                          nameController!.text = value;
-                        });
-                      },
-                    ),
-
-                    FormInputField(
-                      label: "User name",
-                      controller: userNameController,
-                      hintText: "Nhập user name",
-                      onChanged: (value) {
-                        setState(() {
-                          userNameController!.text = value;
-                        });
-                      },
-                    ),
-                    FormInputField(
-                      label: "Mật khẩu",
-                      controller: passwordController,
-                      hintText: "Nhập mật khẩu",
-                      obscureText: true,
-                      onChanged: (value) {
-                        setState(() {
-                          passwordController!.text = value;
-                        });
-                      },
-                    ),
-                    FormInputField(
-                      label: "Ngày sinh",
-                      controller: birthdayController,
-                      hintText: "Chọn ngày sinh",
-                      onTap: () async {
-                        final dateData = await pickDate();
-                        if (dateData == null) {
-                          return;
-                        }
-                        setState(() {
-                          dateTime = dateData;
-                          birthdayController!.text =
-                              "${dateTime.day} - ${dateTime.month} - ${dateTime.year}";
-                        });
-                      },
-                    ),
-                    FormInputField(
-                      label: "Địa chỉ",
-                      controller: addressController,
-                      hintText: "Nhập địa chỉ",
-                      onChanged: (value) {
-                        setState(() {
-                          addressController!.text = value;
-                        });
-                      },
-                    ),
-                    FormInputField(
-                      label: "Số điện thoại",
-                      controller: phoneNumberController,
-                      hintText: "Nhập số điện thoại",
-                      onChanged: (value) {
-                        setState(() {
-                          phoneNumberController!.text = value;
-                        });
-                      },
-                    ),
-                    FormInputField(
-                      label: "CMND",
-                      controller: idNumberController,
-                      hintText: "Nhập CMND",
-                      onChanged: (value) {
-                        setState(() {
-                          idNumberController!.text = value;
-                        });
-                      },
-                    ),
-
-                    SelectOption(
-                      label: 'Vị trí',
-                      list: _listPositions,
-                      dropdownValue: widget.userModal.position != null
-                          ? widget.userModal.position.toString()
-                          : _listPositions[0].value,
-                      onChanged: (p0) {
-                        positionId = p0 as String;
-                      },
-                    ),
-                    FormInputField(
-                      label: "Email",
-                      controller: emailController,
-                      hintText: "Nhập email",
-                      onChanged: (value) {
-                        setState(() {
-                          emailController!.text = value;
-                        });
-                      },
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Ngày tạo: ",
-                          // style: TextStyle(color: ColorPalette.subTitleColor),
-                        ),
-                        Text(
-                          widget.userModal.createAt != null
-                              ? formatDate(widget.userModal.createAt)
-                              : "Chưa có",
-                          // style: TextStyle(color: ColorPalette.subTitleColor),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Ngày chỉnh sửa: ",
-                          // style: TextStyle(color: ColorPalette.subTitleColor),
-                        ),
-                        Text(
-                          widget.userModal.updateAt != null
-                              ? formatDate(widget.userModal.updateAt)
-                              : "Chưa có",
-                          // style: TextStyle(color: ColorPalette.subTitleColor),
-                        )
-                      ],
-                    ),
-                  
-
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, bottom: 10),
-                      child: Row(
+                      SizedBox(
+                        height: 20,
+                      ),
+                      FormInputField(
+                        label: "Họ và tên",
+                        hintText: "Nhập họ và tên",
+                        controller: nameController,
+                        onChanged: (value) {
+                          setState(() {
+                            nameController!.text = value;
+                          });
+                        },
+                        validator: ((p0) {
+                          if (p0 == null || p0 == "") {
+                            return "Trường này không được để trống";
+                          } else {
+                            return null;
+                          }
+                        }),
+                      ),
+                      FormInputField(
+                        label: "User name",
+                        controller: userNameController,
+                        hintText: "Nhập user name",
+                        onChanged: (value) {
+                          setState(() {
+                            userNameController!.text = value;
+                          });
+                        },
+                        validator: ((p0) {
+                          if (p0 == null || p0 == "") {
+                            return "Trường này không được để trống";
+                          } else {
+                            return null;
+                          }
+                        }),
+                      ),
+                      FormInputField(
+                        label: "Mật khẩu",
+                        controller: passwordController,
+                        hintText: "Nhập mật khẩu",
+                        obscureText: true,
+                        onChanged: (value) {
+                          setState(() {
+                            passwordController!.text = value;
+                          });
+                        },
+                        validator: ((p0) {
+                          if (p0 == null || p0 == "") {
+                            return "Trường này không được để trống";
+                          } else {
+                            return null;
+                          }
+                        }),
+                      ),
+                      FormInputField(
+                        label: "Ngày sinh",
+                        controller: birthdayController,
+                        hintText: "Chọn ngày sinh",
+                        onTap: () async {
+                          final dateData = await pickDate();
+                          if (dateData == null) {
+                            return;
+                          }
+                          setState(() {
+                            dateTime = dateData;
+                            birthdayController!.text =
+                                "${dateTime.day} - ${dateTime.month} - ${dateTime.year}";
+                          });
+                        },
+                        validator: ((p0) {
+                          if (p0 == null || p0 == "") {
+                            return "Trường này không được để trống";
+                          } else {
+                            return null;
+                          }
+                        }),
+                      ),
+                      FormInputField(
+                        label: "Địa chỉ",
+                        controller: addressController,
+                        hintText: "Nhập địa chỉ",
+                        onChanged: (value) {
+                          setState(() {
+                            addressController!.text = value;
+                          });
+                        },
+                        validator: ((p0) {
+                          if (p0 == null || p0 == "") {
+                            return "Trường này không được để trống";
+                          } else {
+                            return null;
+                          }
+                        }),
+                      ),
+                      FormInputField(
+                        label: "Số điện thoại",
+                        controller: phoneNumberController,
+                        hintText: "Nhập số điện thoại",
+                        onChanged: (value) {
+                          setState(() {
+                            phoneNumberController!.text = value;
+                          });
+                        },
+                        validator: ((p0) {
+                          if (p0 == null || p0 == "") {
+                            return "Trường này không được để trống";
+                          } else {
+                            return null;
+                          }
+                        }),
+                      ),
+                      FormInputField(
+                        label: "CMND",
+                        controller: idNumberController,
+                        hintText: "Nhập CMND",
+                        onChanged: (value) {
+                          setState(() {
+                            idNumberController!.text = value;
+                          });
+                        },
+                        validator: ((p0) {
+                          if (p0 == null || p0 == "") {
+                            return "Trường này không được để trống";
+                          } else {
+                            return null;
+                          }
+                        }),
+                      ),
+                      SelectOption(
+                        label: 'Vị trí',
+                        list: _listPositions,
+                        dropdownValue: widget.userModal.position != null
+                            ? widget.userModal.position.toString()
+                            : _listPositions[0].value,
+                        onChanged: (p0) {
+                          positionId = p0 as String;
+                        },
+                        validator: ((p0) {
+                          if (p0 == null || p0 == "") {
+                            return "Trường này không được để trống";
+                          } else {
+                            return null;
+                          }
+                        }),
+                      ),
+                      FormInputField(
+                        label: "Email",
+                        controller: emailController,
+                        hintText: "Nhập email",
+                        onChanged: (value) {
+                          setState(() {
+                            emailController!.text = value;
+                          });
+                        },
+                        validator: ((p0) {
+                          if (p0 == null || p0 == "") {
+                            return "Trường này không được để trống";
+                          } else {
+                            return null;
+                          }
+                        }),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
                         children: [
-                          Flexible(
-                              flex: 1,
-                              child: ButtonWidget(
-                                isCancel: true,
-                                // color:
-                                    // ColorPalette.secondColor.withOpacity(0.2),
-                                title: "Hủy",
-                                ontap: (() {
-                                  Navigator.of(context).pop();
-                                }),
-                              )),
-                          SizedBox(
-                            width: kDefaultPadding,
+                          Text(
+                            "Ngày tạo: ",
+                            // style: TextStyle(color: ColorPalette.subTitleColor),
                           ),
-                          Flexible(
-                              flex: 1,
-                              child: ButtonWidget(
-                                isCancel:false,
-                                title: "Xác nhận",
-                                ontap: () async {
-                                  if (_userLoginPosition == "admin" ||
-                                      _userLoginId == widget.userModal.id ||
-                                      widget.userModal.id == null) {
-                                    if (listProject != [] &&
-                                        listProject.length != 0) {
-                                      listProjectsId = [];
-                                      for (var e in listProject) {
-                                        listProjectsId.add(e.id);
-                                      }
-                                    }
-                                    if (widget.userModal.createAt != null) {
-                                      if (await confirm(
-                                        context,
-                                        title: const Text('Xác nhận'),
-                                        content: Text('Xác nhận sửa nhân viên'),
-                                        textOK: const Text('Xác nhận'),
-                                        textCancel: const Text('Thoát'),
-                                      )) {
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-                                        String? url;
-                                        if (file != null) {
-                                          url = await uploadImage();
-                                        } else {
-                                          url = widget.userModal.imageUser;
-                                        }
-
-                                        await updateUser(
-                                            imageUser: url,
-                                            id: widget.userModal.id.toString(),
-                                            name: nameController!.text,
-                                            userName: userNameController!.text,
-                                            password: passwordController!.text,
-                                            birthday: dateTime,
-                                            idNumber: idNumberController!.text,
-                                            position: positionId,
-                                            // projects: listProjectsId,
-                                            checkIn:
-                                                widget.userModal.checkIn ?? [],
-                                            phoneNumber:
-                                                phoneNumberController!.text,
-                                            email: emailController!.text,
-                                            address: addressController!.text,
-                                            createAt:
-                                                widget.userModal.createAt ??
-                                                    DateTime.now(),
-                                            updateAt: DateTime.now());
-                                        setState(() {
-                                          isLoading = false;
-                                        });
-                                        Navigator.of(context).pop();
-
-                                        await EasyLoading.showSuccess(
-                                            "Sửa thành công");
-                                      }
-                                    } else {
-                                      if (await confirm(
-                                        context,
-                                        title: const Text('Xác nhận'),
-                                        content:
-                                            Text('Xác nhận tạo mới nhân viên'),
-                                        textOK: const Text('Xác nhận'),
-                                        textCancel: const Text('Thoát'),
-                                      )) {
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-                                        String? url;
-
-                                        if (file != null) {
-                                          url = await uploadImage();
-                                        } else {
-                                          url = widget.userModal.imageUser;
-                                        }
-
-                                        await createUser(
-                                            imageUser: url,
-                                            name: nameController!.text,
-                                            userName: userNameController!.text,
-                                            password: passwordController!.text,
-                                            birthday: dateTime,
-                                            idNumber: idNumberController!.text,
-                                            address: addressController!.text,
-                                            phoneNumber:
-                                                phoneNumberController!.text,
-                                            position: positionId,
-                                            email: emailController!.text,
-                                            createAt:
-                                                widget.userModal.createAt ??
-                                                    DateTime.now(),
-                                            updateAt: DateTime.now());
-                                        setState(() {
-                                          isLoading = false;
-                                        });
-                                        Navigator.of(context).pop();
-
-                                        await EasyLoading.showSuccess(
-                                            "Tạo thành công");
-                                      }
-                                    }
-                                  } else {
-                                    notAlowAction(context);
-                                  }
-                                },
-                              )),
+                          Text(
+                            widget.userModal.createAt != null
+                                ? formatDate(widget.userModal.createAt)
+                                : "Chưa có",
+                            // style: TextStyle(color: ColorPalette.subTitleColor),
+                          )
                         ],
                       ),
-                    )
-                  ],
+                      Row(
+                        children: [
+                          Text(
+                            "Ngày chỉnh sửa: ",
+                            // style: TextStyle(color: ColorPalette.subTitleColor),
+                          ),
+                          Text(
+                            widget.userModal.updateAt != null
+                                ? formatDate(widget.userModal.updateAt)
+                                : "Chưa có",
+                            // style: TextStyle(color: ColorPalette.subTitleColor),
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10, bottom: 10),
+                        child: Row(
+                          children: [
+                            Flexible(
+                                flex: 1,
+                                child: ButtonWidget(
+                                  isCancel: true,
+                                  // color:
+                                  // ColorPalette.secondColor.withOpacity(0.2),
+                                  title: "Hủy",
+                                  ontap: (() {
+                                    Navigator.of(context).pop();
+                                  }),
+                                )),
+                            SizedBox(
+                              width: kDefaultPadding,
+                            ),
+                            Flexible(
+                                flex: 1,
+                                child: ButtonWidget(
+                                  isCancel: false,
+                                  title: "Xác nhận",
+                                  ontap: () async {
+                                    final isValidForm =
+                                        _formKey.currentState!.validate();
+                                    if (isValidForm) {
+                                      if (_userLoginPosition == "admin" ||
+                                          _userLoginId == widget.userModal.id ||
+                                          widget.userModal.id == null) {
+                                        if (listProject != [] &&
+                                            listProject.length != 0) {
+                                          listProjectsId = [];
+                                          for (var e in listProject) {
+                                            listProjectsId.add(e.id);
+                                          }
+                                        }
+                                        if (widget.userModal.createAt != null) {
+                                          if (await confirm(
+                                            context,
+                                            title: const Text('Xác nhận'),
+                                            content:
+                                                Text('Xác nhận sửa nhân viên'),
+                                            textOK: const Text('Xác nhận'),
+                                            textCancel: const Text('Thoát'),
+                                          )) {
+                                            setState(() {
+                                              isLoading = true;
+                                            });
+                                            String? url;
+                                            if (file != null) {
+                                              url = await uploadImage();
+                                            } else {
+                                              url = widget.userModal.imageUser;
+                                            }
+
+                                            await updateUser(
+                                                imageUser: url,
+                                                id: widget.userModal.id
+                                                    .toString(),
+                                                name: nameController!.text,
+                                                userName:
+                                                    userNameController!.text,
+                                                password:
+                                                    passwordController!.text,
+                                                birthday: dateTime,
+                                                idNumber:
+                                                    idNumberController!.text,
+                                                position: positionId,
+                                                // projects: listProjectsId,
+                                                checkIn:
+                                                    widget.userModal.checkIn ??
+                                                        [],
+                                                phoneNumber:
+                                                    phoneNumberController!.text,
+                                                email: emailController!.text,
+                                                address:
+                                                    addressController!.text,
+                                                createAt:
+                                                    widget.userModal.createAt ??
+                                                        DateTime.now(),
+                                                updateAt: DateTime.now());
+                                            setState(() {
+                                              isLoading = false;
+                                            });
+                                            Navigator.of(context).pop();
+
+                                            await EasyLoading.showSuccess(
+                                                "Sửa thành công");
+                                          }
+                                        } else {
+                                          if (await confirm(
+                                            context,
+                                            title: const Text('Xác nhận'),
+                                            content: Text(
+                                                'Xác nhận tạo mới nhân viên'),
+                                            textOK: const Text('Xác nhận'),
+                                            textCancel: const Text('Thoát'),
+                                          )) {
+                                            setState(() {
+                                              isLoading = true;
+                                            });
+                                            String? url;
+
+                                            if (file != null) {
+                                              url = await uploadImage();
+                                            } else {
+                                              url = widget.userModal.imageUser;
+                                            }
+
+                                            await createUser(
+                                                imageUser: url,
+                                                name: nameController!.text,
+                                                userName:
+                                                    userNameController!.text,
+                                                password:
+                                                    passwordController!.text,
+                                                birthday: dateTime,
+                                                idNumber:
+                                                    idNumberController!.text,
+                                                address:
+                                                    addressController!.text,
+                                                phoneNumber:
+                                                    phoneNumberController!.text,
+                                                position: positionId,
+                                                email: emailController!.text,
+                                                createAt:
+                                                    widget.userModal.createAt ??
+                                                        DateTime.now(),
+                                                updateAt: DateTime.now());
+                                            setState(() {
+                                              isLoading = false;
+                                            });
+                                            Navigator.of(context).pop();
+
+                                            await EasyLoading.showSuccess(
+                                                "Tạo thành công");
+                                          }
+                                        }
+                                      } else {
+                                        notAlowAction(context);
+                                      }
+                                    }
+                                  },
+                                )),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

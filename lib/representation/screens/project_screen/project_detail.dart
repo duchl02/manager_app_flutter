@@ -32,6 +32,8 @@ class ProjectDetail extends StatefulWidget {
 }
 
 class _ProjectDetailState extends State<ProjectDetail> {
+  final _formKey = GlobalKey<FormState>();
+
   bool isLoading = false;
   TextEditingController? nameController = TextEditingController();
   TextEditingController? shortNameController = TextEditingController();
@@ -123,209 +125,237 @@ class _ProjectDetailState extends State<ProjectDetail> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                   
-                    FormInputField(
-                      label: "Tên dự án",
-                      hintText: "Nhập tên dự án",
-                      controller: nameController,
-                      onChanged: (value) {
-                        setState(() {
-                          nameController!.text = value;
-                        });
-                      },
-                    ),
+          : Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FormInputField(
+                        label: "Tên dự án",
+                        hintText: "Nhập tên dự án",
+                        controller: nameController,
+                        validator: ((p0) {
+                          if (p0 == null || p0 == "") {
+                            return "Trường này không được để trống";
+                          } else {
+                            return null;
+                          }
+                        }),
+                        onChanged: (value) {
+                          setState(() {
+                            nameController!.text = value;
+                          });
+                        },
+                      ),
 
-                    FormInputField(
-                      label: "Tên ngắn gọn",
-                      controller: shortNameController,
-                      hintText: "Nhập tên",
-                      onChanged: (value) {
-                        setState(() {
-                          shortNameController!.text = value;
-                        });
-                      },
-                    ),
-                    // FormInputField(label: "Người thực hiện", hintText: "Nhập tiêu đề"),
+                      FormInputField(
+                        label: "Tên ngắn gọn",
+                        controller: shortNameController,
+                        hintText: "Nhập tên",
+                        validator: ((p0) {
+                          if (p0 == null || p0 == "") {
+                            return "Trường này không được để trống";
+                          } else {
+                            return null;
+                          }
+                        }),
+                        onChanged: (value) {
+                          setState(() {
+                            shortNameController!.text = value;
+                          });
+                        },
+                      ),
+                      // FormInputField(label: "Người thực hiện", hintText: "Nhập tiêu đề"),
 
-                    StreamBuilder(
-                      stream: getAllUsers(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return Text("${snapshot.error}");
-                        }
-                        if (snapshot.hasData) {
-                          final projectModal = snapshot.data!;
-                          // listUsersDefault = projectModal;
-                          listUsersDefault = [];
-                          for (var e in projectModal) {
-                            for (var e2 in listUsersId) {
-                              if (e.id == e2) {
-                                listUsersDefault.add(e);
+                      StreamBuilder(
+                        stream: getAllUsers(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Text("${snapshot.error}");
+                          }
+                          if (snapshot.hasData) {
+                            final projectModal = snapshot.data!;
+                            // listUsersDefault = projectModal;
+                            listUsersDefault = [];
+                            for (var e in projectModal) {
+                              for (var e2 in listUsersId) {
+                                if (e.id == e2) {
+                                  listUsersDefault.add(e);
+                                }
                               }
                             }
+                            return SelectMultiCustom(
+                              title: "Nhân viên",
+                              listValues: projectModal,
+                              defaultListValues: listUsersDefault,
+                              onTap: (value) {
+                                // print("---------------------------------------");
+
+                                // print(listUsers);
+                                listUsers = value;
+                              },
+                            );
+                          } else {
+                            return Center(child: CircularProgressIndicator());
                           }
-                          return SelectMultiCustom(
-                            title: "Nhân viên",
-                            listValues: projectModal,
-                            defaultListValues: listUsersDefault,
-                            onTap: (value) {
-                              // print("---------------------------------------");
-
-                              // print(listUsers);
-                              listUsers = value;
-                            },
-                          );
-                        } else {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      },
-                    ),
-                    FormInputField(
-                      label: "Mô tả",
-                      hintText: "Nhập mô tả",
-                      maxLines: 3,
-                      controller: descriptionController,
-                      onChanged: (value) {
-                        setState(() {
-                          descriptionController!.text = value;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 6,),
-                     Row(
-                      children: [
-                        Text("Ngày tạo: ",
-                          // style: TextStyle(color: ColorPalette.subTitleColor)
-                          ),
-                        Text(widget.projectModal.createAt != null
-                            ? formatDate(widget.projectModal.createAt)
-                            : "Chưa có",
-                          // style: TextStyle(color: ColorPalette.subTitleColor),
-                          )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text("Ngày chỉnh sửa: ",
-                          // style: TextStyle(color: ColorPalette.subTitleColor),
-                          ),
-                        Text(widget.projectModal.updateAt != null
-                            ? formatDate(widget.projectModal.updateAt)
-                            : "Chưa có",
-                          // style: TextStyle(color: ColorPalette.subTitleColor),
-                          )
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, bottom: 10),
-                      child: Row(
+                        },
+                      ),
+                      FormInputField(
+                        label: "Mô tả",
+                        hintText: "Nhập mô tả",
+                        maxLines: 3,
+                        controller: descriptionController,
+                        onChanged: (value) {
+                          setState(() {
+                            descriptionController!.text = value;
+                          });
+                        },
+                      ),
+                      SizedBox(
+                        height: 6,
+                      ),
+                      Row(
                         children: [
-                          Flexible(
-                              flex: 1,
-                              child: ButtonWidget(
-                                isCancel: true,
-                                // color: ColorPalette.secondColor.withOpacity(0.2),
-                                title: "Hủy",
-                                ontap: (() {
-                                  Navigator.of(context).pop();
-                                }),
-                              )),
-                          SizedBox(
-                            width: kDefaultPadding,
+                          Text(
+                            "Ngày tạo: ",
+                            // style: TextStyle(color: ColorPalette.subTitleColor)
                           ),
-                          Flexible(
-                              flex: 1,
-                              child: ButtonWidget(
-                                isCancel: false,
-                                title: "Xác nhận",
-                                ontap: () async {
-                                  if (_userLoginPosition == "admin") {
-                                    if (listUsers != []) {
-                                      listUsersId = [];
-                                      for (var e in listUsers) {
-                                        listUsersId.add(e.id);
-                                      }
-                                    }
-
-                                    if (widget.projectModal.createAt != null) {
-                                      if (await confirm(
-                                        context,
-                                        title: const Text('Xác nhận'),
-                                        content: Text('Xác nhận sửa dự án'),
-                                        textOK: const Text('Xác nhận'),
-                                        textCancel: const Text('Thoát'),
-                                      )) {
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-                                        await updateProject(
-                                            id: widget.projectModal.id
-                                                .toString(),
-                                            name: nameController!.text,
-                                            description:
-                                                descriptionController!.text,
-                                            users: listUsersId,
-                                            shortName:
-                                                shortNameController!.text,
-                                            createAt:
-                                                widget.projectModal.createAt ??
-                                                    DateTime.now(),
-                                            updateAt: DateTime.now());
-                                        setState(() {
-                                          isLoading = false;
-                                        });
-                                        Navigator.of(context).pop();
-
-                                        await EasyLoading.showSuccess(
-                                            "Sửa thành công");
-                                      }
-                                    } else {
-                                      if (await confirm(
-                                        context,
-                                        title: const Text('Xác nhận'),
-                                        content:
-                                            Text('Xác nhận thêm mới dự án'),
-                                        textOK: const Text('Xác nhận'),
-                                        textCancel: const Text('Thoát'),
-                                      )) {
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-                                        await createProject(
-                                            name: nameController!.text,
-                                            description:
-                                                descriptionController!.text,
-                                            users: listUsersId,
-                                            shortName:
-                                                shortNameController!.text,
-                                            createAt:
-                                                widget.projectModal.createAt ??
-                                                    DateTime.now(),
-                                            updateAt: DateTime.now());
-                                        setState(() {
-                                          isLoading = false;
-                                        });
-                                        Navigator.of(context).pop();
-
-                                        await EasyLoading.showSuccess(
-                                            "Tạo thành công");
-                                      }
-                                    }
-                                  } else {
-                                    notAlowAction(context);
-                                  }
-                                },
-                              )),
+                          Text(
+                            widget.projectModal.createAt != null
+                                ? formatDate(widget.projectModal.createAt)
+                                : "Chưa có",
+                            // style: TextStyle(color: ColorPalette.subTitleColor),
+                          )
                         ],
                       ),
-                    )
-                  ],
+                      Row(
+                        children: [
+                          Text(
+                            "Ngày chỉnh sửa: ",
+                            // style: TextStyle(color: ColorPalette.subTitleColor),
+                          ),
+                          Text(
+                            widget.projectModal.updateAt != null
+                                ? formatDate(widget.projectModal.updateAt)
+                                : "Chưa có",
+                            // style: TextStyle(color: ColorPalette.subTitleColor),
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10, bottom: 10),
+                        child: Row(
+                          children: [
+                            Flexible(
+                                flex: 1,
+                                child: ButtonWidget(
+                                  isCancel: true,
+                                  // color: ColorPalette.secondColor.withOpacity(0.2),
+                                  title: "Hủy",
+                                  ontap: (() {
+                                    Navigator.of(context).pop();
+                                  }),
+                                )),
+                            SizedBox(
+                              width: kDefaultPadding,
+                            ),
+                            Flexible(
+                                flex: 1,
+                                child: ButtonWidget(
+                                  isCancel: false,
+                                  title: "Xác nhận",
+                                  ontap: () async {
+                                    final isValidForm =
+                                        _formKey.currentState!.validate();
+                                    if (isValidForm) {
+                                      if (_userLoginPosition == "admin") {
+                                        if (listUsers != []) {
+                                          listUsersId = [];
+                                          for (var e in listUsers) {
+                                            listUsersId.add(e.id);
+                                          }
+                                        }
+
+                                        if (widget.projectModal.createAt !=
+                                            null) {
+                                          if (await confirm(
+                                            context,
+                                            title: const Text('Xác nhận'),
+                                            content: Text('Xác nhận sửa dự án'),
+                                            textOK: const Text('Xác nhận'),
+                                            textCancel: const Text('Thoát'),
+                                          )) {
+                                            setState(() {
+                                              isLoading = true;
+                                            });
+                                            await updateProject(
+                                                id: widget.projectModal.id
+                                                    .toString(),
+                                                name: nameController!.text,
+                                                description:
+                                                    descriptionController!.text,
+                                                users: listUsersId,
+                                                shortName:
+                                                    shortNameController!.text,
+                                                createAt: widget.projectModal
+                                                        .createAt ??
+                                                    DateTime.now(),
+                                                updateAt: DateTime.now());
+                                            setState(() {
+                                              isLoading = false;
+                                            });
+                                            Navigator.of(context).pop();
+
+                                            await EasyLoading.showSuccess(
+                                                "Sửa thành công");
+                                          }
+                                        } else {
+                                          if (await confirm(
+                                            context,
+                                            title: const Text('Xác nhận'),
+                                            content:
+                                                Text('Xác nhận thêm mới dự án'),
+                                            textOK: const Text('Xác nhận'),
+                                            textCancel: const Text('Thoát'),
+                                          )) {
+                                            setState(() {
+                                              isLoading = true;
+                                            });
+                                            await createProject(
+                                                name: nameController!.text,
+                                                description:
+                                                    descriptionController!.text,
+                                                users: listUsersId,
+                                                shortName:
+                                                    shortNameController!.text,
+                                                createAt: widget.projectModal
+                                                        .createAt ??
+                                                    DateTime.now(),
+                                                updateAt: DateTime.now());
+                                            setState(() {
+                                              isLoading = false;
+                                            });
+                                            Navigator.of(context).pop();
+
+                                            await EasyLoading.showSuccess(
+                                                "Tạo thành công");
+                                          }
+                                        }
+                                      } else {
+                                        notAlowAction(context);
+                                      }
+                                    }
+                                  },
+                                )),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

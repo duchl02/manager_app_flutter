@@ -31,6 +31,8 @@ class TaskDetail extends StatefulWidget {
 }
 
 class _TaskDetailState extends State<TaskDetail> {
+  final _formKey = GlobalKey<FormState>();
+
   bool isLoading = false;
   TextEditingController? nameController = TextEditingController();
   TextEditingController? timeSuccessController = TextEditingController();
@@ -89,8 +91,8 @@ class _TaskDetailState extends State<TaskDetail> {
       appBar: AppBar(
         // backgroundColor: ColorPalette.primaryColor,
         title: Text(widget.taskModal.createAt != null
-            ? "Chỉnh sửa task"
-            : "Thêm mới task"),
+            ? "Chỉnh sửa công việc"
+            : "Thêm mới công việc"),
         actions: [
           widget.taskModal.createAt != null
               ? InkWell(
@@ -107,7 +109,7 @@ class _TaskDetailState extends State<TaskDetail> {
                       if (await confirm(
                         context,
                         title: const Text('Xác nhận'),
-                        content: Text('Xác nhận xóa task'),
+                        content: Text('Xác nhận xóa công việc'),
                         textOK: const Text('Xác nhận'),
                         textCancel: const Text('Thoát'),
                       )) {
@@ -133,295 +135,347 @@ class _TaskDetailState extends State<TaskDetail> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FormInputField(
-                      label: "Tiêu đề",
-                      hintText: "Nhập tiêu đề",
-                      controller: nameController,
-                      onChanged: (value) {
-                        setState(() {
-                          nameController!.text = value;
-                        });
-                      },
-                    ),
-                    StreamBuilder(
-                      stream: getAllUsers(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return Text("${snapshot.error}");
-                        }
-                        if (snapshot.hasData) {
-                          final userModal = snapshot.data!;
-                          List<OptionModal> _listSatff = [];
-                          var userLogin =
-                              LocalStorageHelper.getValue('userLogin');
-                          List<UserModal> user = [];
-                          for (var e in userModal) {
-                            if (e.id == userLogin["id"]) {
-                              user.add(e);
-                            }
-                          }
-                          if (userLogin["id"] != widget.taskModal.userId &&
-                                  widget.taskModal.userId != null ||
-                              userLogin["position"] == "admin") {
-                            for (var e in userModal) {
-                              _listSatff.add(
-                                  OptionModal(value: e.id!, display: e.name!));
-                            }
+          : Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FormInputField(
+                        label: "Tiêu đề",
+                        hintText: "Nhập tiêu đề",
+                        controller: nameController,
+                        validator: ((p0) {
+                          if (p0 == null || p0 == "") {
+                            return "Trường này không được để trống";
                           } else {
-                            for (var e in user) {
-                              _listSatff.add(
-                                  OptionModal(value: e.id!, display: e.name!));
-                            }
+                            return null;
                           }
-
-                          // UserModal userDefaults =
-                          //     findUserById(userId, userModal);
-                          return SelectOption(
-                            label: "Người thực hiện",
-                            list: _listSatff,
-                            dropdownValue: widget.taskModal.userId != null
-                                ? widget.taskModal.userId.toString()
-                                : "",
-                            onChanged: (p0) {
-                              userId = p0 as String;
-                            },
-                          );
-                        } else {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      },
-                    ),
-                    StreamBuilder(
-                      stream: getAllProjects(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return Text("${snapshot.error}");
-                        }
-                        if (snapshot.hasData) {
-                          final projectModal = snapshot.data!;
-                          List<OptionModal> _listProject = [];
-                          var userLogin =
-                              LocalStorageHelper.getValue('userLogin');
-                          List<ProjectModal> listTasks = [];
-                          for (var e in projectModal) {
-                            for (var e2 in e.users!) {
-                              if (e2 == userLogin["id"]) {
-                                listTasks.add(e);
+                        }),
+                        onChanged: (value) {
+                          setState(() {
+                            nameController!.text = value;
+                          });
+                        },
+                      ),
+                      StreamBuilder(
+                        stream: getAllUsers(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Text("${snapshot.error}");
+                          }
+                          if (snapshot.hasData) {
+                            final userModal = snapshot.data!;
+                            List<OptionModal> _listSatff = [];
+                            var userLogin =
+                                LocalStorageHelper.getValue('userLogin');
+                            List<UserModal> user = [];
+                            for (var e in userModal) {
+                              if (e.id == userLogin["id"]) {
+                                user.add(e);
                               }
                             }
-                          }
-                          if (userLogin["position"] == "admin") {
-                            for (var e in projectModal) {
-                              _listProject.add(
-                                  OptionModal(value: e.id!, display: e.name!));
+                            if (userLogin["id"] != widget.taskModal.userId &&
+                                    widget.taskModal.userId != null ||
+                                userLogin["position"] == "admin") {
+                              for (var e in userModal) {
+                                _listSatff.add(OptionModal(
+                                    value: e.id!, display: e.name!));
+                              }
+                            } else {
+                              for (var e in user) {
+                                _listSatff.add(OptionModal(
+                                    value: e.id!, display: e.name!));
+                              }
                             }
+
+                            // UserModal userDefaults =
+                            //     findUserById(userId, userModal);
+                            return SelectOption(
+                              validator: ((p0) {
+                                if (p0 == null || p0 == "") {
+                                  return "Trường này không được để trống";
+                                } else {
+                                  return null;
+                                }
+                              }),
+                              label: "Người thực hiện",
+                              list: _listSatff,
+                              dropdownValue: widget.taskModal.userId != null
+                                  ? widget.taskModal.userId.toString()
+                                  : "",
+                              onChanged: (p0) {
+                                userId = p0 as String;
+                              },
+                            );
                           } else {
-                            for (var e in listTasks) {
-                              _listProject.add(
-                                  OptionModal(value: e.id!, display: e.name!));
-                            }
+                            return Center(child: CircularProgressIndicator());
                           }
+                        },
+                      ),
+                      StreamBuilder(
+                        stream: getAllProjects(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Text("${snapshot.error}");
+                          }
+                          if (snapshot.hasData) {
+                            final projectModal = snapshot.data!;
+                            List<OptionModal> _listProject = [];
+                            var userLogin =
+                                LocalStorageHelper.getValue('userLogin');
+                            List<ProjectModal> listTasks = [];
+                            for (var e in projectModal) {
+                              for (var e2 in e.users!) {
+                                if (e2 == userLogin["id"]) {
+                                  listTasks.add(e);
+                                }
+                              }
+                            }
+                            if (userLogin["position"] == "admin") {
+                              for (var e in projectModal) {
+                                _listProject.add(OptionModal(
+                                    value: e.id!, display: e.name!));
+                              }
+                            } else {
+                              for (var e in listTasks) {
+                                _listProject.add(OptionModal(
+                                    value: e.id!, display: e.name!));
+                              }
+                            }
 
-                          return SelectOption(
-                            label: "Dự án",
-                            list: _listProject,
-                            dropdownValue: widget.taskModal.projectId != null
-                                ? widget.taskModal.projectId.toString()
-                                : "",
-                            onChanged: (p0) {
-                              projectId = p0 as String;
-                            },
-                          );
-                        } else {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      },
-                    ),
-                    SelectOption(
-                      label: "Độ ưu tiên",
-                      list: _listPriority,
-                      dropdownValue: widget.taskModal.priority != null
-                          ? widget.taskModal.priority.toString()
-                          : "",
-                      onChanged: (p0) {
-                        priorityId = p0 as String;
-                      },
-                    ),
-                    SelectOption(
-                      label: "Trạng thái",
-                      list: _listStatus,
-                      dropdownValue: widget.taskModal.status != null
-                          ? widget.taskModal.status.toString()
-                          : "",
-                      onChanged: (p0) {
-                        statusId = p0 as String;
-                      },
-                    ),
-                    FormInputField(
-                      label: "Thời gian hoàn thành",
-                      controller: timeSuccessController,
-                      hintText: "Nhập số giờ",
-                      onChanged: (value) {
-                        setState(() {
-                          timeSuccessController!.text = value;
-                        });
-                        
-                      },
-                      inputType: TextInputType.number,
-
-                    ),
-                    FormInputField(
-                      label: "Mô tả",
-                      hintText: "Nhập mô tả",
-                      maxLines: 3,
-                      controller: descriptionController,
-                      onChanged: (value) {
-                        setState(() {
-                          descriptionController!.text = value;
-                        });
-                      },
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Ngày tạo: ",
-                          // style: TextStyle(color: ColorPalette.subTitleColor),
-                        ),
-                        Text(
-                          widget.taskModal.createAt != null
-                              ? formatDate(widget.taskModal.createAt)
-                              : "Chưa có",
-                          // style: TextStyle(color: ColorPalette.subTitleColor),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Ngày chỉnh sửa: ",
-                          // style: TextStyle(color: ColorPalette.subTitleColor),
-                        ),
-                        Text(
-                          widget.taskModal.updateAt != null
-                              ? formatDate(widget.taskModal.updateAt)
-                              : "Chưa có",
-                          // style: TextStyle(color: ColorPalette.subTitleColor),
-                        )
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, bottom: 10),
-                      child: Row(
+                            return SelectOption(
+                              label: "Dự án",
+                              validator: ((p0) {
+                                if (p0 == null || p0 == "") {
+                                  return "Trường này không được để trống";
+                                } else {
+                                  return null;
+                                }
+                              }),
+                              list: _listProject,
+                              dropdownValue: widget.taskModal.projectId != null
+                                  ? widget.taskModal.projectId.toString()
+                                  : "",
+                              onChanged: (p0) {
+                                projectId = p0 as String;
+                              },
+                            );
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        },
+                      ),
+                      SelectOption(
+                        label: "Độ ưu tiên",
+                        validator: ((p0) {
+                          if (p0 == null || p0 == "") {
+                            return "Trường này không được để trống";
+                          } else {
+                            return null;
+                          }
+                        }),
+                        list: _listPriority,
+                        dropdownValue: widget.taskModal.priority != null
+                            ? widget.taskModal.priority.toString()
+                            : "",
+                        onChanged: (p0) {
+                          priorityId = p0 as String;
+                        },
+                      ),
+                      SelectOption(
+                        label: "Trạng thái",
+                        validator: ((p0) {
+                          if (p0 == null || p0 == "") {
+                            return "Trường này không được để trống";
+                          } else {
+                            return null;
+                          }
+                        }),
+                        list: _listStatus,
+                        dropdownValue: widget.taskModal.status != null
+                            ? widget.taskModal.status.toString()
+                            : "",
+                        onChanged: (p0) {
+                          statusId = p0 as String;
+                        },
+                      ),
+                      FormInputField(
+                        validator: ((p0) {
+                          if (p0 == null || p0 == "") {
+                            return "Trường này không được để trống";
+                          } else {
+                            return null;
+                          }
+                        }),
+                        label: "Thời gian hoàn thành",
+                        controller: timeSuccessController,
+                        hintText: "Nhập số giờ",
+                        onChanged: (value) {
+                          setState(() {
+                            timeSuccessController!.text = value;
+                          });
+                        },
+                        inputType: TextInputType.number,
+                      ),
+                      FormInputField(
+                        label: "Mô tả",
+                        hintText: "Nhập mô tả",
+                        maxLines: 3,
+                        controller: descriptionController,
+                        onChanged: (value) {
+                          setState(() {
+                            descriptionController!.text = value;
+                          });
+                        },
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
                         children: [
-                          Flexible(
-                              flex: 1,
-                              child: ButtonWidget(
-                                isCancel: true,
-                                // color:
-                                    // ColorPalette.secondColor.withOpacity(0.2),
-                                title: "Hủy",
-                                ontap: (() {
-                                  Navigator.of(context).pop();
-                                }),
-                              )),
-                          SizedBox(
-                            width: kDefaultPadding,
+                          Text(
+                            "Ngày tạo: ",
+                            // style: TextStyle(color: ColorPalette.subTitleColor),
                           ),
-                          Flexible(
-                              flex: 1,
-                              child: ButtonWidget(
-                                isCancel: false,
-                                title: "Xác nhận",
-                                ontap: () async {
-                                  if (_userLoginPosition == "admin" ||
-                                      _userLoginId == widget.taskModal.userId ||
-                                      widget.taskModal.userId == null) {
-                                    if (widget.taskModal.createAt != null) {
-                                      if (await confirm(
-                                        context,
-                                        title: const Text('Xác nhận'),
-                                        content: Text('Xác nhận sửa task'),
-                                        textOK: const Text('Xác nhận'),
-                                        textCancel: const Text('Thoát'),
-                                      )) {
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-                                        await updateTask(
-                                            id: widget.taskModal.id.toString(),
-                                            name: nameController!.text,
-                                            description:
-                                                descriptionController!.text,
-                                            priority: priorityId,
-                                            projectId: projectId,
-                                            userId: userId,
-                                            status: statusId,
-                                            timeSuccess:
-                                                timeSuccessController!.text,
-                                            createAt:
-                                                widget.taskModal.createAt ??
-                                                    DateTime.now(),
-                                            updateAt: DateTime.now());
-                                        setState(() {
-                                          isLoading = false;
-                                        });
-                                        Navigator.of(context).pop();
-
-                                        await EasyLoading.showSuccess(
-                                            "Sửa thành công");
-                                      }
-                                    } else {
-                                      if (await confirm(
-                                        context,
-                                        title: const Text('Xác nhận'),
-                                        content: Text('Xác nhận tạo task'),
-                                        textOK: const Text('Xác nhận'),
-                                        textCancel: const Text('Thoát'),
-                                      )) {
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-                                        await createTask(
-                                            name: nameController!.text,
-                                            description:
-                                                descriptionController!.text,
-                                            priority: priorityId,
-                                            projectId: projectId,
-                                            userId: userId,
-                                            status: statusId,
-                                            timeSuccess:
-                                                timeSuccessController!.text,
-                                            createAt:
-                                                widget.taskModal.createAt ??
-                                                    DateTime.now(),
-                                            updateAt: DateTime.now());
-                                        setState(() {
-                                          isLoading = false;
-                                        });
-                                        Navigator.of(context).pop();
-
-                                        await EasyLoading.showSuccess(
-                                            "Tạo thành công");
-                                      }
-                                    }
-                                  } else {
-                                    notAlowAction(context);
-                                  }
-                                },
-                              )),
+                          Text(
+                            widget.taskModal.createAt != null
+                                ? formatDate(widget.taskModal.createAt)
+                                : "Chưa có",
+                            // style: TextStyle(color: ColorPalette.subTitleColor),
+                          )
                         ],
                       ),
-                    )
-                  ],
+                      Row(
+                        children: [
+                          Text(
+                            "Ngày chỉnh sửa: ",
+                            // style: TextStyle(color: ColorPalette.subTitleColor),
+                          ),
+                          Text(
+                            widget.taskModal.updateAt != null
+                                ? formatDate(widget.taskModal.updateAt)
+                                : "Chưa có",
+                            // style: TextStyle(color: ColorPalette.subTitleColor),
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10, bottom: 10),
+                        child: Row(
+                          children: [
+                            Flexible(
+                                flex: 1,
+                                child: ButtonWidget(
+                                  isCancel: true,
+                                  // color:
+                                  // ColorPalette.secondColor.withOpacity(0.2),
+                                  title: "Hủy",
+                                  ontap: (() {
+                                    Navigator.of(context).pop();
+                                  }),
+                                )),
+                            SizedBox(
+                              width: kDefaultPadding,
+                            ),
+                            Flexible(
+                                flex: 1,
+                                child: ButtonWidget(
+                                  isCancel: false,
+                                  title: "Xác nhận",
+                                  ontap: () async {
+                                    final isValidForm =
+                                        _formKey.currentState!.validate();
+                                    if (isValidForm) {
+                                      if (_userLoginPosition == "admin" ||
+                                          _userLoginId ==
+                                              widget.taskModal.userId ||
+                                          widget.taskModal.userId == null) {
+                                        if (widget.taskModal.createAt != null) {
+                                          if (await confirm(
+                                            context,
+                                            title: const Text('Xác nhận'),
+                                            content:
+                                                Text('Xác nhận sửa công việc'),
+                                            textOK: const Text('Xác nhận'),
+                                            textCancel: const Text('Thoát'),
+                                          )) {
+                                            setState(() {
+                                              isLoading = true;
+                                            });
+                                            await updateTask(
+                                                id: widget.taskModal.id
+                                                    .toString(),
+                                                name: nameController!.text,
+                                                description:
+                                                    descriptionController!.text,
+                                                priority: priorityId,
+                                                projectId: projectId,
+                                                userId: userId,
+                                                status: statusId,
+                                                timeSuccess:
+                                                    timeSuccessController!.text,
+                                                createAt:
+                                                    widget.taskModal.createAt ??
+                                                        DateTime.now(),
+                                                updateAt: DateTime.now());
+                                            setState(() {
+                                              isLoading = false;
+                                            });
+                                            Navigator.of(context).pop();
+
+                                            await EasyLoading.showSuccess(
+                                                "Sửa thành công");
+                                          }
+                                        } else {
+                                          if (await confirm(
+                                            context,
+                                            title: const Text('Xác nhận'),
+                                            content:
+                                                Text('Xác nhận tạo công việc'),
+                                            textOK: const Text('Xác nhận'),
+                                            textCancel: const Text('Thoát'),
+                                          )) {
+                                            setState(() {
+                                              isLoading = true;
+                                            });
+                                            await createTask(
+                                                name: nameController!.text,
+                                                description:
+                                                    descriptionController!.text,
+                                                priority: priorityId,
+                                                projectId: projectId,
+                                                userId: userId,
+                                                status: statusId,
+                                                timeSuccess:
+                                                    timeSuccessController!.text,
+                                                createAt:
+                                                    widget.taskModal.createAt ??
+                                                        DateTime.now(),
+                                                updateAt: DateTime.now());
+                                            setState(() {
+                                              isLoading = false;
+                                            });
+                                            Navigator.of(context).pop();
+
+                                            await EasyLoading.showSuccess(
+                                                "Tạo thành công");
+                                          }
+                                        }
+                                      } else {
+                                        notAlowAction(context);
+                                      }
+                                    }
+                                  },
+                                )),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -438,6 +492,6 @@ List<OptionModal> _listPriority = [
 List<OptionModal> _listStatus = [
   OptionModal(value: "Coding", display: "Đang code"),
   OptionModal(value: "HoldOn", display: "Tạm hoãn"),
-  OptionModal(value: "In progress", display: "Chờ duyệt "),
+  OptionModal(value: "Review", display: "Chờ duyệt"),
   OptionModal(value: "Done", display: "Hoàn thành"),
 ];

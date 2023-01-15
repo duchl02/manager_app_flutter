@@ -8,7 +8,6 @@ import 'package:travel_app/representation/widgets/form_field.dart';
 import 'package:travel_app/representation/widgets/select_option.dart';
 import 'package:validated/validated.dart' as validate;
 import '../../Data/models/option_modal.dart';
-import '../../core/constants/color_constants.dart';
 import '../../core/helpers/local_storage_helper.dart';
 import '../../services/user_services.dart';
 import 'package:travel_app/core/extensions/date_ext.dart';
@@ -69,7 +68,7 @@ class _OnLeaveScreenState extends State<OnLeaveScreen> {
                         FormInputField(
                             controller: textEditingController,
                             validator: ((p0) {
-                              if (p0 != null && p0.length < 1) {
+                              if (p0 == null || p0 == "") {
                                 return "Trường này không được để trống";
                               } else {
                                 return null;
@@ -80,6 +79,13 @@ class _OnLeaveScreenState extends State<OnLeaveScreen> {
                         SelectOption(
                             label: "Loại lý do",
                             list: _list,
+                            validator: ((p0) {
+                              if (p0 == null || p0 == "") {
+                                return "Trường này không được để trống";
+                              } else {
+                                return null;
+                              }
+                            }),
                             dropdownValue: reasonOnLeave ?? "",
                             onChanged: ((p0) {
                               reasonOnLeave = p0 as String;
@@ -99,6 +105,13 @@ class _OnLeaveScreenState extends State<OnLeaveScreen> {
                                     value: e.id!, display: e.name!));
                               }
                               return SelectOption(
+                                validator: ((p0) {
+                                  if (p0 == null || p0 == "") {
+                                    return "Trường này không được để trống";
+                                  } else {
+                                    return null;
+                                  }
+                                }),
                                 label: "Người duyệt (Quản lý của bạn)",
                                 list: _listSatff,
                                 dropdownValue: userId ?? "",
@@ -112,6 +125,13 @@ class _OnLeaveScreenState extends State<OnLeaveScreen> {
                           },
                         ),
                         FormInputField(
+                            validator: ((p0) {
+                              if (p0 != null && p0.length < 1) {
+                                return "Trường này không được để trống";
+                              } else {
+                                return null;
+                              }
+                            }),
                             controller: dateRangeEditingController,
                             label: "Thời gian",
                             hintText: "Chọn thời gian nghỉ phép",
@@ -152,8 +172,9 @@ class _OnLeaveScreenState extends State<OnLeaveScreen> {
                                       final isValidForm =
                                           _formKey.currentState!.validate();
                                       if (isValidForm) {
-                                        // submitBtn(
-                                        //     _toEmail, _emailToCc, htmlContent);
+                                        print("------------------------");
+                                        submitBtn(
+                                            _toEmail, _emailToCc, htmlContent);
                                       }
                                     },
                                   )),
