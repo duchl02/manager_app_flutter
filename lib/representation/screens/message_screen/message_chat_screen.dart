@@ -52,14 +52,10 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
 
     userLogin = LocalStorageHelper.getValue('userLogin');
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        
-      });
+      setState(() {});
     });
     getToken();
     super.initState();
-    sendPushMessage("xinh cao day asessage", "hell",
-        'coxtiWkCSbetyd0u6tjKT1:APA91bFcLgkDeM2YvA8xv5QJoZVKusPTvrqImlWYP1wk-e5KO3snYJVM8nOx35BxOMqvrGrftoC39koDhS88Iah-5H8HKzzAEuSPzZo0B9sTWUfdbnLeKVX0IahxbN2L-zr_UtHptcyn');
   }
 
   Future sendMessage(String text, _userSend, _userLogin) async {
@@ -111,7 +107,7 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
               'title': title,
               'android_channel_id': "dbfood"
             },
-            "to": token,
+            "to":widget.userModal.token,
           },
         ),
       );
@@ -244,7 +240,8 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
           decoration: InputDecoration(
             hintText: 'Tin nhắn',
             suffixIcon: InkWell(
-              onTap: () {
+              onTap: () async {
+                sendPushMessage(textEditingController.text, widget.userModal.name!, mtoken!);
                 if (_listMessage1.isEmpty && _listMessage2.isEmpty) {
                   print("1");
                   sendMessage(textEditingController.text, userLogin["id"],

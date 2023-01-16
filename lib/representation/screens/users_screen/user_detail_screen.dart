@@ -167,7 +167,6 @@ class _UserDetailState extends State<UserDetail> {
           : SingleChildScrollView(
               child: Form(
                 key: _formKey,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: Padding(
                   padding: EdgeInsets.all(16),
                   child: Column(

@@ -106,19 +106,14 @@ class _UserScreenState extends State<UserScreen> {
               });
             },
           ),
-          Row(children: [
-            Expanded(
-              flex: 3,
-              child: SelectOption(
-                searchOption: 0,
-                list: _list,
-                dropdownValue: category,
-                onChanged: ((p0) {
-                  category = p0.toString();
-                }),
-              ),
-            ),
-          ]),
+          SelectOption(
+            searchOption: 0,
+            list: _list,
+            dropdownValue: category,
+            onChanged: ((p0) {
+              category = p0.toString();
+            }),
+          ),
           SizedBox(
             height: 10,
           ),

@@ -65,7 +65,7 @@ class _SelectRangeDateScreenState extends State<SelectRangeDateScreen> {
             Flexible(
               flex: 1,
               child: ButtonWidget(
-                isCancel: false,
+                isCancel: true,
                 title: "Hủy",
                 ontap: () {
                   Navigator.of(context).pop([]);
@@ -78,7 +78,7 @@ class _SelectRangeDateScreenState extends State<SelectRangeDateScreen> {
             Flexible(
               flex: 1,
               child: ButtonWidget(
-                isCancel: true,
+                isCancel: false,
                 title: "Xác nhận",
                 ontap: () {
                   rangeEndDate ??= rangeStartDate;

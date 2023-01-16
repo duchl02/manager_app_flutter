@@ -127,7 +127,6 @@ class _ProjectDetailState extends State<ProjectDetail> {
             )
           : Form(
               key: _formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
               child: SingleChildScrollView(
                 child: Padding(
                   padding: EdgeInsets.all(16),

@@ -62,7 +62,6 @@ class _OnLeaveScreenState extends State<OnLeaveScreen> {
                   padding: EdgeInsets.all(16),
                   child: Form(
                     key: _formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: Column(
                       children: [
                         FormInputField(
@@ -172,7 +171,6 @@ class _OnLeaveScreenState extends State<OnLeaveScreen> {
                                       final isValidForm =
                                           _formKey.currentState!.validate();
                                       if (isValidForm) {
-                                        print("------------------------");
                                         submitBtn(
                                             _toEmail, _emailToCc, htmlContent);
                                       }

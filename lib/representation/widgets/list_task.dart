@@ -22,6 +22,19 @@ class ListTask extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    String getStatus() {
+      if (taskModal.status == "Coding") {
+        return "Đang code";
+      } else if (taskModal.status == "HoldOn") {
+        return 'Tạm hoãn';
+      } else if (taskModal.status == "Review") {
+        return 'Chờ duyệt';
+      } else if (taskModal.status == "Done") {
+        return 'Hoàn thành';
+      } else {
+        return "null";
+      }
+    }
 
     return InkWell(
       onTap: (() {
@@ -29,9 +42,7 @@ class ListTask extends StatelessWidget {
             .pushNamed(TaskDetail.routeName, arguments: taskModal);
       }),
       child: Container(
-        // margin: EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
-          // color: theme.primaryColor.withOpacity(0.2),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
@@ -48,7 +59,6 @@ class ListTask extends StatelessWidget {
                 return ListTile(
                   title: Text(
                     taskModal.name ?? "null",
-                    // style: TextStyle(color: ColorPalette.text1Color),
                   ),
                   leading: Container(
                     width: 40,
@@ -69,14 +79,10 @@ class ListTask extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        // Text("Trạng thái : ", style: TextStyleCustom.smallText),
                         Text(
-                          taskModal.status!,
+                          getStatus(),
                         ),
                         Spacer(),
-                        // // Text("Hoàn thành: "),
-                        // // Text("25/12/2022 "),
-                        // Text("Ngày tạo: ", style: TextStyleCustom.smallText),
                         Text(
                           taskModal.createAt != null
                               ? formatDate(taskModal.createAt)
@@ -86,95 +92,12 @@ class ListTask extends StatelessWidget {
                     )
                   ]),
                 );
-                // return Row(
-                //   children: [
-                //     Text("Người tạo: "),
-                //     Text(_user.name ?? "null"),
-                //     Spacer(),
-                //     _user.imageUser != null
-                //         ? Container(
-                //             width: 24,
-                //             height: 24,
-                //             decoration: BoxDecoration(
-                //                 borderRadius: BorderRadius.circular(50),
-                //                 image: DecorationImage(
-                //                     image: NetworkImage(_user.imageUser!),
-                //                     fit: BoxFit.cover)),
-                //           )
-                //         : SizedBox()
-                //   ],
-                // );
               } else {
                 return Center(child: CircularProgressIndicator());
               }
             },
           ),
         ),
-        // child: Padding(
-        //   padding: EdgeInsets.all(10),
-        //   child:
-        //       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        //     Row(
-        //       children: [
-        //         Text(taskModal.name!, style: TextStyleCustom.nomalTextPrimary),
-        //         Spacer(),
-        //       ],
-        //     ),
-        //     SizedBox(
-        //       height: 6,
-        //     ),
-        //     StreamBuilder(
-        //       stream: getAllUsers(),
-        //       builder: (context, snapshot) {
-        //         if (snapshot.hasError) {
-        //           return Text("${snapshot.error}");
-        //         }
-        //         if (snapshot.hasData) {
-        //           final _userModals = snapshot.data!;
-        //           UserModal _user = findUserById(taskModal.userId, _userModals);
-        //           return Row(
-        //             children: [
-        //               Text("Người tạo: "),
-        //               Text(_user.name ?? "null"),
-        //               Spacer(),
-        //               _user.imageUser != null
-        //                   ? Container(
-        //                     width: 24,
-        //                     height: 24,
-        //                       decoration: BoxDecoration(
-        //                           borderRadius: BorderRadius.circular(50),
-        //                           image: DecorationImage(
-        //                               image: NetworkImage(_user.imageUser!),
-        //                               fit: BoxFit.cover)),
-        //                     )
-        //                   : SizedBox()
-        //             ],
-        //           );
-        //         } else {
-        //           return Center(child: CircularProgressIndicator());
-        //         }
-        //       },
-        //     ),
-        //     SizedBox(
-        //       height: 6,
-        //     ),
-        //     Row(
-        //       children: [
-        //         Text("Trạng thái : ", style: TextStyleCustom.smallText),
-        //         Text(taskModal.status!, style: TextStyleCustom.smallText),
-        //         Spacer(),
-        //         // Text("Hoàn thành: "),
-        //         // Text("25/12/2022 "),
-        //         Text("Ngày tạo: ", style: TextStyleCustom.smallText),
-        //         Text(
-        //             taskModal.createAt != null
-        //                 ? formatDate(taskModal.createAt)
-        //                 : "null",
-        //             style: TextStyleCustom.smallText),
-        //       ],
-        //     )
-        //   ]),
-        // ),
       ),
     );
   }

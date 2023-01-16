@@ -137,7 +137,6 @@ class _TaskDetailState extends State<TaskDetail> {
             )
           : Form(
               key: _formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
               child: SingleChildScrollView(
                 child: Padding(
                   padding: EdgeInsets.all(20),

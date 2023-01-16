@@ -39,17 +39,12 @@ class _SelectOptionState extends State<SelectOption> {
             DropdownButtonFormField<String>(
               value:
                   widget.dropdownValue.isNotEmpty ? widget.dropdownValue : null,
-              // underline: SizedBox(),
               isExpanded: true,
-              // hint: Text("hello"),
               icon: const Icon(Icons.arrow_drop_down),
               elevation: 16,
               validator: widget.validator,
               decoration: InputDecoration(
                 labelText: widget.label,
-                // fillColor: ColorPalette.secondColor,
-                // labelStyle: theme.textTheme.subtitle1,
-
                 focusedBorder: OutlineInputBorder(
                     borderSide:
                         BorderSide(color: theme.primaryColor, width: 2.0),
@@ -64,18 +59,12 @@ class _SelectOptionState extends State<SelectOption> {
                     borderSide: BorderSide(color: Colors.red, width: 2.0),
                     borderRadius: BorderRadius.all(Radius.circular(10))),
               ),
-              // decoration: InputDecoration(
-              //     labelText: widget.label, border: InputBorder.none),
-              // style: const TextStyle(color: ColorPalette.primaryColor),
               onChanged: (String? value) {
                 widget.onChanged(value);
-
-                // This is called when the user selects an item.
                 setState(() {
                   widget.dropdownValue = value!;
                 });
               },
-              // onChanged: widget.onChanged,
               items: widget.list
                   .map<DropdownMenuItem<String>>((OptionModal value) {
                 return DropdownMenuItem(

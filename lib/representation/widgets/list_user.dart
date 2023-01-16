@@ -59,13 +59,13 @@ class ListUser extends StatelessWidget {
               Text(userModal.birthday != null
                   ? formatDate(userModal.birthday)
                   : "null"),
-              Spacer(),
-              Text("SĐT: ", 
-              // style: TextStyleCustom.smallText
-              ),
-              Text(userModal.phoneNumber ?? "null",
-                  // style: TextStyleCustom.smallText
-                  ),
+              // Spacer(),
+              // Text("SĐT: ", 
+              // // style: TextStyleCustom.smallText
+              // ),
+              // Text(userModal.phoneNumber ?? "null",
+              //     // style: TextStyleCustom.smallText
+              //     ),
             ],
           ),
         ),
