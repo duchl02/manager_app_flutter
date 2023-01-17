@@ -29,11 +29,9 @@ class _SplashScreenState extends State<SplashScreen> {
     final checkLogin = LocalStorageHelper.getValue('checkLogin') as bool?;
     await Future.delayed(const Duration(seconds: 1));
     if (checkLogin != null && checkLogin == true) {
-      // ignore: use_build_context_synchronously
       Navigator.pushReplacementNamed(context, MainApp.routeName);
     } else {
       LocalStorageHelper.setValue("ignoreIntroScreen", true);
-      // ignore: use_build_context_synchronously
       Navigator.pushReplacementNamed(context, FormLoginScreen.routeName);
     }
   }

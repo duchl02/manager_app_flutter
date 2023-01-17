@@ -49,35 +49,10 @@ class _SelectDateScreenState extends State<SelectDateScreen> {
             initialSelectedDates: widget.initialDates,
             view: DateRangePickerView.month,
             selectionMode: DateRangePickerSelectionMode.multiple,
-            
             monthViewSettings:
                 DateRangePickerMonthViewSettings(firstDayOfWeek: 1),
-            // selectionColor: ColorPalette.yellowColor,
-            // startRangeSelectionColor: ColorPalette.yellowColor,
-            // endRangeSelectionColor: ColorPalette.yellowColor,
-            // rangeSelectionColor: ColorPalette.yellowColor.withOpacity(0.25),
-            // todayHighlightColor: ColorPalette.yellowColor,
-            // toggleDaySelection: true,
-            // onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
-            //   if (args.value is PickerDateRange) {
-            //     rangeStartDate = args.value.startDate;
-            //     rangeEndDate = args.value.endDate;
-            //   }
-            // },
           ),
-          // Row(children: [
-          //   Flexible(
-          //     flex: 1,
-          //     child: ButtonWidget(
-          //       isCancel: false,
-          //       title: "Xác nhận",
-          //       ontap: () {
-          //         // print(rangeEndDate);
-          //         Navigator.of(context).pop([rangeStartDate, rangeEndDate]);
-          //       },
-          //     ),
-          //   ),
-          // ]),
+
         ]),
       ),
     );

@@ -28,7 +28,6 @@ class ListProject extends StatelessWidget {
       }),
       child: Container(
         decoration: BoxDecoration(
-          // color: theme.primaryColor.withOpacity(0.2),
           borderRadius: BorderRadius.circular(10),
         ),
         child: ListTile(

@@ -25,9 +25,6 @@ class ButtonWidget extends StatelessWidget {
           color: isCancel
               ? theme.primaryColor.withOpacity(0.2)
               : theme.primaryColor
-          // gradient:
-          //     color != null ? null : Gradients.defaultGradientBackground,
-          ,
         ),
         alignment: Alignment.center,
         child: Text(title,

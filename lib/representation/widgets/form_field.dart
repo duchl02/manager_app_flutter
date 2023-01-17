@@ -38,7 +38,6 @@ class FormInputField extends StatelessWidget {
         children: <Widget>[
           TextFormField(
             maxLines: maxLines,
-            // style: TextStyleCustom.normalSizeBlack,
             controller: controller,
             focusNode: focusNode,
             keyboardType: inputType,
@@ -48,8 +47,6 @@ class FormInputField extends StatelessWidget {
             validator: validator,
             decoration: InputDecoration(
               labelText: hintText,
-              // fillColor: ColorPalette.secondColor,
-              // labelStyle: theme.textTheme.subtitle1,
               suffixIcon: onTap != null
                   ? const Icon(
                       Icons.keyboard_arrow_down,

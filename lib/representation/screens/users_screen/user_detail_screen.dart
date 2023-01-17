@@ -120,7 +120,6 @@ class _UserDetailState extends State<UserDetail> {
     dynamic _userLoginId = LocalStorageHelper.getValue('userLogin')["id"];
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: ColorPalette.primaryColor,
         title: Text(widget.userModal.createAt != null
             ? "Chỉnh sửa nhân viên"
             : "Thêm mới nhân viên"),
@@ -361,10 +360,8 @@ class _UserDetailState extends State<UserDetail> {
                               children: [
                                 Text(
                                   "Ngày tạo: ",
-                                  // style: TextStyle(color: ColorPalette.subTitleColor),
                                 ),
                                 Text(formatDate(widget.userModal.createAt)
-                                    // style: TextStyle(color: ColorPalette.subTitleColor),
                                     )
                               ],
                             )
@@ -374,10 +371,8 @@ class _UserDetailState extends State<UserDetail> {
                               children: [
                                 Text(
                                   "Ngày chỉnh sửa: ",
-                                  // style: TextStyle(color: ColorPalette.subTitleColor),
                                 ),
                                 Text(formatDate(widget.userModal.updateAt)
-                                    // style: TextStyle(color: ColorPalette.subTitleColor),
                                     )
                               ],
                             )
@@ -390,8 +385,6 @@ class _UserDetailState extends State<UserDetail> {
                                 flex: 1,
                                 child: ButtonWidget(
                                   isCancel: true,
-                                  // color:
-                                  // ColorPalette.secondColor.withOpacity(0.2),
                                   title: "Hủy",
                                   ontap: (() {
                                     Navigator.of(context).pop();
@@ -451,7 +444,6 @@ class _UserDetailState extends State<UserDetail> {
                                                 idNumber:
                                                     idNumberController!.text,
                                                 position: positionId,
-                                                // projects: listProjectsId,
                                                 checkIn:
                                                     widget.userModal.checkIn ??
                                                         [],

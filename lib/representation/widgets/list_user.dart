@@ -31,11 +31,8 @@ class ListUser extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
-          // color: theme.primaryColor.withOpacity(0.2),
           borderRadius: BorderRadius.circular(10),
         ),
-        // child: Padding(
-        // padding: EdgeInsets.all(10),
         child: ListTile(
           leading: Container(
             width: 40,
@@ -47,11 +44,8 @@ class ListUser extends StatelessWidget {
                         "https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg"),
                     fit: BoxFit.cover)),
           ),
-
-          // leading: Icon(Icons.arrow_forward),
           title: Text(
             userModal.name!,
-            // style: TextStyle(color: ColorPalette.text1Color),
           ),
           subtitle: Row(
             children: [
@@ -59,13 +53,7 @@ class ListUser extends StatelessWidget {
               Text(userModal.birthday != null
                   ? formatDate(userModal.birthday)
                   : "null"),
-              // Spacer(),
-              // Text("SĐT: ", 
-              // // style: TextStyleCustom.smallText
-              // ),
-              // Text(userModal.phoneNumber ?? "null",
-              //     // style: TextStyleCustom.smallText
-              //     ),
+
             ],
           ),
         ),

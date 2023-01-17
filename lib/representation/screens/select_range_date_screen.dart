@@ -48,11 +48,6 @@ class _SelectRangeDateScreenState extends State<SelectRangeDateScreen> {
 
             monthViewSettings:
                 DateRangePickerMonthViewSettings(firstDayOfWeek: 1),
-            // selectionColor: ColorPalette.yellowColor,
-            // startRangeSelectionColor: ColorPalette.yellowColor,
-            // endRangeSelectionColor: ColorPalette.yellowColor,
-            // rangeSelectionColor: ColorPalette.yellowColor.withOpacity(0.25),
-            // todayHighlightColor: ColorPalette.yellowColor,
             toggleDaySelection: true,
             onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
               if (args.value is PickerDateRange) {

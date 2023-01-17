@@ -29,10 +29,6 @@ PageRoute? generateRoutes(RouteSettings settings) {
     case MessageScreen.routeName:
       return CupertinoPageRoute(
           builder: (context) => MessageScreen(), settings: settings);
-      //         case MessageChatScreen.routeName:
-      // return CupertinoPageRoute(
-      //     builder: (context) => MessageChatScreen(), settings: settings);
-
     case ProjectScreen.routeName:
       late final bool checkUser = (settings.arguments as bool);
 

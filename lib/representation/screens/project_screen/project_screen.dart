@@ -77,7 +77,6 @@ class _ProjectScreenState extends State<ProjectScreen> {
             }
           },
         ),
-        // backgroundColor: ColorPalette.primaryColor,
         actions: [
           _userRule == "admin"
               ? InkWell(

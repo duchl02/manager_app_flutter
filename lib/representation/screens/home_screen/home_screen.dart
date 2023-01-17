@@ -344,18 +344,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               theme, Colors.brown),
                         ],
                       )
-                      // child: Wrap(
-                      //   children: [
-                      //     _buildItem6(success.length.toString(), "Hoàn thành",
-                      //         theme, Colors.orange),
-                      //     _buildItem4(codding.length.toString(), "Đang code",
-                      //         theme, Colors.purple),
-                      //     _buildItem4(onHold.length.toString(), "Tạm hoãn",
-                      //         theme, Colors.yellow),
-                      //     _buildItem6(review.length.toString(), "Chờ duyệt",
-                      //         theme, Colors.brown),
-                      //   ],
-                      // ),
+
                       );
 
                   return InkWell(

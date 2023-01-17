@@ -45,13 +45,10 @@ class _TaskDetailState extends State<TaskDetail> {
   void initState() {
     super.initState();
     setValue();
-    // userController = TextEditingController();
-    // passwordController = TextEditingController();
   }
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is disposed.
     nameController!.dispose();
     timeSuccessController!.dispose();
     descriptionController!.dispose();
@@ -89,7 +86,6 @@ class _TaskDetailState extends State<TaskDetail> {
     dynamic _userLoginId = LocalStorageHelper.getValue('userLogin')["id"];
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: ColorPalette.primaryColor,
         title: Text(widget.taskModal.createAt != null
             ? "Chỉnh sửa công việc"
             : "Thêm mới công việc"),
@@ -190,9 +186,6 @@ class _TaskDetailState extends State<TaskDetail> {
                                     value: e.id!, display: e.name!));
                               }
                             }
-
-                            // UserModal userDefaults =
-                            //     findUserById(userId, userModal);
                             return SelectOption(
                               validator: ((p0) {
                                 if (p0 == null || p0 == "") {
@@ -339,10 +332,8 @@ class _TaskDetailState extends State<TaskDetail> {
                               children: [
                                 Text(
                                   "Ngày tạo: ",
-                                  // style: TextStyle(color: ColorPalette.subTitleColor),
                                 ),
                                 Text(formatDate(widget.taskModal.createAt)
-                                    // style: TextStyle(color: ColorPalette.subTitleColor),
                                     )
                               ],
                             )
@@ -352,10 +343,8 @@ class _TaskDetailState extends State<TaskDetail> {
                               children: [
                                 Text(
                                   "Ngày chỉnh sửa: ",
-                                  // style: TextStyle(color: ColorPalette.subTitleColor),
                                 ),
                                 Text(formatDate(widget.taskModal.updateAt)
-                                    // style: TextStyle(color: ColorPalette.subTitleColor),
                                     )
                               ],
                             )
@@ -368,8 +357,6 @@ class _TaskDetailState extends State<TaskDetail> {
                                 flex: 1,
                                 child: ButtonWidget(
                                   isCancel: true,
-                                  // color:
-                                  // ColorPalette.secondColor.withOpacity(0.2),
                                   title: "Hủy",
                                   ontap: (() {
                                     Navigator.of(context).pop();

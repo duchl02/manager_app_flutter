@@ -30,23 +30,23 @@ List<UserModal> searchUser(
     name, category, list, List<ProjectModal> listProject) {
   List<UserModal> data = list;
   List<UserModal> listSearch = [];
-  // String _projectId = "";
-  // ProjectModal _project = ProjectModal();
-  // for (var e in listProject) {
-  //   if (e.name.toString().toLowerCase().contains(name)) {
-  //     _project = e;
-  //     print(e.name);
-  //   }
-  // }
+  String _projectId = "";
+  ProjectModal _project = ProjectModal();
+  for (var e in listProject) {
+    if (e.name.toString().toLowerCase().contains(name)) {
+      _project = e;
+      print(e.name);
+    }
+  }
   data.forEach((element) {
-    // if (category == "project") {
-    //   for (var e in _project.users!) {
-    //     if (element.id == e) {
-    //       print("-----------------");
-    //       listSearch.add(element);
-    //     }
-    //   }
-    // }
+    if (category == "project") {
+      for (var e in _project.users!) {
+        if (element.id == e) {
+          print("-----------------");
+          listSearch.add(element);
+        }
+      }
+    }
     if ('name' == category &&
         element.name.toString().toLowerCase().contains(name)) {
       listSearch.add(element);

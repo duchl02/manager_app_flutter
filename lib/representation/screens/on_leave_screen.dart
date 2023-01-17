@@ -40,7 +40,6 @@ class _OnLeaveScreenState extends State<OnLeaveScreen> {
   var htmlContent;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -51,7 +50,6 @@ class _OnLeaveScreenState extends State<OnLeaveScreen> {
           title: Text(
             "Đăng ký nghỉ phép",
           ),
-          // backgroundColor: ColorPalette.primaryColor,
         ),
         body: isLoading
             ? Center(
@@ -152,8 +150,6 @@ class _OnLeaveScreenState extends State<OnLeaveScreen> {
                                   flex: 1,
                                   child: ButtonWidget(
                                     isCancel: true,
-                                    // color: ColorPalette.secondColor
-                                    //     .withOpacity(0.2),
                                     title: "Hủy",
                                     ontap: (() {
                                       Navigator.of(context).pop();

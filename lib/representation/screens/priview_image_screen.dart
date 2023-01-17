@@ -19,10 +19,9 @@ class _PreviewImageScreenState extends State<PreviewImageScreen> {
     return Scaffold(
       body: Hero(
         tag: widget.img,
-        child: Container(
-            child: PhotoView(
+        child: PhotoView(
           imageProvider: NetworkImage(widget.img),
-        )),
+        ),
       ),
     );
   }

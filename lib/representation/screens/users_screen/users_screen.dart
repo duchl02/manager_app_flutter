@@ -165,5 +165,4 @@ List<OptionModal> _list = [
   OptionModal(value: "name", display: "Tên"),
   OptionModal(value: "userName", display: "Tên user"),
   OptionModal(value: "phoneNumber", display: "Số điện thoại"),
-  OptionModal(value: "project", display: "Tên dự án"),
 ];

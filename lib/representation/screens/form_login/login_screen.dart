@@ -60,15 +60,6 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
         .update({'token': token});
   }
 
-  // final List<UserLoginModal> listUsers = [
-  //   UserLoginModal(user: "admin", password: "admin"),
-  //   UserLoginModal(user: "user", password: "user"),
-  // ];
-
-  // void saveUserPassword(userInput, passwordInput) async {
-  //   final user = LocalStorageHelper.setValue('user', userInput);
-  //   final pasword = LocalStorageHelper.setValue('password', passwordInput);
-  // }
 
   void checkLogin(userInput, passwordInput) async {
     bool checkLogin = false;
@@ -100,16 +91,7 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
       );
     }
 
-    // UserLoginModal userLogin =
-    //     UserLoginModal(password: passwordInput, user: userInput);
-    // for (int i = 0; i < listUsers.length; i++) {
-    //   if (listUsers[i].user == userInput &&
-    //       listUsers[i].password == passwordInput) {
-    //     LocalStorageHelper.setValue('checkLogin', true);
-    //     // Navigator.pushNamed(context, MainApp.routeName);
-    //     Navigator.pushReplacementNamed(context, MainApp.routeName);
-    //   }
-    // }
+
   }
 
   @override
@@ -120,8 +102,7 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
         child: Padding(
           padding: EdgeInsets.all(kDefaultPadding),
           child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.center,
-            // mainAxisAlignment: MainAxisAlignment.center,
+
             children: <Widget>[
               StreamBuilder(
                 stream: getAllUsers(),
@@ -180,19 +161,7 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
                   },
                 ),
               ),
-              // Padding(
-              //   padding: EdgeInsets.all(kDefaultPadding),
-              //   child: Text("Tài khoản admin: admin/admin"),
-              // ),
-              // Padding(
-              //   padding: EdgeInsets.all(kDefaultPadding),
-              //   child: Text("Tài khoản user: user/user"),
-              // ),
 
-              // Positioned.fill(
-              //   child: ImageHelper.loadFromAsset(AssetHelper.computerGuy,
-              //       fit: BoxFit.fitWidth , width: double.infinity , height: 280),
-              // ),
             ],
           ),
         ),

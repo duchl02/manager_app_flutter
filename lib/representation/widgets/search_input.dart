@@ -35,7 +35,6 @@ class _SearchInputState extends State<SearchInput> {
       children: [
         TextField(
           focusNode: _focusNode,
-          // controller: controller,
           enabled: true,
           autocorrect: false,
           decoration: InputDecoration(
@@ -44,12 +43,10 @@ class _SearchInputState extends State<SearchInput> {
               padding: const EdgeInsets.all(8.0),
               child: Icon(
                 FontAwesomeIcons.magnifyingGlass,
-                // color: ColorPalette.textWhite,
                 size: 16,
               ),
             ),
             filled: true,
-            // fillColor: ColorPalette.subTitleColor,
             border: OutlineInputBorder(
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.all(
@@ -61,7 +58,6 @@ class _SearchInputState extends State<SearchInput> {
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: kItemPadding),
           ),
-          // style: TextStyleCustom.normalSize,
           onChanged: widget.onChanged,
           onSubmitted: (String submitValue) {},
         ),

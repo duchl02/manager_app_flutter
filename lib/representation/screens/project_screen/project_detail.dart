@@ -81,7 +81,6 @@ class _ProjectDetailState extends State<ProjectDetail> {
 
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: ColorPalette.primaryColor,
         title: Text(widget.projectModal.createAt != null
             ? "Chỉnh sửa dự án"
             : "Thêm mới dự án"),
@@ -168,7 +167,6 @@ class _ProjectDetailState extends State<ProjectDetail> {
                           });
                         },
                       ),
-                      // FormInputField(label: "Người thực hiện", hintText: "Nhập tiêu đề"),
 
                       StreamBuilder(
                         stream: getAllUsers(),
@@ -178,7 +176,6 @@ class _ProjectDetailState extends State<ProjectDetail> {
                           }
                           if (snapshot.hasData) {
                             final projectModal = snapshot.data!;
-                            // listUsersDefault = projectModal;
                             listUsersDefault = [];
                             for (var e in projectModal) {
                               for (var e2 in listUsersId) {
@@ -192,9 +189,6 @@ class _ProjectDetailState extends State<ProjectDetail> {
                               listValues: projectModal,
                               defaultListValues: listUsersDefault,
                               onTap: (value) {
-                                // print("---------------------------------------");
-
-                                // print(listUsers);
                                 listUsers = value;
                               },
                             );
@@ -222,10 +216,8 @@ class _ProjectDetailState extends State<ProjectDetail> {
                               children: [
                                 Text(
                                   "Ngày tạo: ",
-                                  // style: TextStyle(color: ColorPalette.subTitleColor),
                                 ),
                                 Text(formatDate(widget.projectModal.createAt)
-                                    // style: TextStyle(color: ColorPalette.subTitleColor),
                                     )
                               ],
                             )
@@ -235,10 +227,8 @@ class _ProjectDetailState extends State<ProjectDetail> {
                               children: [
                                 Text(
                                   "Ngày chỉnh sửa: ",
-                                  // style: TextStyle(color: ColorPalette.subTitleColor),
                                 ),
                                 Text(formatDate(widget.projectModal.updateAt)
-                                    // style: TextStyle(color: ColorPalette.subTitleColor),
                                     )
                               ],
                             )
@@ -251,7 +241,6 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                 flex: 1,
                                 child: ButtonWidget(
                                   isCancel: true,
-                                  // color: ColorPalette.secondColor.withOpacity(0.2),
                                   title: "Hủy",
                                   ontap: (() {
                                     Navigator.of(context).pop();

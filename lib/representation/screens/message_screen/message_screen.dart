@@ -28,7 +28,6 @@ class _MessageScreenState extends State<MessageScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: ColorPalette.primaryColor,
         title: Text("Tin nhắn"),
       ),
       body: Padding(
@@ -59,9 +58,6 @@ class _MessageScreenState extends State<MessageScreen> {
                     final userModal = snapshot.data!;
                     currentUserData = searchUser(
                         textEditingController.text, "name", userModal, []);
-                    // for (var i = 0; i < 10; i++) {
-                    //   currentUserData.add(userModal[0]);
-                    // }
                     return ListView(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
@@ -90,9 +86,6 @@ class _MessageScreenState extends State<MessageScreen> {
                   if (snapshot.hasData) {
                     final _userModal = snapshot.data!;
                     List<UserModal> _currentData = _userModal;
-                    // for (var i = 0; i < 10; i++) {
-                    //   _currentData.add(_userModal[0]);
-                    // }
                     return ListView(
                       children: _currentData
                           .map(((e) => listRoom(userModal: e, theme: theme)))
@@ -104,10 +97,6 @@ class _MessageScreenState extends State<MessageScreen> {
                 },
               ),
             ),
-            // SingleChildScrollView(
-            //   scrollDirection: Axis.horizontal,
-
-            // )
           ],
         ),
       ),
@@ -163,10 +152,8 @@ class _MessageScreenState extends State<MessageScreen> {
                     fit: BoxFit.cover)),
           ),
 
-          // leading: Icon(Icons.arrow_forward),
           title: Text(
             userModal.name!,
-            // style: TextStyle(color: ColorPalette.text1Color),
           ),
           subtitle: Row(
             children: [

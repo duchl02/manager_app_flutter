@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/Data/models/project_model.dart';
 import 'package:travel_app/Data/models/task_model.dart';
-import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
-import 'package:travel_app/core/constants/text_style.dart';
 import 'package:travel_app/core/helpers/asset_helper.dart';
 import 'package:travel_app/core/helpers/image_helper.dart';
-import 'package:travel_app/representation/screens/project_screen/project_detail.dart';
 import 'package:travel_app/representation/screens/project_screen/project_screen.dart';
 import 'package:travel_app/services/project_services.dart';
 import 'package:travel_app/services/task_services.dart';
@@ -49,10 +46,8 @@ class AppBarContainerWidget extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-                // gradient: Gradients.defaultGradientBackground,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(35),
-                    bottomRight: Radius.circular(35))),
+              borderRadius: BorderRadius.circular(30),
+            ),
             height: isHomePage! ? 180 : 120,
             width: double.infinity,
             child: AppBar(
@@ -60,7 +55,6 @@ class AppBarContainerWidget extends StatelessWidget {
               automaticallyImplyLeading: false,
               elevation: 0,
               toolbarHeight: 100,
-              // backgroundColor: ColorPalette.backgroundScaffoldColor,
               title: title ??
                   Row(
                     children: [
@@ -71,8 +65,8 @@ class AppBarContainerWidget extends StatelessWidget {
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(20)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
                                 color: Colors.white),
                             padding: EdgeInsets.all(kDefaultPadding),
                             child: Icon(
@@ -106,8 +100,7 @@ class AppBarContainerWidget extends StatelessWidget {
                       if (implementTraveling)
                         Container(
                           decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(20),
                               color: Colors.white),
                           padding: EdgeInsets.all(kDefaultPadding),
                           child: Icon(
@@ -122,10 +115,8 @@ class AppBarContainerWidget extends StatelessWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                        // gradient: Gradients.defaultGradientBackground,
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(35),
-                            bottomRight: Radius.circular(35))),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                   ),
                   Positioned(
                       top: 0,
@@ -141,197 +132,184 @@ class AppBarContainerWidget extends StatelessWidget {
             ),
           ),
           if (isHomePage!)
-          Container(
-            margin: EdgeInsets.only(top: 180),
-            child: child,
-            padding: EdgeInsets.symmetric(horizontal: kMediumPadding),
-            // decoration: BoxDecoration(
-            //     // gradient: Gradients.defaultGradientBackground,
-            //     borderRadius: BorderRadius.only(
-            //         bottomLeft: Radius.circular(35),
-            //         bottomRight: Radius.circular(35))),
-          ),
-          // if (isHomePage == false)
-          //   Container(
-          //     margin: EdgeInsets.only(top: 40),
-          //     child: child,
-          //     padding: EdgeInsets.symmetric(horizontal: kItemPadding),
-          //   ),
-          if (isHomePage!)
             Container(
-              margin: EdgeInsets.only(top: 120),
-              padding: EdgeInsets.only(left: 40, right: 40),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: Column(
-                    children: [
-                      StreamBuilder(
-                        stream: getAllUsers(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasError) {
-                            return Text("${snapshot.error}");
-                          }
-                          if (snapshot.hasData) {
-                            final projectModal = snapshot.data!;
-                            userModal =
-                                findUserById(userLogin["id"], projectModal);
-                            var user = userModal;
-                            var time = DateTime.now();
+              margin: EdgeInsets.only(top: 180),
+              child: child,
+              padding: EdgeInsets.symmetric(horizontal: kMediumPadding),
+            ),
+          Container(
+            margin: EdgeInsets.only(top: 120),
+            padding: EdgeInsets.only(left: 40, right: 40),
+            child: Row(
+              children: [
+                Expanded(
+                    child: Column(
+                  children: [
+                    StreamBuilder(
+                      stream: getAllUsers(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Text("${snapshot.error}");
+                        }
+                        if (snapshot.hasData) {
+                          final projectModal = snapshot.data!;
+                          userModal =
+                              findUserById(userLogin["id"], projectModal);
+                          var user = userModal;
+                          var time = DateTime.now();
 
-                            List<DateTime> listDate = [];
+                          List<DateTime> listDate = [];
 
-                            if (user.checkIn != null) {
-                              for (var e in user.checkIn!) {
-                                if (e.toDate().isAfter(
-                                        DateTime(time.year, time.month)) ==
-                                    true) {
-                                  listDate.add(e.toDate());
-                                }
+                          if (user.checkIn != null) {
+                            for (var e in user.checkIn!) {
+                              if (e.toDate().isAfter(
+                                      DateTime(time.year, time.month)) ==
+                                  true) {
+                                listDate.add(e.toDate());
                               }
                             }
-                            return InkWell(
-                              onTap: (() {
-                                Navigator.of(context).pushNamed(
-                                    SelectDateScreen.routeName,
-                                    arguments: listDate);
-                              }),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    listDate.length.toString(),
-                                    style: theme.textTheme.headline5!
-                                        .copyWith(color: Colors.white),
-                                  ),
-                                  SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                    "Điểm danh",
-                                    style: theme.textTheme.subtitle1!
-                                        .copyWith(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            );
-                          } else {
-                            return Center(child: CircularProgressIndicator());
                           }
-                        },
-                      ),
-                    ],
-                  )),
-                  Expanded(
-                      child: Column(
-                    children: [
-                      StreamBuilder(
-                        stream: getAllTasks(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasError) {
-                            return Text("${snapshot.error}");
-                          }
-                          if (snapshot.hasData) {
-                            final taskModal = snapshot.data!;
-                            var userLogin =
-                                LocalStorageHelper.getValue('userLogin');
-                            List<TaskModal> listTasks = [];
-                            var time = DateTime.now();
+                          return InkWell(
+                            onTap: (() {
+                              Navigator.of(context).pushNamed(
+                                  SelectDateScreen.routeName,
+                                  arguments: listDate);
+                            }),
+                            child: Column(
+                              children: [
+                                Text(
+                                  listDate.length.toString(),
+                                  style: theme.textTheme.headline5!
+                                      .copyWith(color: Colors.white),
+                                ),
+                                SizedBox(
+                                  height: 4,
+                                ),
+                                Text(
+                                  "Điểm danh",
+                                  style: theme.textTheme.subtitle1!
+                                      .copyWith(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                      },
+                    ),
+                  ],
+                )),
+                Expanded(
+                    child: Column(
+                  children: [
+                    StreamBuilder(
+                      stream: getAllTasks(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Text("${snapshot.error}");
+                        }
+                        if (snapshot.hasData) {
+                          final taskModal = snapshot.data!;
+                          var userLogin =
+                              LocalStorageHelper.getValue('userLogin');
+                          List<TaskModal> listTasks = [];
+                          var time = DateTime.now();
 
-                            for (var e in taskModal) {
-                              if (e.userId == userLogin["id"] &&
-                                  e.createAt!.isAfter(
-                                          DateTime(time.year, time.month)) ==
-                                      true) {
+                          for (var e in taskModal) {
+                            if (e.userId == userLogin["id"] &&
+                                e.createAt!.isAfter(
+                                        DateTime(time.year, time.month)) ==
+                                    true) {
+                              listTasks.add(e);
+                            }
+                          }
+                          return InkWell(
+                            onTap: (() {
+                              Navigator.of(context).pushNamed(
+                                  TaskScreen.routeName,
+                                  arguments: true);
+                            }),
+                            child: Column(
+                              children: [
+                                Text(
+                                  listTasks.length.toString(),
+                                  style: theme.textTheme.headline5!
+                                      .copyWith(color: Colors.white),
+                                ),
+                                SizedBox(
+                                  height: 4,
+                                ),
+                                Text(
+                                  "Công việc",
+                                  style: theme.textTheme.subtitle1!
+                                      .copyWith(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                      },
+                    ),
+                  ],
+                )),
+                Expanded(
+                    child: Column(
+                  children: [
+                    StreamBuilder(
+                      stream: getAllProjects(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Text("${snapshot.error}");
+                        }
+                        if (snapshot.hasData) {
+                          final taskModal = snapshot.data!;
+                          var userLogin =
+                              LocalStorageHelper.getValue('userLogin');
+                          List<ProjectModal> listTasks = [];
+                          for (var e in taskModal) {
+                            for (var e2 in e.users!) {
+                              if (e2 == userLogin["id"]) {
                                 listTasks.add(e);
                               }
                             }
-                            return InkWell(
-                              onTap: (() {
-                                Navigator.of(context).pushNamed(
-                                    TaskScreen.routeName,
-                                    arguments: true);
-                              }),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    listTasks.length.toString(),
-                                    style: theme.textTheme.headline5!
-                                        .copyWith(color: Colors.white),
-                                  ),
-                                  SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                    "Công việc",
-                                    style: theme.textTheme.subtitle1!
-                                        .copyWith(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            );
-                          } else {
-                            return Center(child: CircularProgressIndicator());
                           }
-                        },
-                      ),
-                    ],
-                  )),
-                  Expanded(
-                      child: Column(
-                    children: [
-                      StreamBuilder(
-                        stream: getAllProjects(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasError) {
-                            return Text("${snapshot.error}");
-                          }
-                          if (snapshot.hasData) {
-                            final taskModal = snapshot.data!;
-                            var userLogin =
-                                LocalStorageHelper.getValue('userLogin');
-                            List<ProjectModal> listTasks = [];
-                            for (var e in taskModal) {
-                              for (var e2 in e.users!) {
-                                if (e2 == userLogin["id"]) {
-                                  listTasks.add(e);
-                                }
-                              }
-                            }
-                            return InkWell(
-                              onTap: (() {
-                                Navigator.of(context).pushNamed(
-                                    ProjectScreen.routeName,
-                                    arguments: true);
-                              }),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    listTasks.length.toString(),
-                                    style: theme.textTheme.headline5!
-                                        .copyWith(color: Colors.white),
-                                  ),
-                                  SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                    "Dự án",
-                                    style: theme.textTheme.subtitle1!
-                                        .copyWith(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            );
-                          } else {
-                            return Center(child: CircularProgressIndicator());
-                          }
-                        },
-                      ),
-                    ],
-                  )),
-                ],
-              ),
+                          return InkWell(
+                            onTap: (() {
+                              Navigator.of(context).pushNamed(
+                                  ProjectScreen.routeName,
+                                  arguments: true);
+                            }),
+                            child: Column(
+                              children: [
+                                Text(
+                                  listTasks.length.toString(),
+                                  style: theme.textTheme.headline5!
+                                      .copyWith(color: Colors.white),
+                                ),
+                                SizedBox(
+                                  height: 4,
+                                ),
+                                Text(
+                                  "Dự án",
+                                  style: theme.textTheme.subtitle1!
+                                      .copyWith(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                      },
+                    ),
+                  ],
+                )),
+              ],
             ),
-        
+          ),
         ],
       ),
     );
@@ -349,15 +327,8 @@ class AppBarContainerWidget extends StatelessWidget {
             }
             if (snapshot.hasData) {
               final taskModal = snapshot.data!;
-              // if (taskModal.checkIn != null){
-              //    return Text(
-              //   taskModal.checkIn.length.toString(),
-              //   style: TextStyleCustom.h1Text,
-              // );
-              // }
               return Text(
                 taskModal.length.toString(),
-                // style: TextStyleCustom.h1Text,
               );
             } else {
               return Center(child: CircularProgressIndicator());
@@ -369,7 +340,6 @@ class AppBarContainerWidget extends StatelessWidget {
         ),
         Text(
           name,
-          // style: TextStyleCustom.nomalTextWhile,
         ),
       ],
     ));

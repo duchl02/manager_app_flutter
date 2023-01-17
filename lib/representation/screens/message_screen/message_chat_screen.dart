@@ -147,9 +147,7 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: ColorPalette.primaryColor,
         title: Text(widget.userModal.name ?? "null"),
-        // actions: const [Icon(FontAwesomeIcons.phone)],
       ),
       body: Padding(
         padding: const EdgeInsets.only(bottom: 60, left: 10, right: 10),
@@ -268,15 +266,13 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
               ),
             ),
             filled: true,
-            // fillColor: ColorPalette.subTitleColor.withOpacity(0.2),
             border: OutlineInputBorder(
               borderSide: BorderSide.none,
             ),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: kItemPadding),
           ),
-          // style: TextStyleCustom.normalSizeBlack,
-          // onChanged: widget.onChanged,
+
           onSubmitted: (String submitValue) {},
         ),
       ),
@@ -328,14 +324,12 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
                               ? BorderRadius.only(
                                   topLeft: Radius.circular(10),
                                   topRight: Radius.circular(10),
-                                  //  bottomRight: Radius.circular(10),
                                   bottomLeft: Radius.circular(10),
                                 )
                               : BorderRadius.only(
                                   topLeft: Radius.circular(10),
                                   topRight: Radius.circular(10),
                                   bottomRight: Radius.circular(10),
-                                  // bottomLeft: Radius.circular(10),
                                 )),
                       child: Padding(
                           padding: EdgeInsets.all(10),
@@ -351,7 +345,6 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
               child: Text(
                 formatDateAndTime(messageModal.createAt),
                 // style:
-                // TextStyle(color: ColorPalette.secondColor.withOpacity(0.7)),
               ),
             )
           ],

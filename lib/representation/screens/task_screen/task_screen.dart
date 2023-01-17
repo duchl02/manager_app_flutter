@@ -29,11 +29,9 @@ class TaskScreen extends StatefulWidget {
 
   @override
   State<TaskScreen> createState() => _TaskScreenState();
-  // final TaskModal taskModal;
 }
 
 class _TaskScreenState extends State<TaskScreen> {
-  // String dropdownValue = list.first
 
   @override
   void initState() {
@@ -82,7 +80,6 @@ class _TaskScreenState extends State<TaskScreen> {
             }
           },
         ),
-        // backgroundColor: ColorPalette.primaryColor,
         actions: [
           InkWell(
             child: Padding(
