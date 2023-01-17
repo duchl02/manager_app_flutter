@@ -27,63 +27,20 @@ class ListProject extends StatelessWidget {
             .pushNamed(ProjectDetail.routeName, arguments: projectModal);
       }),
       child: Container(
-        margin: EdgeInsets.only(bottom: 6),
         decoration: BoxDecoration(
           // color: theme.primaryColor.withOpacity(0.2),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Padding(
-          padding: EdgeInsets.all(10),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Row(
-              children: [
-                Text(
-                  projectModal.name!,
-                ),
-                Spacer(),
-              ],
-            ),
-            SizedBox(
-              height: 6,
-            ),
-            Row(
-              children: [
-                Text("Tên ngắn gọn: "),
-                Text(projectModal.shortName ?? "null"),
-                Spacer(),
-                Text(
-                  "Ngày tạo: ",
-                ),
-                Text(
-                  projectModal.createAt != null
-                      ? formatDate(projectModal.createAt)
-                      : "null",
-                ),
-                // style: TextStyleCustom.smallText
-                // Text("Độ ưu tiên: ", style: TextStyleCustom.smallText),
-                // Text(projectModal.priority ?? "null",
-                //     style: TextStyleCustom.smallText),
-                // Text("Ngày tạo: ", style: TextStyleCustom.smallText),
-                // Text("23/12/2022", style: TextStyleCustom.smallText),
-              ],
-            ),
-            SizedBox(
-              height: 6,
-            ),
-            Row(
-              children: [
-                Text(
-                  "Mô tả : ",
-                ),
-                Text(
-                  projectModal.description ?? "null",
-                ),
-                Spacer(),
-                // Text("Hoàn thành: "),
-                // Text("25/12/2022 "),
-              ],
-            )
+        child: ListTile(
+          title: Text(
+            projectModal.name!,
+            style: theme.textTheme.subtitle1,
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+            Text("Tên ngắn gọn: ${projectModal.shortName}"),
+            Text("Mô tả: ${projectModal.description}")
           ]),
         ),
       ),

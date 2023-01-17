@@ -49,7 +49,7 @@ class _SelectDateScreenState extends State<SelectDateScreen> {
             initialSelectedDates: widget.initialDates,
             view: DateRangePickerView.month,
             selectionMode: DateRangePickerSelectionMode.multiple,
-
+            
             monthViewSettings:
                 DateRangePickerMonthViewSettings(firstDayOfWeek: 1),
             // selectionColor: ColorPalette.yellowColor,
@@ -65,19 +65,19 @@ class _SelectDateScreenState extends State<SelectDateScreen> {
             //   }
             // },
           ),
-          Row(children: [
-            Flexible(
-              flex: 1,
-              child: ButtonWidget(
-                isCancel: false,
-                title: "Xác nhận",
-                ontap: () {
-                  // print(rangeEndDate);
-                  Navigator.of(context).pop([rangeStartDate, rangeEndDate]);
-                },
-              ),
-            ),
-          ]),
+          // Row(children: [
+          //   Flexible(
+          //     flex: 1,
+          //     child: ButtonWidget(
+          //       isCancel: false,
+          //       title: "Xác nhận",
+          //       ontap: () {
+          //         // print(rangeEndDate);
+          //         Navigator.of(context).pop([rangeStartDate, rangeEndDate]);
+          //       },
+          //     ),
+          //   ),
+          // ]),
         ]),
       ),
     );

@@ -86,7 +86,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
             ? "Chỉnh sửa dự án"
             : "Thêm mới dự án"),
         actions: [
-          widget.projectModal.createAt != null
+          widget.projectModal.createAt != null && _userLoginPosition == "admin"
               ? InkWell(
                   child: Padding(
                       padding: EdgeInsets.only(right: 20),
@@ -217,34 +217,32 @@ class _ProjectDetailState extends State<ProjectDetail> {
                       SizedBox(
                         height: 6,
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            "Ngày tạo: ",
-                            // style: TextStyle(color: ColorPalette.subTitleColor)
-                          ),
-                          Text(
-                            widget.projectModal.createAt != null
-                                ? formatDate(widget.projectModal.createAt)
-                                : "Chưa có",
-                            // style: TextStyle(color: ColorPalette.subTitleColor),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "Ngày chỉnh sửa: ",
-                            // style: TextStyle(color: ColorPalette.subTitleColor),
-                          ),
-                          Text(
-                            widget.projectModal.updateAt != null
-                                ? formatDate(widget.projectModal.updateAt)
-                                : "Chưa có",
-                            // style: TextStyle(color: ColorPalette.subTitleColor),
-                          )
-                        ],
-                      ),
+                     widget.projectModal.createAt != null
+                          ? Row(
+                              children: [
+                                Text(
+                                  "Ngày tạo: ",
+                                  // style: TextStyle(color: ColorPalette.subTitleColor),
+                                ),
+                                Text(formatDate(widget.projectModal.createAt)
+                                    // style: TextStyle(color: ColorPalette.subTitleColor),
+                                    )
+                              ],
+                            )
+                          : SizedBox(),
+                      widget.projectModal.updateAt != null
+                          ? Row(
+                              children: [
+                                Text(
+                                  "Ngày chỉnh sửa: ",
+                                  // style: TextStyle(color: ColorPalette.subTitleColor),
+                                ),
+                                Text(formatDate(widget.projectModal.updateAt)
+                                    // style: TextStyle(color: ColorPalette.subTitleColor),
+                                    )
+                              ],
+                            )
+                          : SizedBox(),
                       Padding(
                         padding: EdgeInsets.only(top: 10, bottom: 10),
                         child: Row(

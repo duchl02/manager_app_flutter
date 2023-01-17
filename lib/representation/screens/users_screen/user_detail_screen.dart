@@ -125,7 +125,7 @@ class _UserDetailState extends State<UserDetail> {
             ? "Chỉnh sửa nhân viên"
             : "Thêm mới nhân viên"),
         actions: [
-          widget.userModal.createAt != null
+          widget.userModal.createAt != null && _userLoginPosition == "admin" && widget.userModal.position != "admin"
               ? InkWell(
                   child: Padding(
                       padding: EdgeInsets.only(right: 20),
@@ -142,18 +142,18 @@ class _UserDetailState extends State<UserDetail> {
                         textOK: const Text('Xác nhận'),
                         textCancel: const Text('Thoát'),
                       )) {
-                        setState(() {
-                          isLoading = true;
-                        });
-                        await deleteUser(widget.userModal.id.toString());
-                        setState(() {
-                          isLoading = false;
-                        });
-                        Navigator.of(context).pop();
-                        await EasyLoading.showSuccess("Xóa thành công");
+                        notAlowAction(context);
                       }
                     } else {
-                      notAlowAction(context);
+                      setState(() {
+                        isLoading = true;
+                      });
+                      await deleteUser(widget.userModal.id.toString());
+                      setState(() {
+                        isLoading = false;
+                      });
+                      Navigator.of(context).pop();
+                      await EasyLoading.showSuccess("Xóa thành công");
                     }
                   },
                 )
@@ -305,13 +305,6 @@ class _UserDetailState extends State<UserDetail> {
                             addressController!.text = value;
                           });
                         },
-                        validator: ((p0) {
-                          if (p0 == null || p0 == "") {
-                            return "Trường này không được để trống";
-                          } else {
-                            return null;
-                          }
-                        }),
                       ),
                       FormInputField(
                         label: "Số điện thoại",
@@ -322,13 +315,6 @@ class _UserDetailState extends State<UserDetail> {
                             phoneNumberController!.text = value;
                           });
                         },
-                        validator: ((p0) {
-                          if (p0 == null || p0 == "") {
-                            return "Trường này không được để trống";
-                          } else {
-                            return null;
-                          }
-                        }),
                       ),
                       FormInputField(
                         label: "CMND",
@@ -339,13 +325,6 @@ class _UserDetailState extends State<UserDetail> {
                             idNumberController!.text = value;
                           });
                         },
-                        validator: ((p0) {
-                          if (p0 == null || p0 == "") {
-                            return "Trường này không được để trống";
-                          } else {
-                            return null;
-                          }
-                        }),
                       ),
                       SelectOption(
                         label: 'Vị trí',
@@ -373,45 +352,36 @@ class _UserDetailState extends State<UserDetail> {
                             emailController!.text = value;
                           });
                         },
-                        validator: ((p0) {
-                          if (p0 == null || p0 == "") {
-                            return "Trường này không được để trống";
-                          } else {
-                            return null;
-                          }
-                        }),
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            "Ngày tạo: ",
-                            // style: TextStyle(color: ColorPalette.subTitleColor),
-                          ),
-                          Text(
-                            widget.userModal.createAt != null
-                                ? formatDate(widget.userModal.createAt)
-                                : "Chưa có",
-                            // style: TextStyle(color: ColorPalette.subTitleColor),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "Ngày chỉnh sửa: ",
-                            // style: TextStyle(color: ColorPalette.subTitleColor),
-                          ),
-                          Text(
-                            widget.userModal.updateAt != null
-                                ? formatDate(widget.userModal.updateAt)
-                                : "Chưa có",
-                            // style: TextStyle(color: ColorPalette.subTitleColor),
-                          )
-                        ],
-                      ),
+                      widget.userModal.createAt != null
+                          ? Row(
+                              children: [
+                                Text(
+                                  "Ngày tạo: ",
+                                  // style: TextStyle(color: ColorPalette.subTitleColor),
+                                ),
+                                Text(formatDate(widget.userModal.createAt)
+                                    // style: TextStyle(color: ColorPalette.subTitleColor),
+                                    )
+                              ],
+                            )
+                          : SizedBox(),
+                      widget.userModal.updateAt != null
+                          ? Row(
+                              children: [
+                                Text(
+                                  "Ngày chỉnh sửa: ",
+                                  // style: TextStyle(color: ColorPalette.subTitleColor),
+                                ),
+                                Text(formatDate(widget.userModal.updateAt)
+                                    // style: TextStyle(color: ColorPalette.subTitleColor),
+                                    )
+                              ],
+                            )
+                          : SizedBox(),
                       Padding(
                         padding: EdgeInsets.only(top: 10, bottom: 10),
                         child: Row(

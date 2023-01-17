@@ -53,7 +53,8 @@ class AppBarContainerWidget extends StatelessWidget {
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(35),
                     bottomRight: Radius.circular(35))),
-            height: isHomePage! ? 187 : 120,
+            height: isHomePage! ? 180 : 120,
+            width: double.infinity,
             child: AppBar(
               centerTitle: true,
               automaticallyImplyLeading: false,
@@ -71,7 +72,7 @@ class AppBarContainerWidget extends StatelessWidget {
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.all(
-                                    Radius.circular(kDefaultPadding)),
+                                    Radius.circular(20)),
                                 color: Colors.white),
                             padding: EdgeInsets.all(kDefaultPadding),
                             child: Icon(
@@ -106,7 +107,7 @@ class AppBarContainerWidget extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                               borderRadius:
-                                  BorderRadius.circular(kDefaultPadding),
+                                  BorderRadius.circular(20),
                               color: Colors.white),
                           padding: EdgeInsets.all(kDefaultPadding),
                           child: Icon(
@@ -139,11 +140,16 @@ class AppBarContainerWidget extends StatelessWidget {
               ),
             ),
           ),
-          // if (isHomePage!)
+          if (isHomePage!)
           Container(
-            margin: EdgeInsets.only(top: 156),
+            margin: EdgeInsets.only(top: 180),
             child: child,
             padding: EdgeInsets.symmetric(horizontal: kMediumPadding),
+            // decoration: BoxDecoration(
+            //     // gradient: Gradients.defaultGradientBackground,
+            //     borderRadius: BorderRadius.only(
+            //         bottomLeft: Radius.circular(35),
+            //         bottomRight: Radius.circular(35))),
           ),
           // if (isHomePage == false)
           //   Container(
@@ -325,6 +331,7 @@ class AppBarContainerWidget extends StatelessWidget {
                 ],
               ),
             ),
+        
         ],
       ),
     );

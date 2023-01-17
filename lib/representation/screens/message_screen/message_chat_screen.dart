@@ -85,6 +85,7 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
   }
 
   void sendPushMessage(String body, String title, String token) async {
+    print(widget.userModal.token);
     try {
       await http.post(
         Uri.parse('https://fcm.googleapis.com/fcm/send'),
@@ -107,7 +108,7 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
               'title': title,
               'android_channel_id': "dbfood"
             },
-            "to":widget.userModal.token,
+            "to": widget.userModal.token,
           },
         ),
       );
@@ -241,7 +242,8 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
             hintText: 'Tin nhắn',
             suffixIcon: InkWell(
               onTap: () async {
-                sendPushMessage(textEditingController.text, widget.userModal.name!, mtoken!);
+                sendPushMessage(textEditingController.text,
+                    userLogin["name"], mtoken!);
                 if (_listMessage1.isEmpty && _listMessage2.isEmpty) {
                   print("1");
                   sendMessage(textEditingController.text, userLogin["id"],

@@ -94,7 +94,7 @@ class _TaskDetailState extends State<TaskDetail> {
             ? "Chỉnh sửa công việc"
             : "Thêm mới công việc"),
         actions: [
-          widget.taskModal.createAt != null
+          widget.taskModal.createAt != null 
               ? InkWell(
                   child: Padding(
                       padding: EdgeInsets.only(right: 20),
@@ -334,34 +334,32 @@ class _TaskDetailState extends State<TaskDetail> {
                       SizedBox(
                         height: 10,
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            "Ngày tạo: ",
-                            // style: TextStyle(color: ColorPalette.subTitleColor),
-                          ),
-                          Text(
-                            widget.taskModal.createAt != null
-                                ? formatDate(widget.taskModal.createAt)
-                                : "Chưa có",
-                            // style: TextStyle(color: ColorPalette.subTitleColor),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "Ngày chỉnh sửa: ",
-                            // style: TextStyle(color: ColorPalette.subTitleColor),
-                          ),
-                          Text(
-                            widget.taskModal.updateAt != null
-                                ? formatDate(widget.taskModal.updateAt)
-                                : "Chưa có",
-                            // style: TextStyle(color: ColorPalette.subTitleColor),
-                          )
-                        ],
-                      ),
+                      widget.taskModal.createAt != null
+                          ? Row(
+                              children: [
+                                Text(
+                                  "Ngày tạo: ",
+                                  // style: TextStyle(color: ColorPalette.subTitleColor),
+                                ),
+                                Text(formatDate(widget.taskModal.createAt)
+                                    // style: TextStyle(color: ColorPalette.subTitleColor),
+                                    )
+                              ],
+                            )
+                          : SizedBox(),
+                      widget.taskModal.updateAt != null
+                          ? Row(
+                              children: [
+                                Text(
+                                  "Ngày chỉnh sửa: ",
+                                  // style: TextStyle(color: ColorPalette.subTitleColor),
+                                ),
+                                Text(formatDate(widget.taskModal.updateAt)
+                                    // style: TextStyle(color: ColorPalette.subTitleColor),
+                                    )
+                              ],
+                            )
+                          : SizedBox(),
                       Padding(
                         padding: EdgeInsets.only(top: 10, bottom: 10),
                         child: Row(

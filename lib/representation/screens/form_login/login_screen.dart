@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:confirm_dialog/confirm_dialog.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:travel_app/Data/models/user_model.dart';
@@ -37,6 +39,27 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
     passwordController = TextEditingController();
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    getToken();
+    super.dispose();
+  }
+
+  void getToken() async {
+    await FirebaseMessaging.instance.getToken().then((token) {
+      setToken(token!);
+    });
+  }
+
+  var userLogin = LocalStorageHelper.getValue('userLogin');
+  void setToken(String token) async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userLogin["id"])
+        .update({'token': token});
+  }
+
   // final List<UserLoginModal> listUsers = [
   //   UserLoginModal(user: "admin", password: "admin"),
   //   UserLoginModal(user: "user", password: "user"),
@@ -54,6 +77,8 @@ class _FormLoginScreenState extends State<FormLoginScreen> {
         checkLogin = true;
         UserLoginModal userLoginModal = UserLoginModal(
             password: element.password!,
+            name: element.name!,
+            token: element.token!,
             user: element.userName!,
             id: element.id!,
             position: element.position!);

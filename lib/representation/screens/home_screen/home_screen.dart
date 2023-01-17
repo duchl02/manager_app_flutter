@@ -154,9 +154,6 @@ class _HomeScreenState extends State<HomeScreen> {
         titleString: "home",
         isHomePage: true,
         child: ListView(children: [
-          SizedBox(
-            height: kDefaultPadding * 3,
-          ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
