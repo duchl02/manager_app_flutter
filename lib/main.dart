@@ -1,12 +1,11 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:travel_app/core/constants/color_constants.dart';
 import 'package:travel_app/core/helpers/local_storage_helper.dart';
-import 'package:travel_app/representation/screens/splash_screen.dart';
+import 'package:travel_app/presentations/screens/splash_screen.dart';
 import 'package:travel_app/routes.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-
+// ignore: depend_on_referenced_packages
 import 'package:firebase_core/firebase_core.dart';
 
 Future main() async {
@@ -37,8 +36,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Travel App',
-      theme: ThemeData(
-      ),
+      theme: ThemeData(),
       home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
       routes: routes,

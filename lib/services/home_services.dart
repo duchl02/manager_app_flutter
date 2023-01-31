@@ -2,7 +2,6 @@ import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/Data/models/task_model.dart';
 
-import '../core/helpers/local_storage_helper.dart';
 
 List<TaskModal> convertToListModal(List<TaskModal> listModal, listId) {
   List<TaskModal> data = [];

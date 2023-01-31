@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:travel_app/Data/models/message_modal.dart';
+import 'package:travel_app/Data/models/message_model.dart';
 
 class MessageServices {
   static Future sendMessage(String text, userSend, userLogin) async {

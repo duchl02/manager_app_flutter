@@ -1,12 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:travel_app/Data/models/task_model.dart';
 import 'package:travel_app/services/project_services.dart';
 import 'package:travel_app/services/user_services.dart';
 
-import '../representation/screens/users_screen/users_screen.dart';
 
 Stream<List<TaskModal>> getAllTasks() {
   var data = FirebaseFirestore.instance.collection("tasks").snapshots().map(
