@@ -369,7 +369,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: kItemPadding,
             ),
             Text(
-              "auhsdyhasduias",
+              title,
               style: theme.textTheme.subtitle2!
                   .copyWith(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
