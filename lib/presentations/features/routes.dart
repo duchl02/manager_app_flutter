@@ -3,21 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/Data/models/project_model.dart';
 import 'package:travel_app/Data/models/task_model.dart';
 import 'package:travel_app/Data/models/user_model.dart';
-import 'package:travel_app/presentations/screens/form_login/login_screen.dart';
-import 'package:travel_app/presentations/screens/home_screen/home_screen.dart';
-import 'package:travel_app/presentations/screens/main_app.dart';
-import 'package:travel_app/presentations/screens/message_screen/message_chat_screen.dart';
-import 'package:travel_app/presentations/screens/message_screen/message_screen.dart';
+import 'package:travel_app/presentations/features/form_login/login_screen.dart';
+
+import 'package:travel_app/presentations/features/root/tabs/home_screen.dart';
+import 'package:travel_app/presentations/features/root/root_page.dart';
+import 'package:travel_app/presentations/features/message/message_chat_screen.dart';
+import 'package:travel_app/presentations/features/root/tabs/message_screen.dart';
 import 'package:travel_app/presentations/screens/on_leave_screen.dart';
 import 'package:travel_app/presentations/screens/priview_image_screen.dart';
-import 'package:travel_app/presentations/screens/project_screen/project_detail.dart';
-import 'package:travel_app/presentations/screens/project_screen/project_screen.dart';
+import 'package:travel_app/presentations/features/project/project_detail.dart';
+import 'package:travel_app/presentations/features/root/tabs/project_screen.dart';
 import 'package:travel_app/presentations/screens/select_date_screen.dart';
 import 'package:travel_app/presentations/screens/select_range_date_screen.dart';
-import 'package:travel_app/presentations/screens/users_screen/user_detail_screen.dart';
-import 'package:travel_app/presentations/screens/users_screen/users_screen.dart';
-import 'package:travel_app/presentations/screens/task_screen/task_detail_screen.dart';
-import 'package:travel_app/presentations/screens/task_screen/task_screen.dart';
+import 'package:travel_app/presentations/features/user/user_detail_screen.dart';
+import 'package:travel_app/presentations/features/root/tabs/users_screen.dart';
+import 'package:travel_app/presentations/features/task/task_detail_screen.dart';
+import 'package:travel_app/presentations/features/root/tabs/task_screen.dart';
 
 final Map<String, WidgetBuilder> routes = {};
 

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
-import 'package:travel_app/presentations/screens/home_screen/home_screen.dart';
-import 'package:travel_app/presentations/screens/message_screen/message_screen.dart';
-import 'package:travel_app/presentations/screens/project_screen/project_screen.dart';
-import 'package:travel_app/presentations/screens/users_screen/users_screen.dart';
-import 'package:travel_app/presentations/screens/task_screen/task_screen.dart';
+import 'package:travel_app/presentations/features/root/tabs/home_screen.dart';
+import 'package:travel_app/presentations/features/root/tabs/message_screen.dart';
+import 'package:travel_app/presentations/features/root/tabs/project_screen.dart';
+import 'package:travel_app/presentations/features/root/tabs/users_screen.dart';
+import 'package:travel_app/presentations/features/root/tabs/task_screen.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});

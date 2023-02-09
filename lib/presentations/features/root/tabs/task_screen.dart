@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/Data/models/project_model.dart';
 import 'package:travel_app/Data/models/user_model.dart';
-import 'package:travel_app/presentations/screens/task_screen/task_detail_screen.dart';
+import 'package:travel_app/presentations/features/task/task_detail_screen.dart';
 import 'package:travel_app/presentations/widgets/list_task.dart';
 import 'package:travel_app/presentations/widgets/search_input.dart';
 import 'package:travel_app/presentations/widgets/select_option.dart';

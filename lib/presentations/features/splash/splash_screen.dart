@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/core/helpers/local_storage_helper.dart';
-import 'package:travel_app/presentations/screens/form_login/login_screen.dart';
-import 'package:travel_app/presentations/screens/main_app.dart';
+import 'package:travel_app/presentations/features/form_login/login_screen.dart';
+
+import 'package:travel_app/presentations/features/root/root_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,9 +24,11 @@ class _SplashScreenState extends State<SplashScreen> {
     final checkLogin = LocalStorageHelper.getValue('checkLogin') as bool?;
     await Future.delayed(const Duration(seconds: 1));
     if (checkLogin != null && checkLogin == true) {
+      // ignore: use_build_context_synchronously
       Navigator.pushReplacementNamed(context, MainApp.routeName);
     } else {
       LocalStorageHelper.setValue("ignoreIntroScreen", true);
+      // ignore: use_build_context_synchronously
       Navigator.pushReplacementNamed(context, FormLoginScreen.routeName);
     }
   }

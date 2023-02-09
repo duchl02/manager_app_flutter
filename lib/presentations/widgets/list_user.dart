@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/Data/models/user_model.dart';
 
 import '../../core/helpers/extensions/date_time_format.dart';
-import '../screens/users_screen/user_detail_screen.dart';
+import '../features/user/user_detail_screen.dart';
 
 class ListUser extends StatelessWidget {
   const ListUser({

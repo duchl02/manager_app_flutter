@@ -5,7 +5,7 @@ import 'package:travel_app/Data/models/task_model.dart';
 import 'package:travel_app/core/constants/dismension_constants.dart';
 import 'package:travel_app/core/helpers/asset_helper.dart';
 import 'package:travel_app/core/helpers/image_helper.dart';
-import 'package:travel_app/presentations/screens/project_screen/project_screen.dart';
+import 'package:travel_app/presentations/features/root/tabs/project_screen.dart';
 import 'package:travel_app/services/project_services.dart';
 import 'package:travel_app/services/task_services.dart';
 import 'package:travel_app/services/user_services.dart';
@@ -13,7 +13,7 @@ import 'package:travel_app/services/user_services.dart';
 import '../../Data/models/user_model.dart';
 import '../../core/helpers/local_storage_helper.dart';
 import '../screens/select_date_screen.dart';
-import '../screens/task_screen/task_screen.dart';
+import '../features/root/tabs/task_screen.dart';
 
 class AppBarContainerWidget extends StatelessWidget {
   AppBarContainerWidget(

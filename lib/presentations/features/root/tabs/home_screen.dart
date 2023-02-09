@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:travel_app/core/helpers/extensions/date_time_format.dart';
-import 'package:travel_app/presentations/screens/form_login/login_screen.dart';
+import 'package:travel_app/presentations/features/form_login/login_screen.dart';
 import 'package:travel_app/presentations/screens/on_leave_screen.dart';
-import 'package:travel_app/presentations/screens/task_screen/task_screen.dart';
-import 'package:travel_app/presentations/screens/users_screen/user_detail_screen.dart';
+import 'package:travel_app/presentations/features/root/tabs/task_screen.dart';
+import 'package:travel_app/presentations/features/user/user_detail_screen.dart';
 import 'package:travel_app/services/task_services.dart';
 
 import 'package:travel_app/Data/models/task_model.dart';
@@ -17,9 +17,9 @@ import 'package:travel_app/core/helpers/asset_helper.dart';
 import 'package:travel_app/core/helpers/image_helper.dart';
 import 'package:travel_app/core/helpers/local_storage_helper.dart';
 import 'package:travel_app/services/user_services.dart';
-import '../../widgets/app_bar_container.dart';
-import '../select_date_screen.dart';
-import '../task_screen/task_detail_screen.dart';
+import '../../../widgets/app_bar_container.dart';
+import '../../../screens/select_date_screen.dart';
+import '../../task/task_detail_screen.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -331,7 +331,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           _buildItem6(success.length.toString(), "Hoàn thành",
                               theme, Colors.orange),
-                          _buildItem4(codding.length.toString(), "Đang code",
+                          _buildItem4(codding.length.toString(), "Đang thực hiện",
                               theme, Colors.green),
                           _buildItem4(onHold.length.toString(), "Tạm hoãn",
                               theme, Colors.yellow),

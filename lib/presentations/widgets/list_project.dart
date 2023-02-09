@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/Data/models/project_model.dart';
 
-import '../screens/project_screen/project_detail.dart';
+import '../features/project/project_detail.dart';
 
 class ListProject extends StatelessWidget {
   const ListProject({

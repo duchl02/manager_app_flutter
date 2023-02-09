@@ -4,8 +4,8 @@ import 'package:travel_app/Data/models/user_model.dart';
 
 import 'package:travel_app/core/helpers/extensions/date_time_format.dart';
 import 'package:travel_app/services/user_services.dart';
-import '../../widgets/search_input.dart';
-import 'message_chat_screen.dart';
+import '../../../widgets/search_input.dart';
+import '../../message/message_chat_screen.dart';
 
 class MessageScreen extends StatefulWidget {
   const MessageScreen({super.key});
