@@ -67,7 +67,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                 (e) {},
               );
               return Text(
-                "Dự án (" + projectModal.length.toString() + ")",
+                "Dự án (${projectModal.length})",
               );
             } else {
               return Center(child: CircularProgressIndicator());
